@@ -12,6 +12,11 @@
  Text Domain:  nevechild
 */
 
+.cn-button.wp-default {
+	background-color: rgba(74,119,187,1);
+	border: 1px solid #fff;
+}
+
 .builder-item--footer_copyright {
 	display:none;
 }
