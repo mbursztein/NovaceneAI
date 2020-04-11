@@ -1,0 +1,122 @@
+body { 
+   direction: rtl; 
+   unicode-bidi: embed; 
+}
+
+/* backend editor */
+.ultp-popup-select .ultp-search-icon {
+    position: absolute;
+    right: auto;
+    left: 10px;
+}
+.ultp-field-color2 .ultp-sub-field {
+    margin-right: auto;
+    margin-left: 0;
+}
+.ultp-button-group .ultp-base-control-btn {
+    margin-right: 0;
+    margin-left: 8px;
+}
+.ultp-button-group span {
+    border-radius: 0 3px 3px 0;
+}
+.ultp-button-group span:last-child {
+    border-right: none;
+    border-left: 1px solid #d4d4d4;
+    border-radius: 3px 0 0 3px;
+}
+.ultp-field-toggle .ultp-sub-field {
+    float: left;
+}
+.components-toggle-control .components-base-control__field .components-form-toggle {
+    margin-left: 0;
+    margin-right: 16px;
+}
+.ultp-label-control label {
+    margin-right: 0;
+    margin-left: 5px;
+}
+.ultp-edit-btn .ultp-base-control-btn.dashicons-image-rotate,
+.ultp-field-color .ultp-clear,
+.ultp-field-select .ultp-multiple-value>span {
+    margin-right: 0;
+    margin-left: 4px;
+}
+.ultp-field-select .ultp-multiple-value>span span.ultp-select-close {
+    margin-left: 0;
+    margin-right: 4px;
+}
+
+/* filter */
+.ultp-heading-filter .ultp-filter-navigation {
+    left: 0;
+    justify-content: flex-end;
+    right: auto;
+}
+
+.ultp-next-prev-wrap ul li {
+    margin-right: 0;
+    margin-left: 5px;
+}
+.ultp-heading-filter .ultp-next-prev-wrap {
+    margin-left: 0;
+    margin-right: 15px;
+}
+.ultp-next-prev-wrap ul li:last-child {
+    margin-left: 0;
+}
+
+.ultp-heading-style11 .ultp-heading-btn svg {
+    transform: rotate(180deg);
+    margin-left: 0;
+    margin-right: 8px;
+}
+.ultp-next-page-numbers svg {
+    transform: rotate(180deg); 
+}
+.ultp-prev-page-numbers svg {
+    transform: rotate(180deg); 
+}
+.ultp-prev-action svg {
+    transform: rotate(180deg); 
+}
+.ultp-next-action svg {
+    transform: rotate(180deg); 
+}
+
+/* block */
+.ultp-block-meta span:first-child, .ultp-block-meta.ultp-block-meta-style6 span:nth-child(2) {
+    padding-right: 0!important;
+}
+
+/* meta */
+.ultp-block-meta.ultp-block-meta-dot span:after,
+.ultp-block-meta.ultp-block-meta-verticalbar span:after {
+    left: auto;
+    right: -1px;
+}
+.ultp-block-meta.ultp-block-meta-slash span:after {
+    left: auto;
+    right: -2px;
+}
+.ultp-block-meta.ultp-block-meta-doubleslash span:after,
+.ultp-block-meta.ultp-block-meta-close span:after {
+    left: auto;
+    right: -4px;
+}
+.ultp-block-meta.ultp-block-meta-dash span:after {
+    left: auto;
+    right: -3px;
+}
+.ultp-block-meta span i {
+    margin-right: 0;
+    margin-left: 4px;
+}
+.ultp-meta-author-img {
+    margin-right: 0;
+    margin-left: 5px;
+}
+.ultp-block-meta.ultp-block-meta-style5 .ultp-meta-body span:nth-child(2) {
+    padding-left: inherit;
+    padding-right: 0;
+}

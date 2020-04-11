@@ -1,0 +1,21 @@
+[10/Feb/2020:01:23:18] (ℹ️): WordPress Instance Info:
+[10/Feb/2020:01:23:18] (ℹ️): Home URL : http://novaceneai.com
+[10/Feb/2020:01:23:18] (ℹ️): Site URL : https://novaceneai.com
+[10/Feb/2020:01:23:18] (ℹ️): WordPress Version : 5.2.5
+[10/Feb/2020:01:23:18] (ℹ️): Onboarding Version : 1.7.12
+[10/Feb/2020:01:23:18] (ℹ️): Multisite : No
+[10/Feb/2020:01:23:18] (ℹ️): Server Info : Apache/2.4.29 (Ubuntu)
+[10/Feb/2020:01:23:18] (ℹ️): PHP Version : 7.2.24-0ubuntu0.18.04.2
+[10/Feb/2020:01:23:18] (ℹ️): HTTPS : Yes
+[10/Feb/2020:01:23:18] (ℹ️): PHP Max Execution Time : 60
+[10/Feb/2020:01:23:18] (ℹ️): PHP Max Input Vars : 1000
+[10/Feb/2020:01:23:18] (ℹ️): Max Upload Size : 16777216
+[10/Feb/2020:01:23:18] (ℹ️): Plugins:
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Accordion Blocks : v1.0.6 (Phil Buchanan)
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Blocks Animation: CSS Animations for Gutenberg Blocks : v1.0.4 (ThemeIsle)
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Cloudflare : v3.4.1 (John Wineman, Furkan Yilmaz, Junade Ali (Cloudflare Team))
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Display Posts : v3.0.2 (Bill Erickson)
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Duplicate Page : v4.0 (mndpsingh287)
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Gutenberg Blocks and Template Library by Otter : v1.3.3 (ThemeIsle)
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] Password Protected : v2.2.5 (Ben Huson)
+[10/Feb/2020:01:23:18] (ℹ️): [PLUGIN] WP fail2ban : v4.2.7.1 (Charles Lecklider)

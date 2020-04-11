@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="123px" height="67px" viewBox="0 0 123 67" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.2 (81672) - https://sketch.com -->
+    <title>Shape Copy 3</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Screenshot-2020-01-03-at-3.36.01-PM-2" transform="translate(-1273.000000, -55.000000)">
+            <g id="Shape-Copy-3" transform="translate(1272.000000, 55.000000)">
+                <text id="Ultimate-Post-Copy" font-family="Avenir-Heavy, Avenir" font-size="22" font-weight="600" letter-spacing="-1" fill="#000000">
+                    <tspan x="0" y="66">Ultimate</tspan>
+                    <tspan x="80.066" y="66" font-family="Avenir-Book, Avenir" font-weight="normal"> </tspan>
+                    <tspan x="85.182" y="66" font-family="Avenir-Light, Avenir" font-weight="300">Post</tspan>
+                </text>
+                <circle id="Oval" fill="#1740F5" cx="62" cy="21" r="21"></circle>
+                <path d="M75,27 C75,27.5523437 74.5782948,28 74.057971,28 L62.942029,28 C62.4217052,28 62,27.5523437 62,27 C62,26.4476563 62.4217052,26 62.942029,26 L74.057971,26 C74.5782948,26 75,26.4476563 75,27 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+                <path d="M74.0878318,22 L66.9121682,22 C66.4083378,22 66,22.4478516 66,23 C66,23.5523437 66.4083378,24 66.9121682,24 L74.0878318,24 C74.5916622,24 75,23.5523437 75,23 C75,22.4478516 74.5916622,22 74.0878318,22 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+                <path d="M74.1573126,18 L70.8426874,18 C70.3772343,18 70,18.4476563 70,19 C70,19.5523437 70.3772343,20 70.8426874,20 L74.1573126,20 C74.6227657,20 75,19.5523437 75,19 C75,18.4476563 74.6227657,18 74.1573126,18 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+                <g id="Group-7" transform="translate(47.000000, 8.000000)" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="1.5">
+                    <path d="M21.3526492,6.64576388 L7.52898437,20.4693771 C7.38254733,20.6159663 7.18387234,20.6979887 6.97660082,20.6979887 L2.3659547,20.6951988 C1.93431715,20.6949376 1.58428001,20.3448969 1.58402183,19.913258 L1.58126385,15.3025972 C1.58126385,15.095325 1.66328871,14.8966499 1.80987846,14.7502134 L15.6335433,0.92660017 C15.9384681,0.621523867 16.4332944,0.62182327 16.7385843,0.927268793 L21.3519883,5.54071937 C21.6574307,5.84601237 21.6577267,6.34084029 21.3526492,6.64576388 Z" id="Path" transform="translate(11.581264, 10.697989) rotate(-4.000000) translate(-11.581264, -10.697989) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

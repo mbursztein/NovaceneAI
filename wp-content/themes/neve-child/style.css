@@ -1,0 +1,137 @@
+/*
+ Theme Name:   Neve Child
+ Theme URI:    http://example.com/twenty-fifteen-child/
+ Description:  Neve Child Theme
+ Author:       John Doe
+ Author URI:   http://example.com
+ Template:     neve
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+ Text Domain:  nevechild
+*/
+
+.builder-item--footer_copyright {
+	display:none;
+}
+
+.header-menu-sidebar.light-mode .header-menu-sidebar-bg {
+    background-color: #000000;
+}
+
+.light-mode .icon-bar {
+    background: #ffffff;
+}
+
+.light-mode .navbar-toggle {
+    color: #ffffff;
+}
+
+@media (min-width: 960px) {
+	.row .primary-menu-ul .sub-menu li {
+		background-color: #000000;
+		border: none;
+	}
+	.row .primary-menu-ul .sub-menu {
+		border-top: none;
+	}
+}
+
+.nv-comment-content a, .nv-content-wrap a:not(.button) {
+	text-decoration: none;
+}
+
+.display-posts-listing .listing-item {
+	border-bottom: 1px solid #ccc;
+	padding: 20px;
+}
+
+.display-posts-listing .listing-item .excerpt {
+    display: block;
+}
+
+.display-posts-listing .excerpt-dash {
+	display:none;
+}
+
+
+
+.builder-item--primary-menu .nav-menu-primary > .primary-menu-ul li.current-menu-item a {
+	border-bottom: 3px solid #4a77bb;
+}
+
+.center-text {
+	padding: 0 25% 0 10%;
+}
+
+.pl {
+	padding-left: 10%;
+}
+
+.pr {
+	padding-right: 25%;
+}
+
+.pt {
+	padding-top: 10%;
+}
+
+.half-size img {
+    padding: 10% 20%;
+}
+
+.unit-leads .listing-item {
+	border:none;
+	float:left;
+	width:25%;
+}
+
+.display-posts-listing img {
+	  border-radius: 110px;
+    width: 80%;
+		max-width: 200px;
+	  display: block;
+	  margin: 10% auto;
+}
+
+.nc-divider {
+	width: 50px;
+	margin: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .img-p img {
+		padding: 7%;
+	}
+	.pt {
+		padding-top: 5%;
+	}
+	.pl {
+		padding-left: 5%;
+	}
+	.half-size img {
+    padding: 10%;
+	}
+	.unit-leads .listing-item {
+		border:none;
+		width:100%;
+	}
+	.display-posts-listing img {
+    width: 50%;
+	}
+	h1:not(.site-title) {
+		line-height: 1.1;
+	}
+}
+
+.nv-index-posts, .nv-single-page-wrap {
+    margin-bottom: 0;
+}
+
+
+
+.display-posts-listing .title {
+	font-weight:bold;
+}
