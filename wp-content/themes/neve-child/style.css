@@ -12,6 +12,15 @@
  Text Domain:  nevechild
 */
 
+#footer {
+	width: 100%;
+	background-color: #000;
+	color: #fff;
+	padding: 5rem;
+	text-align: center;
+	font-size: 14px;
+}
+
 .cn-button.wp-default {
 	background-color: rgba(74,119,187,1);
 	border: 1px solid #fff;
