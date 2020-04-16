@@ -53,6 +53,15 @@ class Post_Grid_3{
                 'type' => 'string',
                 'default' => 'date',
             ],
+            'metaKey' => [
+                'type' => 'string',
+                'default' => 'custom_meta_key',
+                'style' => [
+                    (object)[
+                        'depends' => [(object)['key' => 'queryOrderBy','condition' => '==','value' => 'meta_value_num']]
+                    ],
+                ],
+            ],
             'queryOrder' => [
                 'type' => 'string',
                 'default' => 'desc',
@@ -766,7 +775,7 @@ class Post_Grid_3{
                 'default' => (object)['lg' =>'240', 'unit' =>'px'],
                 'style' => [
                     (object)[
-                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-block-image img {width: 100%; object-fit: cover; height: {{overlaySmallHeight}}; }'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-block-image img, {{ULTP}} .ultp-block-item .ultp-block-empty-image {width: 100%; object-fit: cover; height: {{overlaySmallHeight}}; }'
                     ],
                 ],
             ],
@@ -775,7 +784,7 @@ class Post_Grid_3{
                 'default' => (object)['lg' =>'450', 'unit' =>'px'],
                 'style' => [
                     (object)[
-                        'selector'=>'{{ULTP}} .ultp-block-row .ultp-block-item:first-child .ultp-block-image img {width: 100%; object-fit: cover; height: {{overlayHeight}}; }'
+                        'selector'=>'{{ULTP}} .ultp-block-row .ultp-block-item:first-child .ultp-block-image img, {{ULTP}} .ultp-block-row .ultp-block-item:first-child .ultp-block-empty-image {width: 100%; object-fit: cover; height: {{overlayHeight}}; }'
                     ],
                 ],
             ],
@@ -820,9 +829,20 @@ class Post_Grid_3{
                 'type' => 'boolean',
                 'default' => false,
             ],
+            'showFullExcerpt' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
             'excerptLimit' => [
                 'type' => 'string',
                 'default' => 30,
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'showFullExcerpt','condition'=>'==','value'=>false],
+                        ],
+                    ],
+                ],
             ],
             'excerptColor' => [
                 'type' => 'string',
@@ -1456,9 +1476,13 @@ class Post_Grid_3{
                 'type' => 'string',
                 'default' => 'category'
             ],
+            'filterText' => [
+                'type' => 'string',
+                'default' => 'all'
+            ],
             'filterCat' => [
                 'type' => 'string',
-                'default' => '["all"]',
+                'default' => '[]',
                 'style' => [
                     (object)[
                         'depends' => [(object)['key' => 'filterType','condition' => '==','value' => 'category']]
@@ -1467,7 +1491,7 @@ class Post_Grid_3{
             ],
             'filterTag' => [
                 'type' => 'string',
-                'default' => '["all"]',
+                'default' => '[]',
                 'style' => [
                     (object)[
                         'depends' => [(object)['key' => 'filterType','condition' => '==','value' => 'post_tag']]
@@ -2117,6 +2141,8 @@ class Post_Grid_3{
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
                                             }
                                         $post_loop .= '</div>';
+                                    } else {
+                                        $post_loop .= '<div class="ultp-block-image ultp-block-empty-image"></div>';
                                     }
                                     $post_loop .= '<div class="ultp-block-content ultp-block-content-'.$attr['overlayContentPosition'].'">';
                                         $post_loop .= '<div class="ultp-block-content-inner">';
@@ -2140,7 +2166,11 @@ class Post_Grid_3{
 
                                             // Excerpt
                                             if(($idx == 0 || $attr['showSmallExcerpt']) && $attr['excerptShow']) { 
-                                                $post_loop .= '<div class="ultp-block-excerpt">'.ultimate_post()->excerpt($post_id, $attr['excerptLimit']).'</div>';
+                                                if ( $attr['showFullExcerpt']== 0 )  {
+                                                    $post_loop .= '<div class="ultp-block-excerpt">'.ultimate_post()->excerpt($post_id, $attr['excerptLimit']).'</div>';
+                                                } else {
+                                                    $post_loop .= '<div class="ultp-block-excerpt">'.get_the_excerpt().'</div>';
+                                                }
                                             }
 
                                             // Read More

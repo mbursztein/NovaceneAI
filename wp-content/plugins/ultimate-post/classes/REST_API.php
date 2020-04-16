@@ -8,7 +8,7 @@ add_action( 'rest_api_init', 'ultp_register_route' );
 function ultp_register_route() {
     register_rest_route( 'ultp', 'posts', array(
             'methods' => WP_REST_Server::READABLE,
-            'args' => array('post_type', 'taxonomy', 'include', 'exclude', 'order', 'orderby', 'count', 'size', 'tag', 'cat', 'wpnonce'),
+            'args' => array('post_type', 'taxonomy', 'include', 'exclude', 'order', 'orderby', 'count', 'size', 'tag', 'cat', 'meta_key', 'wpnonce'),
             'callback' => 'ultp_route_post_data',
         )
     );
@@ -91,6 +91,12 @@ function ultp_route_post_data($prams,$local=false) {
     if(isset($prams['order'])){ $args['order'] = esc_attr($prams['order']); }
     if(isset($prams['offset'])){ $args['offset'] = esc_attr($prams['offset']); }
     if(isset($prams['paged'])){ $args['paged'] = esc_attr($prams['paged']); }
+
+    if(isset($prams['orderby']) && isset($prams['meta_key'])){
+        if($prams['orderby'] == 'meta_value_num') {
+            $args['meta_key'] = $prams['meta_key'];
+        }
+    }
     
     $data = [];
     $loop = new WP_Query($args);

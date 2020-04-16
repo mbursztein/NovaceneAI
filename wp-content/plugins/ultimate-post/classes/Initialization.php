@@ -171,6 +171,7 @@ class Initialization{
                     if(isset($value['attrs']['queryNumber'])){
                         $attr['queryNumber'] = $value['attrs']['queryNumber'];
                     }
+                    $attr = array_merge($attr, $value['attrs']);
                     echo $this->all_blocks[$blockRaw]->content($attr, true);
                     die();
                 }

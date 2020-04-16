@@ -209,22 +209,7 @@ class Options{
                                     $html .= '<p class="description">'.$value['desc'].'</p>';
                                 $html .= '</div>';
                                 break;
-                            /*    
-                            case 'select_multiple':
-                                $html .= '<div class="ultp-settings-field">';
-                                    $val = isset($option_data[$key]) ? $option_data[$key] : (isset($value['default']) ? $value['default'] : '');
-                                    
 
-                                    $html .= '<select name="" multiple>';
-                                        foreach ($value['attr'] as $k => $value) {
-                                            $html .= '<option value="'.$k.'" '.in_array('selected').'>'.$value.'</option>';
-                                        }
-                                    $html .= '</select>';
-
-
-                                    $html .= '<p class="description">'.$value['desc'].'</p>';
-                                $html .= '</div>';
-                            */
                             default:
                                 # code...
                                 break;
@@ -261,7 +246,6 @@ class Options{
                     $html .= '<li>'.esc_html__( 'Box Width layout', 'ultimate-post' ).'</li>';
                     $html .= '<li>'.esc_html__( 'Unlimited Color Options', 'ultimate-post' ).'</li>';
                 $html .= '</ul>';
-                // $html .= '<a class="button button-primary" target="_blank" href="https://coblog.wpxpo.com/">'.__('Live Demo', 'ultimate-post').'</a>';
                 $html .= '<a class="button button-success" target="_blank" href="https://wordpress.org/themes/coblog">'.__('Free Download', 'ultimate-post').'</a>';
             $html .= '</div>';//ultp-admin-card
 
@@ -710,7 +694,7 @@ class Options{
             <div class="ultp-setting-header">
                 <div class="ultp-setting-header-info">
                     <h1>
-                        <?php _e('Welcome to <strong>Gutenberg Post Blocks</strong> - Version', 'ultimate-post'); ?><span> 1.1.5</span>
+                        <?php _e('Welcome to <strong>Gutenberg Post Blocks</strong> - Version', 'ultimate-post'); ?><span> <?php echo ULTP_VER; ?></span>
                     </h1>
                     <p><?php esc_html_e('Most Powerful & Advanced Gutenberg Kit', 'ultimate-post'); ?><a href="https://wordpress.org/support/plugin/ultimate-post/reviews/#new-post"><?php esc_html_e('Rate the plugin', 'ultimate-post'); ?><span>★★★★★<span></a></p>
                 </div>

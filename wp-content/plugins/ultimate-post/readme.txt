@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
 Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -141,6 +141,16 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 
 == Changelog ==
 
+
+= 1.1.6 - 15 April 2020 =
+* New: Filter All Text Change Option
+* New: Query Order by Meta Value Added
+* New: Layout Click is now not Query Reset
+* New: Show Full Excerpt Added in Every Blocks
+* Fix: Post List #1 Bug Fix and it is Now Live
+* Fix: Filter is now not Showing Draft Posts
+* Fix: Filter Design Improved
+* Fix: Blank Image Problem Solved
 
 = 1.1.5 - 03 April 2020 =
 * Update: Compatible With WordPress 5.4

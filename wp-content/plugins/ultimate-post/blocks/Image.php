@@ -175,7 +175,7 @@ class Image{
             //Caption
             'headingText' => [
                 'type' => 'string',
-                'default' => 'This is a Heading Example',
+                'default' => 'This is a Image Example',
             ],
             'headingEnable' => [
                 'type' => 'boolean',

@@ -53,6 +53,15 @@ class Post_Slider_1{
                 'type' => 'string',
                 'default' => 'date',
             ],
+            'metaKey' => [
+                'type' => 'string',
+                'default' => 'custom_meta_key',
+                'style' => [
+                    (object)[
+                        'depends' => [(object)['key' => 'queryOrderBy','condition' => '==','value' => 'meta_value_num']]
+                    ],
+                ],
+            ],
             'queryOrder' => [
                 'type' => 'string',
                 'default' => 'desc',
@@ -737,9 +746,20 @@ class Post_Slider_1{
             //--------------------------
             // Content Setting/Style
             //--------------------------
+            'showFullExcerpt' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
             'excerptLimit' => [
                 'type' => 'string',
                 'default' => 40,
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'showFullExcerpt','condition'=>'==','value'=>false],
+                        ],
+                    ],
+                ],
             ],
             'excerptColor' => [
                 'type' => 'string',
@@ -2099,7 +2119,11 @@ class Post_Slider_1{
                                             }
 
                                             if ($attr['excerptShow']) {
-                                                include ULTP_PATH.'blocks/template/excerpt.php';
+                                                if ( $attr['showFullExcerpt']== 0 )  {
+                                                    $post_loop .= '<div class="ultp-block-excerpt">'.ultimate_post()->excerpt($post_id, $attr['excerptLimit']).'</div>';
+                                                } else {
+                                                    $post_loop .= '<div class="ultp-block-excerpt">'.get_the_excerpt().'</div>';
+                                                }
                                             }
 
                                             if ($attr['readMore']) {

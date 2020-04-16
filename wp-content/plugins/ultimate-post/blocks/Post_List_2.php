@@ -53,6 +53,15 @@ class Post_List_2{
                 'type' => 'string',
                 'default' => 'date',
             ],
+            'metaKey' => [
+                'type' => 'string',
+                'default' => 'custom_meta_key',
+                'style' => [
+                    (object)[
+                        'depends' => [(object)['key' => 'queryOrderBy','condition' => '==','value' => 'meta_value_num']]
+                    ],
+                ],
+            ],
             'queryOrder' => [
                 'type' => 'string',
                 'default' => 'desc',
@@ -1633,9 +1642,13 @@ class Post_List_2{
                 'type' => 'string',
                 'default' => 'category'
             ],
+            'filterText' => [
+                'type' => 'string',
+                'default' => 'all'
+            ],
             'filterCat' => [
                 'type' => 'string',
-                'default' => '["all"]',
+                'default' => '[]',
                 'style' => [
                     (object)[
                         'depends' => [(object)['key' => 'filterType','condition' => '==','value' => 'category']]
@@ -1644,7 +1657,7 @@ class Post_List_2{
             ],
             'filterTag' => [
                 'type' => 'string',
-                'default' => '["all"]',
+                'default' => '[]',
                 'style' => [
                     (object)[
                         'depends' => [(object)['key' => 'filterType','condition' => '==','value' => 'post_tag']]
@@ -2321,7 +2334,7 @@ class Post_List_2{
                                         if(($idx == 0 || $attr['showSmallExcerpt']) && $attr['excerptShow']) {
                                             if ( $attr['showFullExcerpt']== 0 )  {
                                                 $post_loop .= '<div class="ultp-block-excerpt">'.ultimate_post()->excerpt($post_id, $attr['excerptLimit']).'</div>';
-                                                } else {
+                                            } else {
                                                 $post_loop .= '<div class="ultp-block-excerpt">'.get_the_excerpt().'</div>';
                                             }
                                         }

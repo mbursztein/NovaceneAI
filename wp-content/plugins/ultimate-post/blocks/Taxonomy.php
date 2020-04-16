@@ -51,6 +51,15 @@ class Taxonomy{
                 'type' => 'string',
                 'default' => 'date',
             ],
+            'metaKey' => [
+                'type' => 'string',
+                'default' => 'custom_meta_key',
+                'style' => [
+                    (object)[
+                        'depends' => [(object)['key' => 'queryOrderBy','condition' => '==','value' => 'meta_value_num']]
+                    ],
+                ],
+            ],
             'queryOrder' => [
                 'type' => 'string',
                 'default' => 'desc',
@@ -131,7 +140,7 @@ class Taxonomy{
             //--------------------------
             'headingText' => [
                 'type' => 'string',
-                'default' => 'Post Grid #1',
+                'default' => 'Post Taxonomy',
             ],
             'headingURL' => [
                 'type' => 'string',
@@ -1499,9 +1508,13 @@ class Taxonomy{
                 'type' => 'string',
                 'default' => 'category'
             ],
+            'filterText' => [
+                'type' => 'string',
+                'default' => 'all'
+            ],
             'filterCat' => [
                 'type' => 'string',
-                'default' => '["all"]',
+                'default' => '[]',
                 'style' => [
                     (object)[
                         'depends' => [(object)['key' => 'filterType','condition' => '==','value' => 'category']]
@@ -1510,7 +1523,7 @@ class Taxonomy{
             ],
             'filterTag' => [
                 'type' => 'string',
-                'default' => '["all"]',
+                'default' => '[]',
                 'style' => [
                     (object)[
                         'depends' => [(object)['key' => 'filterType','condition' => '==','value' => 'post_tag']]

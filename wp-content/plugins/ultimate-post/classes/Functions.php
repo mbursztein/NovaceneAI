@@ -18,7 +18,14 @@ class Functions{
             'orderby'           => isset($attr['queryOrderBy']) ? $attr['queryOrderBy'] : 'date',
             'order'             => isset($attr['queryOrder']) ? $attr['queryOrder'] : 'desc',
             'paged'             => isset($attr['paged']) ? $attr['paged'] : 1,
+            'post_status'       => 'publish'
         );
+
+        if(isset($attr['queryOrderBy']) && isset($attr['metaKey'])){
+            if($attr['queryOrderBy'] == 'meta_value_num') {
+                $query_args['meta_key'] = $attr['metaKey'];
+            }
+        }
 
         if(isset($attr['queryOffset']) && $attr['queryOffset'] && !($query_args['paged'] > 1) ){
             $query_args['offset'] = isset($attr['queryOffset']) ? $attr['queryOffset'] : 0;
@@ -198,18 +205,24 @@ class Functions{
         return '<div class="ultp-loading">'.$html.'</div>';
     }
 
-    public function filter($filterType = '', $filterCat = '[]', $filterTag = '[]'){
+    public function filter($filterText = '', $filterType = '', $filterCat = '[]', $filterTag = '[]'){
         $html = '';
         $html .= '<ul class="ultp-flex-menu">';
             if ($filterType == 'category') {
                 $cat = $this->taxonomy('category');
+                if($filterText){
+                    $html .= '<li class="filter-item"><a data-taxonomy="" href="#">'.$filterText.'</a></li>';
+                }
                 foreach (json_decode($filterCat) as $val) {
-                    $html .= '<li class="filter-item"><a data-taxonomy="'.($val=='all'?'':$val).'" href="#">'.(isset($cat[$val]) ? $cat[$val] : $val).'</a></li>';
+                    $html .= '<li class="filter-item"><a data-taxonomy="'.$val.'" href="#">'.(isset($cat[$val]) ? $cat[$val] : $val).'</a></li>';
                 }
             } else {
                 $tag = $this->taxonomy('post_tag');
+                if($filterText){
+                    $html .= '<li class="filter-item"><a data-taxonomy="" href="#">'.$filterText.'</a></li>';
+                }
                 foreach (json_decode($filterTag) as $val) {
-                    $html .= '<li class="filter-item"><a data-taxonomy="'.($val=='all'?'':$val).'" href="#">'.(isset($tag[$val]) ? $tag[$val] : $val).'</a></li>';
+                    $html .= '<li class="filter-item"><a data-taxonomy="'.$val.'" href="#">'.(isset($tag[$val]) ? $tag[$val] : $val).'</a></li>';
                 }
             }
         $html .= '</ul>';
