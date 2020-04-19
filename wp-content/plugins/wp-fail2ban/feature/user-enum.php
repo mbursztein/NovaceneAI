@@ -46,6 +46,7 @@ if ( !function_exists( __NAMESPACE__ . '\\parse_request' ) ) {
      *
      * @see \WP::parse_request()
      *
+     * @since 4.2.8 Refactor to make XDebug happy (h/t @dinghy)
      * @since 3.5.0 Refactored for unit testing
      * @since 2.1.0
      *
@@ -55,7 +56,7 @@ if ( !function_exists( __NAMESPACE__ . '\\parse_request' ) ) {
      */
     function parse_request( $query )
     {
-        if ( !current_user_can( 'list_users' ) && intval( @$query->query_vars['author'] ) ) {
+        if ( !current_user_can( 'list_users' ) && array_key_exists( 'author', $query->query_vars ) && intval( $query->query_vars['author'] ) ) {
             _log_bail_user_enum();
         }
         return $query;
@@ -79,6 +80,7 @@ if ( !function_exists( __NAMESPACE__ . '\\rest_user_query' ) ) {
      *
      * @see \WP_REST_Users_Controller::get_items()
      *
+     * @since 4.2.8 Change cap to edit_others_posts to play better with GB
      * @since 4.0.0
      *
      * @param array             $prepared_args
@@ -88,7 +90,7 @@ if ( !function_exists( __NAMESPACE__ . '\\rest_user_query' ) ) {
      */
     function rest_user_query( $prepared_args, $request )
     {
-        if ( !current_user_can( 'list_users' ) ) {
+        if ( !current_user_can( 'edit_others_posts' ) ) {
             return _log_bail_user_enum();
         }
         return $prepared_args;

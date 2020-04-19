@@ -80,6 +80,44 @@ __ERROR__;
     
     }
 } );
+/**
+ * @since 4.2.8
+ */
+if ( !function_exists( __NAMESPACE__ . '\\release_notes_message' ) ) {
+    /**
+     * CTA for release notes
+     *
+     * @since 4.2.8
+     *
+     * @param string    $link   Link to release notes page or tab
+     */
+    function release_notes_message( $link )
+    {
+        
+        if ( !defined( 'PHPUNIT_COMPOSER_INSTALL' ) ) {
+            $msg = sprintf( ' - please check the <a href="%s">release notes</a>.', $link );
+            add_action( 'init', function () use( $msg ) {
+                if ( current_user_can( 'manage_options' ) ) {
+                    
+                    if ( isset( $_GET['wp-fail2ban-notice'] ) || false === ($notice = get_site_option( 'wp-fail2ban-notice' )) || !isset( $notice['4.2.8'] ) || false === $notice['4.2.8'] ) {
+                        wf_fs()->add_sticky_admin_message(
+                            $msg,
+                            'wpf2b-4.2.8',
+                            'Important news',
+                            'info'
+                        );
+                        update_site_option( 'wp-fail2ban-notice', array(
+                            '4.2.8' => true,
+                        ) );
+                    }
+                
+                }
+            } );
+        }
+    
+    }
+
+}
 require __DIR__ . '/feature/lib.php';
 /**
  * @since 4.2.5
@@ -92,10 +130,15 @@ if ( version_compare( PHP_VERSION, '5.6.0', '>=' ) ) {
     global  $wp_fail2ban ;
     $wp_fail2ban['plugins'] = array();
     require __DIR__ . '/feature/plugins.php';
+    
     if ( is_admin() ) {
+        $page = ( wf_fs()->is_free_plan() ? 'wp-fail2ban' : 'wpf2b-settings&tab=about' );
+        release_notes_message( admin_url( 'admin.php?page=' . $page ) );
         require 'admin/admin.php';
     }
+
 } elseif ( is_admin() ) {
+    release_notes_message( admin_url( 'admin.php?page=wp-fail2ban' ) );
     require __DIR__ . '/admin/lib/about.php';
     add_action( 'admin_menu', function () {
         add_menu_page(

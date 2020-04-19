@@ -62,7 +62,9 @@ function admin_menu()
             \org\lecklider\charles\wordpress\wp_fail2ban\addons\remote_tools\help();
         }
     } );
-    $submenu['wp-fail2ban'][0][0] = __( 'Welcome' );
+    if ( array_key_exists( 'wp-fail2ban', $submenu ) ) {
+        $submenu['wp-fail2ban'][0][0] = __( 'Welcome' );
+    }
 }
 
 add_action( 'admin_menu', __NAMESPACE__ . '\\admin_menu' );
@@ -81,7 +83,7 @@ function plugin_action_links( $links, $file )
         array_unshift( $links, sprintf(
             '<a href="%s?page=%s" title="%s">%s</a>',
             admin_url( 'admin.php' ),
-            ( wf_fs()->is_free_plan() ? 'wp-fail2ban' : 'wpf2b-settings' ),
+            'wpf2b-settings',
             __( 'Settings' ),
             ( function_exists( '\\add_security_page' ) ? '<span class="dashicon dashicons-admin-generic"></span>' : __( 'Settings' ) )
         ) );

@@ -5,7 +5,7 @@
  * Plugin URI: https://wp-fail2ban.com/
  * Description: Write a myriad of WordPress events to syslog for integration with fail2ban.
  * Text Domain: wp-fail2ban
- * Version: 4.2.7.1
+ * Version: 4.2.8
  * Author: Charles Lecklider
  * Author URI: https://charles.lecklider.org/
  * License: GPLv2
@@ -39,7 +39,7 @@ namespace org\lecklider\charles\wordpress\wp_fail2ban;
 /**
  * @since 4.0.5
  */
-define( 'WP_FAIL2BAN_VER', '4.2.7.1' );
+define( 'WP_FAIL2BAN_VER', '4.2.8' );
 define( 'WP_FAIL2BAN_FILE', __FILE__ );
 
 if ( defined( 'ABSPATH' ) ) {
@@ -79,7 +79,7 @@ if ( defined( 'ABSPATH' ) ) {
                     'menu'           => array(
                     'slug'       => 'wp-fail2ban',
                     'first-path' => 'admin.php?page=wp-fail2ban',
-                    'support'    => false,
+                    'support'    => true,
                 ),
                     'is_live'        => true,
                 ) );
@@ -93,6 +93,23 @@ if ( defined( 'ABSPATH' ) ) {
         // Set currency to GBP
         wf_fs()->add_filter( 'default_currency', function () {
             return 'gbp';
+        } );
+        // Set forum URL
+        wf_fs()->add_filter( 'support_forum_url', function () {
+            if ( wf_fs()->is_trial() ) {
+                /** Trial forum: Invite-only */
+                return 'https://forums.invis.net/c/wp-fail2ban-premium/support-trial/';
+            }
+            if ( wf_fs()->is_free_plan() ) {
+                /** Free forum: available to all */
+                return 'https://forums.invis.net/c/wp-fail2ban/support-free/';
+            }
+            if ( wf_fs()->is_paying() ) {
+                /** Paying forum: Invite-only */
+                return 'https://forums.invis.net/c/wp-fail2ban-premium/support-premium/';
+            }
+            /** Just in case... */
+            return 'https://forums.invis.net/c/wp-fail2ban/';
         } );
         // Signal that SDK was initiated.
         do_action( 'wf_fs_loaded' );
