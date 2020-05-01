@@ -149,3 +149,17 @@
 .display-posts-listing .title {
 	font-weight:bold;
 }
+
+#wpcf7-f2482-p2480-o1 form label, #wpcf7-f2482-p2480-o1 form input {
+	color: #fff;
+}
+
+#wpcf7-f2482-p2480-o1 form .wpcf7-validation-errors,
+#wpcf7-f2482-p2480-o1 form .wpcf7-mail-sent-ok {
+	display: none !important;
+}
+
+.page-id-2480,
+.page-id-2487 {
+	background-color: #000;
+}
