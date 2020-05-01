@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0
+class ComposerStaticInite8045e5427b38f7e74d01a423dc8fd66
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -25,6 +25,7 @@ class ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0
         'AddColumnsToIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200420073606_AddColumnsToIndexables.php',
         'AddIndexableObjectIdAndTypeIndex' => __DIR__ . '/../..' . '/src/config/migrations/20200430075614_AddIndexableObjectIdAndTypeIndex.php',
         'BreadcrumbTitleAndHierarchyReset' => __DIR__ . '/../..' . '/src/config/migrations/20200428123747_BreadcrumbTitleAndHierarchyReset.php',
+        'ClearIndexableTables' => __DIR__ . '/../..' . '/src/config/migrations/20200430150130_ClearIndexableTables.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
         'Composer\\Installers\\AimeosInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
         'Composer\\Installers\\AnnotateCmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
@@ -555,6 +556,10 @@ class ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0
         'YoastSEO_Vendor\\GuzzleHttp\\RetryMiddleware' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/RetryMiddleware.php',
         'YoastSEO_Vendor\\GuzzleHttp\\TransferStats' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/TransferStats.php',
         'YoastSEO_Vendor\\GuzzleHttp\\UriTemplate' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/UriTemplate.php',
+        'YoastSEO_Vendor\\IdiormMethodMissingException' => __DIR__ . '/../..' . '/vendor_prefixed/j4mie/idiorm/idiorm.php',
+        'YoastSEO_Vendor\\IdiormResultSet' => __DIR__ . '/../..' . '/vendor_prefixed/j4mie/idiorm/idiorm.php',
+        'YoastSEO_Vendor\\IdiormString' => __DIR__ . '/../..' . '/vendor_prefixed/j4mie/idiorm/idiorm.php',
+        'YoastSEO_Vendor\\IdiormStringException' => __DIR__ . '/../..' . '/vendor_prefixed/j4mie/idiorm/idiorm.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Grant\\AbstractGrant' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Grant/AbstractGrant.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Grant\\AuthorizationCode' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Grant/AuthorizationCode.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Grant\\ClientCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Grant/ClientCredentials.php',
@@ -581,6 +586,7 @@ class ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Tool\\QueryBuilderTrait' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Tool/QueryBuilderTrait.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Tool\\RequestFactory' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Tool/RequestFactory.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Tool\\RequiredParameterTrait' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Tool/RequiredParameterTrait.php',
+        'YoastSEO_Vendor\\ORM' => __DIR__ . '/../..' . '/vendor_prefixed/j4mie/idiorm/idiorm.php',
         'YoastSEO_Vendor\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/ContainerExceptionInterface.php',
         'YoastSEO_Vendor\\Psr\\Container\\ContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/ContainerInterface.php',
         'YoastSEO_Vendor\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/NotFoundExceptionInterface.php',
@@ -892,9 +898,9 @@ class ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd68966ec94af8b28648b9ed9a98a08f0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite8045e5427b38f7e74d01a423dc8fd66::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite8045e5427b38f7e74d01a423dc8fd66::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite8045e5427b38f7e74d01a423dc8fd66::$classMap;
 
         }, null, ClassLoader::class);
     }
