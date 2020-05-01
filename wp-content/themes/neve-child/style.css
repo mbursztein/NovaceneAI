@@ -138,6 +138,17 @@
 	h1:not(.site-title) {
 		line-height: 1.1;
 	}
+
+	.page-id-2480 .nv-sidebar-full-width .alignfull {
+		padding: 0 !important;
+    	margin: 0 !important;
+	}
+	.page-id-2480 .wp-block-themeisle-blocks-advanced-columns .innerblocks-wrap .wp-block-themeisle-blocks-advanced-column,
+	.page-id-2487 .wp-block-themeisle-blocks-advanced-columns .innerblocks-wrap .wp-block-themeisle-blocks-advanced-column {
+		max-width: 320px;
+		margin-top: 0 !important;
+    	padding-top: 0 !important;
+	}
 }
 
 .nv-index-posts, .nv-single-page-wrap {
@@ -162,4 +173,10 @@
 .page-id-2480,
 .page-id-2487 {
 	background-color: #000;
+}
+
+input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
