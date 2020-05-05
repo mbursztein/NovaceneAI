@@ -1661,6 +1661,17 @@ class Post_Grid_2{
                 'type' => 'string',
                 'default' => 'loadMore',
             ],
+            'loadMoreText' => [
+                'type' => 'string',
+                'default' => 'Load More',
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'paginationType','condition'=>'==','value'=>'loadMore'],
+                        ],
+                    ],
+                ],
+            ],
             'paginationNav' => [
                 'type' => 'string',
                 'default' => 'textArrow',

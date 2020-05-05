@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
 Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -141,6 +141,11 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 
 == Changelog ==
 
+= 1.1.7 - 4 May 2020 =
+* New: Load More Text Added
+* New: Include and Exclude Help Text Added
+* Fix: AJAX Pagination Viewport Issue
+* Update: Performance Improved
 
 = 1.1.6 - 15 April 2020 =
 * New: Filter All Text Change Option

@@ -67,7 +67,7 @@ class Initialization{
     // Only Backend
     public function register_scripts_back_callback() {
         $this->register_scripts_common();
-        wp_enqueue_script('ultp-blocks-editor-script', ULTP_URL.'assets/js/editor.blocks.js', array('wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ), ULTP_VER, true);
+        wp_enqueue_script('ultp-blocks-editor-script', ULTP_URL.'assets/js/editor.blocks.min.js', array('wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ), ULTP_VER, true);
         wp_enqueue_style('ultp-blocks-editor-css', ULTP_URL.'assets/css/blocks.editor.css', array(), ULTP_VER);
         if(is_rtl()){ wp_enqueue_style('ultp-blocks-editor-rtl-css', ULTP_URL.'assets/css/rtl.css', array(), ULTP_VER); }
         wp_localize_script('ultp-blocks-editor-script', 'ultp_data', array(

@@ -260,6 +260,11 @@
                 },
                 success: function(data) {
                     wrap.find('.ultp-block-items-wrap').html(data);
+                    if($(window).scrollTop() > wrap.offset().top){
+                        $([document.documentElement, document.body]).animate({
+                            scrollTop: wrap.offset().top - 50
+                        }, 100);
+                    }
                 },
                 complete:function() {
                     wrap.removeClass('ultp-loading-active');

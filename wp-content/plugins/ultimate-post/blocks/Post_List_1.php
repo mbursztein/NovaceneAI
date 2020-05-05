@@ -1782,6 +1782,17 @@ class Post_List_1{
                 'type' => 'string',
                 'default' => 'pagination',
             ],
+            'loadMoreText' => [
+                'type' => 'string',
+                'default' => 'Load More',
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'paginationType','condition'=>'==','value'=>'loadMore'],
+                        ],
+                    ],
+                ],
+            ],
             'paginationNav' => [
                 'type' => 'string',
                 'default' => 'textArrow',
