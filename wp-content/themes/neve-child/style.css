@@ -19,6 +19,7 @@
 	padding: 5rem;
 	text-align: center;
 	font-size: 14px;
+    border-top: 1px solid #4977b9;
 }
 
 .cn-button.wp-default {
@@ -190,4 +191,8 @@ input {
 	height: 51px;
     margin-top: 9px;
     margin-bottom: 8px;
+}
+
+.site-footer {
+	display: none;
 }
