@@ -181,3 +181,13 @@ input {
 	-moz-appearance: none;
 	appearance: none;
 }
+
+.msft-partner-logo img {
+	height: 68px;
+}
+
+.ibm-partner-logo img {
+	height: 51px;
+    margin-top: 9px;
+    margin-bottom: 8px;
+}
