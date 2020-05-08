@@ -196,3 +196,8 @@ input {
 .site-footer {
 	display: none;
 }
+
+.post-password-form {
+	margin-top: 90px;
+    color: #fff;
+}
