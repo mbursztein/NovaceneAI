@@ -205,3 +205,8 @@ input {
 #pwbox-2431 {
 	color: #fff;
 }
+
+.archive h2 {
+	font-size: 1.2em;
+	font-weight: bold;
+}
