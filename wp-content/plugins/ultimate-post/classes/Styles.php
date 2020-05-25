@@ -113,7 +113,7 @@ class Styles {
 					throw new Exception(__('CSS can not be saved due to permission!!!', 'ultimate-post')); 
 				}
 				update_post_meta($post_id, '_ultp_css', $ultp_block_css);
-				return ['success'=>true, 'message'=>__('Ultimate Post block css file has been updated.', 'ultimate-post')];
+				return ['success'=>true, 'message'=>__('Gutenberg Post block css file has been updated.', 'ultimate-post')];
 			} else {
 				delete_post_meta($post_id, '_ultp_active');
 				if (file_exists($dir.$filename)) {
@@ -177,6 +177,9 @@ class Styles {
 			$css_dir_path = $upload_css_dir_url . "ultimate-post/ultp-css-{$post_id}.css";
 			if ( file_exists( $css_dir_path ) ) {
 				$css_dir_url = trailingslashit( $upload_dir_url['baseurl'] );
+				if (is_ssl()) {
+					$css_dir_url = str_replace('http://', 'https://', $css_dir_url);
+				}
 				$css_url = $css_dir_url . "ultimate-post/ultp-css-{$post_id}.css";
 				wp_enqueue_style( "ultp-post-{$post_id}", $css_url, array(), ULTP_VER, 'all' );
 			} else {

@@ -166,8 +166,12 @@
 	color: #fff;
 }
 
+
+
 #wpcf7-f2482-p2480-o1 form .wpcf7-validation-errors,
-#wpcf7-f2482-p2480-o1 form .wpcf7-mail-sent-ok {
+#wpcf7-f2482-p2480-o1 form .wpcf7-mail-sent-ok,
+#wpcf7-f1831-p1832-o1 form .wpcf7-validation-errors,
+#wpcf7-f1831-p1832-o1 form .wpcf7-mail-sent-ok  {
 	display: none !important;
 }
 

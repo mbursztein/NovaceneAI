@@ -2145,11 +2145,6 @@ class Post_Grid_2{
                                                 include ULTP_PATH.'blocks/template/title.php';
                                             }
 
-                                            // Excerpt
-                                            if($attr['excerptShow']) {
-                                                $post_loop .= '<div class="ultp-block-excerpt">'.ultimate_post()->excerpt($post_id, $attr['excerptLimit']).'</div>';
-                                            }
-
                                             if( $attr['excerptShow'] ) { 
                                                 if ( $attr['showFullExcerpt']== 0 ) {
                                                     $post_loop .= '<div class="ultp-block-excerpt">'.ultimate_post()->excerpt($post_id, $attr['excerptLimit']).'</div>';

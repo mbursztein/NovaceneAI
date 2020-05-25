@@ -69,7 +69,7 @@ class Functions{
     public function get_page_number($attr, $post_number) {
         if($post_number > 0){
             $post_per_page = isset($attr['queryNumber']) ? $attr['queryNumber'] : 3;
-            $pages = floor($post_number/$post_per_page);
+            $pages = ceil($post_number/$post_per_page);
             return $pages ? $pages : 1;
         }else{
             return 1;

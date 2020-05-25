@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Gutenberg Post Blocks
- * Description: Ultimate Post blocks is a Gutenberg block Plugin for creating dynamic blog listing, grid and slider.
- * Version:     1.1.7
+ * Description: Gutenberg Post blocks is a Gutenberg block Plugin for creating dynamic blog listing, grid and slider.
+ * Version:     1.1.9
  * Author:      wpxpo
  * Author URI:  https://wpxpo.com/
  * Text Domain: ultimate-post
@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Define
-define('ULTP_VER', '1.1.7');
+define('ULTP_VER', '1.1.9');
 define('ULTP_URL', plugin_dir_url(__FILE__));
 define('ULTP_PATH', plugin_dir_path(__FILE__));
 

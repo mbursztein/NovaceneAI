@@ -11,8 +11,8 @@ class Options{
 
     public static function menu_page_callback() {
         add_menu_page(
-            esc_html__( 'Ultimate Post', 'ultimate-post' ),
-            esc_html__( 'Ultimate Post', 'ultimate-post' ),
+            esc_html__( 'Post Blocks', 'ultimate-post' ),
+            esc_html__( 'Post Blocks', 'ultimate-post' ),
             'manage_options',
             'ultp-settings',
             array( self::class, 'create_admin_page' ),
@@ -35,7 +35,7 @@ class Options{
             $settings = self::get_option_settings();
             foreach ($settings as $key => $setting) {
                 if (!empty($key)) {
-                    $options[$key] = sanitize_text_field($options[$key]);
+                    $options[$key] = isset($options[$key]) ? sanitize_text_field($options[$key]) : '';
                 }
             }
         }
@@ -46,10 +46,10 @@ class Options{
         return array(
             'css_save_as' => array(
                 'type' => 'select',
-                'label' => __('CSS Save Method', 'ultimate-post'),
+                'label' => __('CSS Add Via', 'ultimate-post'),
                 'options' => array(
-                    'wp_head'   => __( 'Header','ultimate-post' ),
-                    'filesystem' => __( 'File System','ultimate-post' ),
+                    'wp_head'   => __( 'Header - (Internal)','ultimate-post' ),
+                    'filesystem' => __( 'File System - (External)','ultimate-post' ),
                 ),
                 'default' => 'wp_head',
                 'desc' => __('Select where you want to save CSS.', 'ultimate-post')
@@ -64,17 +64,17 @@ class Options{
                 'default' => 'style1',
                 'desc' => __('Select Preloader Style.', 'ultimate-post')
             ),
-            // 'preloader_color' => array(
-            //     'type' => 'color',
-            //     'label' => __('Preloader Color', 'ultimate-post'),
-            //     'default' => '#1740f5',
-            //     'desc' => __('Select Preloader Color.', 'ultimate-post')
-            // ),
             'container_width' => array(
                 'type' => 'number',
                 'label' => __('Container Width', 'ultimate-post'),
                 'default' => '1140',
                 'desc' => __('Change Container Width.', 'ultimate-post')
+            ),
+            'hide_import_btn' => array(
+                'type' => 'switch',
+                'label' => __('Hide Import Button', 'ultimate-post'),
+                'default' => '',
+                'desc' => __('Hide Import Layout Button from the Gutenberg Editor.', 'ultimate-post')
             ),
         );
     }
@@ -206,6 +206,14 @@ class Options{
                                 $html .= '<div class="ultp-settings-field">';
                                     $val = isset($option_data[$key]) ? $option_data[$key] : (isset($value['default']) ? $value['default'] : '');
                                     $html .= '<input type="number" name="ultp_options['.$key.']" value="'.$val.'"/>';
+                                    $html .= '<p class="description">'.$value['desc'].'</p>';
+                                $html .= '</div>';
+                                break;
+
+                            case 'switch':
+                                $html .= '<div class="ultp-settings-field">';
+                                    $val = isset($option_data[$key]) ? $option_data[$key] : (isset($value['default']) ? $value['default'] : '');
+                                    $html .= '<input type="checkbox" value="yes" name="ultp_options['.$key.']" '.($val == 'yes' ? 'checked' : '').' />';
                                     $html .= '<p class="description">'.$value['desc'].'</p>';
                                 $html .= '</div>';
                                 break;
@@ -698,7 +706,7 @@ class Options{
                     </h1>
                     <p><?php esc_html_e('Most Powerful & Advanced Gutenberg Kit', 'ultimate-post'); ?><a href="https://wordpress.org/support/plugin/ultimate-post/reviews/#new-post"><?php esc_html_e('Rate the plugin', 'ultimate-post'); ?><span>★★★★★<span></a></p>
                 </div>
-                <img src="<?php echo ULTP_URL.'assets/img/logo-option.svg'; ?>" alt="<?php _e('Ultimate Post', 'ultimate-post'); ?>">
+                <img src="<?php echo ULTP_URL.'assets/img/logo-option.svg'; ?>" alt="<?php _e('Gutenberg Post Blocks', 'ultimate-post'); ?>">
             </div>
             <div class="ultp-tab-wrap">
                 <div class="ultp-tab-title-wrap">
@@ -715,7 +723,7 @@ class Options{
                                 <div class="ultp-overview-content">
                                     <div class="ultp-overview-text">
                                         <h3 class="ultp-title"><?php esc_html_e( 'Quick Overview', 'ultimate-post' ); ?></h3>
-                                        <?php esc_html_e('Ultimate Post Blocks is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds.', 'ultimate-post'); ?>
+                                        <?php esc_html_e('Gutenberg Post Blocks is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds.', 'ultimate-post'); ?>
                                         <div>
                                         <a href="https://www.wpxpo.com/" class="button button-primary"><?php esc_html_e('Plugin Details', 'ultimate-post'); ?></a>
                                         <a class="button button-success" target="_blank" href="https://demo.wpxpo.com/layouts/"><?php esc_html_e('Free Layout Pack', 'ultimate-post'); ?></a>

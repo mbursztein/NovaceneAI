@@ -70,10 +70,20 @@ class Initialization{
         wp_enqueue_script('ultp-blocks-editor-script', ULTP_URL.'assets/js/editor.blocks.min.js', array('wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ), ULTP_VER, true);
         wp_enqueue_style('ultp-blocks-editor-css', ULTP_URL.'assets/css/blocks.editor.css', array(), ULTP_VER);
         if(is_rtl()){ wp_enqueue_style('ultp-blocks-editor-rtl-css', ULTP_URL.'assets/css/rtl.css', array(), ULTP_VER); }
+        
+        $import = '';
+        $options = get_option('ultp_options');
+        if (isset($options['hide_import_btn'])) {
+            if ($options['hide_import_btn']=='yes') {
+                $import = 'yes';
+            }
+        }
+
         wp_localize_script('ultp-blocks-editor-script', 'ultp_data', array(
             'url' => ULTP_URL,
             'ajax' => admin_url('admin-ajax.php'),
-            'security' => wp_create_nonce('ultp-nonce')
+            'security' => wp_create_nonce('ultp-nonce'),
+            'hide_import_btn' => $import
         ));
     }
 
@@ -84,7 +94,8 @@ class Initialization{
                 'css_save_as' => 'wp_head',
                 'preloader_style' => 'style1',
                 'preloader_color' => '#1740f5',
-                'container_width' => '1140'
+                'container_width' => '1140',
+                'hide_import_btn' => ''
             );
             update_option('ultp_options', $option_data);
         }
@@ -161,15 +172,15 @@ class Initialization{
             if($blockName == $value['blockName']) {
                 if($value['attrs']['blockId'] == $blockId) {
                     $attr = $this->all_blocks[$blockRaw]->get_attributes(true);
-                    $attr['queryTax'] = $taxtype == 'category' ? 'category' : 'tag';
+                    $value['attrs']['queryTax'] = $taxtype == 'category' ? 'category' : 'tag';
                     if($taxtype == 'category' && $taxonomy) {
-                        $attr['queryCat'] = json_encode(array($taxonomy));
+                        $value['attrs']['queryCat'] = json_encode(array($taxonomy));
                     }
                     if($taxtype == 'post_tag' && $taxonomy) {
-                        $attr['queryTag'] = json_encode(array($taxonomy));
+                        $value['attrs']['queryTag'] = json_encode(array($taxonomy));
                     }
                     if(isset($value['attrs']['queryNumber'])){
-                        $attr['queryNumber'] = $value['attrs']['queryNumber'];
+                        $value['attrs']['queryNumber'] = $value['attrs']['queryNumber'];
                     }
                     $attr = array_merge($attr, $value['attrs']);
                     echo $this->all_blocks[$blockRaw]->content($attr, true);
@@ -245,7 +256,7 @@ class Initialization{
             array(
                 array( 
                     'slug' => 'ultimate-post', 
-                    'title' => __( 'Ultimate Post', 'ultimate-post' ) 
+                    'title' => __( 'Gutenberg Post Blocks', 'ultimate-post' ) 
                 )
             ), $categories 
         );

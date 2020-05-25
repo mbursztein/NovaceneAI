@@ -24,7 +24,7 @@ class Templates{
     }
 
     public function add_template_callback($templates){
-		$templates['ultp_page_template'] = __('Ultimate Post Template', 'ultimate-post');
+		$templates['ultp_page_template'] = __('Gutenberg Post Blocks Template', 'ultimate-post');
 		return $templates;
 	}
 }

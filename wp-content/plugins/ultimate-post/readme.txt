@@ -2,9 +2,9 @@
 Contributors: wpxpo
 Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 5.4
-Stable tag: 1.1.7
+Stable tag: 1.1.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,19 +12,19 @@ Gutenberg post blocks is a Gutenberg blocks plugin for latest post blocks, post 
 
 == Description ==
 
-Ultimate Post Blocks is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds. 
+Gutenberg Post Blocks is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds. 
 
 [🔥 Plugin Details](https://wpxpo.com/) || [💥 Free Starter Pack](https://demo.wpxpo.com/layouts/) || [😱 Download Free Theme](https://wordpress.org/themes/coblog/) || [💿 Video Tutorials](https://www.youtube.com/watch?v=JZxIflYKOuM&list=PLPidnGLSR4qcAwVwIjMo1OVaqXqjUp_s4)
 
 [youtube https://www.youtube.com/watch?v=JZxIflYKOuM]
 
 <strong>Live Editable Gutenberg Blocks</strong>
-Each and every setting are visually editable in Ultimate Post Blocks. You can change your blocks design of the post with ultimate design settings. An enormous amount of google font has been added for your section design. You don't have enough design skills? No problem, preset sections blocks and layouts blocks are ready for your needs. 
+Each and every setting are visually editable in Gutenberg Post Blocks. You can change your blocks design of the post with ultimate design settings. An enormous amount of google font has been added for your section design. You don't have enough design skills? No problem, preset sections blocks and layouts blocks are ready for your needs. 
 
 <strong>Slider Blocks</strong>
-Dynamic slider using posts is now easier to make using ultimate post blocks. Slider will be run with your control, your desire design. Post Grid blocks come with ultimate control over the modern design. 
+Dynamic slider using posts is now easier to make using Gutenberg post blocks. Slider will be run with your control, your desire design. Post Grid blocks come with ultimate control over the modern design. 
 
-Using Ultimate Post Blocks query builder you can create a complex query for your post grid. Anyone can create complex queries for every block without writing a single line of code.  
+Using Gutenberg Post Blocks query builder you can create a complex query for your post grid. Anyone can create complex queries for every block without writing a single line of code.  
 
 
 
@@ -38,7 +38,7 @@ Using Ultimate Post Blocks query builder you can create a complex query for your
 * Post Carosel
 
 
-= Ultimate Post Blocks Key Feature: =
+= Gutenberg Post Blocks Key Feature: =
 
 These Gutenberg post blocks come with a lot of key features. 
 
@@ -92,7 +92,7 @@ Developed by [WPXPO](https://www.wpxpo.com)
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t even need to leave your web browser. 
 
 1. Go to your WordPress Plugin installation menu (Dashboard > Plugins > Add New)
-2. In the search field type “Ultimate Post Blocks” and press enter.
+2. In the search field type Gutenberg Post Blocks” and press enter.
 3. "Install Now" and then click "Active"
 
 
@@ -140,6 +140,19 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 6. Post Slider
 
 == Changelog ==
+= 1.1.9 - 20 May 2020 =
+* New: All Sections Title Tag P and SPAN Issue
+* Fix: Undefined Index in Options.php Page
+
+= 1.1.8 - 18 May 2020 =
+* New: Import Layout Enable/Disable Button Added
+* Fix: Excerpt Duplicate Issue in Product Grid 2
+* Fix: Change name "Ultimate-post" to "Gutenberg Post Blocks"
+* Fix: Pagination Not Working for some Criteria
+* Fix: CSS links HTTPS mixed content issue fixed
+* Fix: Filter Not working for the specific condition
+* Update: Add span and p in the title tag lists
+* Update: Option Panel Text has been Updated
 
 = 1.1.7 - 4 May 2020 =
 * New: Load More Text Added

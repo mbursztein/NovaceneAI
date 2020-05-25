@@ -19,6 +19,41 @@ Neve is distributed under the terms of the GNU GPLv2 or later
 
 == Changelog ==
 
+##### [Version 2.7.1](https://github.com/Codeinwp/neve/compare/v2.7.0...v2.7.1) (2020-05-21)
+
+- [Feat] Replaced Skin Mode control with a Text Color control in the header builder rows
+- [Fix] Apply row background color to menu dropdowns
+- [Fix] Filter by price widget button default background-color
+- [Fix] Make the alignment classes more generic to allow overwriting from block specific settings
+- [Fix] Clickable links in the Changelog area
+- [Fix] Neve Options page on lower resolutions
+- [Fix] Check for the Rest API endpoint before allowing users to start an import
+
+
+
+
+#### [Version 2.7.0](https://github.com/Codeinwp/neve/compare/v2.6.6...v2.7.0) (2020-05-13)
+
+- [Feat] Improved Neve Options page and onboarding experience
+- [Feat] Integration with the Toolset plugin
+- [Feat] Improved dynamic CSS generation & Gutenberg integration
+- [Fix] Yellow background on the number of products in categories on the Shop page
+- [Fix] Secondary Menu alignment on mobile
+- New starter sites
+- Book Shop - https://themeisle.com/demo/?theme=Book%20Shop
+- Psychologist - https://themeisle.com/demo/?theme=Psychologist
+- Doctors - https://themeisle.com/demo/?theme=Doctors%202
+- Pet Shop - https://themeisle.com/demo/?theme=Pet%20Shop
+- Apparel - https://themeisle.com/demo/?theme=Apparel
+- Boat Rental - https://themeisle.com/demo/?theme=Boat%20Rental
+- Jewellery Shop - https://themeisle.com/demo/?theme=Jewellery%20Shop%202
+- Perfume Shop - https://themeisle.com/demo/?theme=Perfume%20Shop
+- Music Band - https://themeisle.com/demo/?theme=Music%20Band%202
+- Fitness Trainer - https://themeisle.com/demo/?theme=Fitness%20Trainer
+
+
+
+
 ##### [Version 2.6.6](https://github.com/Codeinwp/neve/compare/v2.6.5...v2.6.6) (2020-04-07)
 
 - [Fix] Background color for mobile menu
@@ -1152,3 +1187,77 @@ Starter Sites screenshots resources:
 * https://mystock.themeisle.com/photo/cheesy-hamburger-with-french-fries/
 * https://mystock.themeisle.com/photo/fancy-restaurant/
 * https://mystock.themeisle.com/photo/indian-vegetable-grill-sandwich/
+
+- Fitness Trainer
+* https://stocksnap.io/photo/people-hiking-GGQX7WXAAC
+* https://stocksnap.io/photo/00RNNUWGLM
+
+- Music Band 2
+* https://stocksnap.io/photo/people-men-H80Z9EVEGA
+* https://stocksnap.io/photo/events-concert-1ZNLM71V1J
+
+- Perfume Shop
+* https://stocksnap.io/photo/chanel-perfume-KFMR70XLYS
+
+- Jewellery Shop 2
+* https://stocksnap.io/photo/woman-closeup-BIR9EBVX6K
+* https://stocksnap.io/photo/diamond-ring-V6XSRDWN2G
+* https://stocksnap.io/photo/still-items-NLSP8TGHFM
+
+- Copywriter
+* https://stocksnap.io/photo/man-smiling-X6BW9YMWXV
+
+- Boat Rental
+* https://stocksnap.io/photo/architecture-buildings-B7260BRVGS
+* https://stocksnap.io/photo/boat-ship-L584FW8XBR
+* https://mystock.themeisle.com/photo/three-boats-at-the-dock/
+* https://mystock.themeisle.com/photo/small-boat-on-copenhagen-canals/
+* https://mystock.themeisle.com/photo/blue-boat-docked-on-an-island-in-maldives/
+
+- Apparel
+* https://mystock.themeisle.com/photo/protest/
+* https://mystock.themeisle.com/photo/shopping-building-in-copenhagen-center/
+* https://mystock.themeisle.com/photo/grooms-suite/
+* https://mystock.themeisle.com/photo/mannequin/
+* https://stocksnap.io/photo/AOOC3CJARN
+* https://stocksnap.io/photo/HKTKMOVXNO
+
+- Pet Shop
+* https://mystock.themeisle.com/photo/buddy/
+* https://mystock.themeisle.com/photo/street-dog-sitting-on-a-beach/
+
+- Doctors 2
+* https://stocksnap.io/photo/city-buildings-VAGYAWK3PE
+* https://stocksnap.io/photo/chair-dentist-3J10QN5PTS
+* https://stocksnap.io/photo/stethoscope-medical-9M1HWW2JFV
+
+- Phychologist
+* https://stocksnap.io/photo/people-girls-Y2AHVPYB51
+* https://mystock.themeisle.com/photo/hammock-placed-between-two-poles-on-a-beach/
+
+- Book Shop
+* https://mystock.themeisle.com/photo/fireplace/
+* https://mystock.themeisle.com/photo/thinking-time/
+* https://mystock.themeisle.com/photo/volkswagen-vanagon/
+* https://mystock.themeisle.com/photo/programming-laptop-2/
+* https://mystock.themeisle.com/photo/temple-2/
+* https://stocksnap.io/photo/UA83K6Z0WY
+* https://stocksnap.io/photo/EB9B6BC1F6
+
+- Laundry Services
+* https://stocksnap.io/photo/laundry-laundromat-4876CF9B9C
+* https://stocksnap.io/photo/laundry-laundromat-611E343F6D
+* https://mystock.themeisle.com/photo/silk-scarfs/
+
+- Craft Beer
+* https://stocksnap.io/photo/beer-bottles-8HS0I30RUK
+* https://stocksnap.io/photo/wine-beer-C2988083A4
+
+- Gardening
+* https://mystock.themeisle.com/photo/distant-view-of-taj-mahal-surounded-by-nature/
+* https://stocksnap.io/photo/green-window-HYEGYZNLA6
+* https://mystock.themeisle.com/photo/trees-carefully-trimmed-into-geometrical-shapes-on-a-beach/
+
+- Resume 2
+* https://mystock.themeisle.com/photo/browser-tabs/
+* https://stocksnap.io/photo/man-interior-BXO1M5UBLM
