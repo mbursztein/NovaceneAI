@@ -12,6 +12,19 @@
  Text Domain:  nevechild
 */
 
+
+
+.page-id-2575 .has-black-background-color,
+#wp-block-themeisle-blocks-advanced-column-ca1514f4,
+#wp-block-themeisle-blocks-advanced-columns-741ed573,
+#wp-block-themeisle-blocks-advanced-columns-a2f4acc3 {
+	color: #fff;
+}
+
+.page-id-2575 {
+	background-color: #000;
+}
+
 #footer {
 	width: 100%;
 	background-color: #000;
@@ -150,6 +163,46 @@
 		margin-top: 0 !important;
     	padding-top: 0 !important;
 	}
+
+	.hfg_header .header-menu-sidebar .header-menu-sidebar-bg {
+		background-color: #000;
+	}
+	.header-menu-sidebar .navbar-toggle-wrapper button.navbar-toggle {
+    	color: #fff;
+	}
+
+	.navbar-toggle-wrapper .icon-bar {
+		background-color: #fff !important;	
+	}
+
+	#wp-block-themeisle-blocks-advanced-columns-a9d932c2 {
+		background-position: -550px !important;
+	}
+
+	#wp-block-themeisle-blocks-advanced-columns-302807b7,
+	#wp-block-themeisle-blocks-advanced-columns-ce0ee533,
+	#wp-block-themeisle-blocks-advanced-columns-bb3c3fcc,
+	#wp-block-themeisle-blocks-advanced-columns-c0f00be1,
+	#wp-block-themeisle-blocks-advanced-columns-352a969e,
+	#wp-block-themeisle-blocks-advanced-columns-5041da52,
+	#wp-block-themeisle-blocks-advanced-columns-41627f05,
+	#wp-block-themeisle-blocks-advanced-columns-68f47d15,
+	#wp-block-themeisle-blocks-advanced-columns-ddb2fd93 {
+		margin: 0;
+    	width: auto;
+    	max-width: initial;
+	}
+
+	#wp-block-themeisle-blocks-advanced-column-56335fdf {
+		padding-right: 10px !important;
+    	padding-top: 30px !important;
+    	padding-left: 30px !important;
+    }
+
+    #wp-block-themeisle-blocks-advanced-columns-5041da52 {
+    	padding: 0 !important;
+    }
+
 }
 
 .nv-index-posts, .nv-single-page-wrap {
