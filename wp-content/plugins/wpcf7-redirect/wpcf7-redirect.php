@@ -3,7 +3,7 @@
  * Plugin Name:  Redirection for Contact Form 7
  * Plugin URI:   http://querysol.com
  * Description:  Contact Form 7 Add-on - Redirect after mail sent.
- * Version:      1.3.5
+ * Version:      1.3.6
  * Author:       Query Solutions
  * Author URI:   http://querysol.com
  * Contributors: querysolutions, yuvalsabar
@@ -31,7 +31,7 @@ class WPCF7_Redirect {
 	public function __construct() {
 		$this->plugin_url  = plugin_dir_url( __FILE__ );
 		$this->plugin_path = plugin_dir_path( __FILE__ );
-		$this->version     = '1.3.5';
+		$this->version     = '1.3.6';
 		$this->add_actions();
 	}
 
@@ -342,7 +342,7 @@ class WPCF7_Redirect {
 			if ( $submission->get_status() === 'mail_sent' ) {
 
 				// Use extrnal url
-				if ( 'on' === $this->fields['external_url'] && $this->fields['use_external_url'] ) {
+				if ( 'on' === $this->fields['use_external_url'] && $this->fields['external_url'] ) {
 					$this->redirect_url = $this->fields['external_url'];
 				} else {
 					$this->redirect_url = get_permalink( $this->fields['page_id'] );
@@ -385,14 +385,13 @@ class WPCF7_Redirect {
 
 		<?php if ( ! get_option( 'wpcf7_redirect_banner_dismiss' ) ) : ?>
 
-		<div class="banner-wrap">
-			<button type="button" class="notice-dismiss">
-				<span class="screen-reader-text"><?php _e( 'Close Banner', 'qstheme' ); ?>.</span>
-			</button>
-			<a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">
-				<img src="<?php echo $this->plugin_url; ?>/img/banner-pro.png" alt="<?php _e( 'Banner - Redirection Pro For Contact Form 7', 'wpcf7-redirect' ); ?>">
-			</a>
-		</div>
+			<div class="banner-wrap">
+				<button type="button" class="notice-dismiss" aria-label="<?php _e( 'Close Banner', 'wpcf7-redirect' ); ?>" title="<?php _e( 'Close Banner', 'wpcf7-redirect' ); ?>"></button>
+
+				<a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">
+					<img src="<?php echo $this->plugin_url; ?>/img/banner-pro.png" alt="<?php _e( 'Banner - Redirection Pro For Contact Form 7', 'wpcf7-redirect' ); ?>">
+				</a>
+			</div>
 
 		<?php endif; ?>
 
@@ -510,7 +509,7 @@ class WPCF7_Redirect {
 			<div class="get-pro">
 				<span class="dashicons dashicons-star-filled"></span>
 				<a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">
-					Redirection Pro For Contact Form 7 - We've added exciting new features!
+					<?php _e( "Redirection Pro For Contact Form 7 - We've added exciting new features!", 'wpcf7-redirect' ); ?>
 				</a>
 				<span class="dashicons dashicons-star-filled"></span>
 			</div>

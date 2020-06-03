@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
 Tested up to: 5.4.1
 Requires PHP: 5.4
-Stable tag: 1.1.9
+Stable tag: 1.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,7 +77,7 @@ These Gutenberg post blocks come with a lot of key features.
 </ul>
 
 = Author =
-Developed by [WPXPO](https://www.wpxpo.com)
+Developed by [WPXPO](https://www.wpxpo.com). [Contribute to Gutenberg Post Blocks on Bitbucket](https://bitbucket.org/wpstabon/ultimate-post/src/master/) and join the party.
 
 == Installation ==
 
@@ -140,6 +140,11 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 6. Post Slider
 
 == Changelog ==
+= 1.2.0 - 02 June 2020 =
+* Fix: Title Tag CSS Issue Fixed
+* Fix: Dropdown Field Type Open Issue Fixed
+* Fix: Excerpt CSS Issue Fixed
+
 = 1.1.9 - 20 May 2020 =
 * New: All Sections Title Tag P and SPAN Issue
 * Fix: Undefined Index in Options.php Page

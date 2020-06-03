@@ -2,8 +2,8 @@
 Tags: contact form 7 redirect, contact form 7 thank you page, redirect cf7, redirect contact form 7, contact form 7 success page, cf7 redirect
 Contributors: yuvalsabar
 Requires at least: 4.7.0
-Tested up to: 5.4
-Stable tag: 1.3.5
+Tested up to: 5.4.1
+Stable tag: 1.3.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,8 +69,8 @@ No. One of the reasons we developed this plugin, is because on_send_ok is now de
 
 == Changelog ==
 
-= 1.3.5 =
-* Fixed a bug: Redirection Pro for Contact Form 7 not disappearing after clicking the X button (for some users).
+= 1.3.6 =
+* Fixed a bug: Redirection for legacy browsers (non-ajax) not working when using external url.
 
 = 1.3.4 =
 * Fixed a bug: "Changes you made may not be saved" pop-up no longer appears when no changes have been made.
