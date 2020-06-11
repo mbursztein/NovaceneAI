@@ -1,6 +1,6 @@
 === Neve ===
 Contributors: themeisle
-Tags: blog, custom-logo, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, accessibility-ready, wide-blocks, block-styles, footer-widgets, portfolio, left-sidebar, right-sidebar
+Tags: blog, custom-logo, e-commerce, rtl-language-support, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, accessibility-ready, wide-blocks, block-styles, footer-widgets, portfolio, left-sidebar, right-sidebar
 Requires at least: 4.0
 Tested up to: 5.4
 Stable tag: 1.0.23
@@ -18,6 +18,24 @@ Neve WordPress theme, Copyright 2018 Themeisle
 Neve is distributed under the terms of the GNU GPLv2 or later
 
 == Changelog ==
+
+##### [Version 2.7.2](https://github.com/Codeinwp/neve/compare/v2.7.1...v2.7.2) (2020-06-04)
+
+- [Feat] Three layouts for the header builder Search Icon component ( Canvas, Minimal and Float above Header )
+- [Feat] Styling controls for the header builder Search Icon and Search Form components
+- [Feat] Support for post formats
+- [Feat] New neve_before_header_wrapper_hook and neve_after_header_wrapper_hook hooks
+- [Fix] Dismissable notice for contributing to Neve
+- [Fix] Support for Main image width and Thumbnail width options in WooCommerce ( to fix blurred images on the Shop page )
+- [Fix] Wrong default padding for buttons
+- [Fix] Wrong content width for grouped blocks
+- [Fix] Neve Options page not loading in Microsoft Edge v18
+- [Fix] Update list of Google Fonts
+- [Fix] Google lighthouse reports not unique ID attribute
+- [Fix] Live refresh with the Primary Menu hover skin option
+
+
+
 
 ##### [Version 2.7.1](https://github.com/Codeinwp/neve/compare/v2.7.0...v2.7.1) (2020-05-21)
 
@@ -1261,3 +1279,22 @@ Starter Sites screenshots resources:
 - Resume 2
 * https://mystock.themeisle.com/photo/browser-tabs/
 * https://stocksnap.io/photo/man-interior-BXO1M5UBLM
+
+- Leather Shop
+* https://stocksnap.io/photo/bag-leather-DQCQ6W96UC
+* https://stocksnap.io/photo/brown-leather-9YGBJUD1FY
+* https://stocksnap.io/photo/shoes-shoelace-G2QXOYC0UN
+* https://stocksnap.io/photo/brown-leather-84G6CURMJ3
+* https://stocksnap.io/photo/guy-man-YK0PRWX6MC
+
+- Public Notary
+* https://mystock.themeisle.com/photo/vatican-streets/
+* https://mystock.themeisle.com/photo/scale-model-of-a-modern-building/
+
+- Pharmacy
+* https://stocksnap.io/photo/pills-medicine-I4P7JN8SCN
+* https://mystock.themeisle.com/photo/blox-building-in-copenhagen/
+
+- Investment Consulting
+* https://stocksnap.io/photo/man-outside-HBDZWHMZ6K
+* https://mystock.themeisle.com/photo/writers/

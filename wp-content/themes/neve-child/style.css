@@ -14,15 +14,67 @@
 
 
 
-.page-id-2575 .has-black-background-color,
-#wp-block-themeisle-blocks-advanced-column-ca1514f4,
-#wp-block-themeisle-blocks-advanced-columns-741ed573,
-#wp-block-themeisle-blocks-advanced-columns-a2f4acc3 {
+/* Styles for: /paper-to-insight/ */
+#wp-block-themeisle-blocks-advanced-column-4200ed21 {
+	background-color: #000;
 	color: #fff;
 }
 
-.page-id-2575 {
+#wp-block-themeisle-blocks-advanced-columns-5d2da63b,
+#wp-block-themeisle-blocks-advanced-column-4200ed21 {
+	padding: 0 !important;
+	margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+#wp-block-themeisle-blocks-advanced-column-4200ed21 {
+	padding: 5em !important;
+}
+
+#wp-block-themeisle-blocks-advanced-column-817ef6c2 .wp-block-columns {
+	margin-bottom: 0;
+}
+
+#wp-block-themeisle-blocks-advanced-column-817ef6c2 h2 {
+	margin-bottom: 1em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#wp-block-themeisle-blocks-advanced-columns-0ed67c68 {
+	display: none;
+}
+
+.page-id-2575 .has-black-background-color,
+#wp-block-themeisle-blocks-advanced-column-ca1514f4,
+#wp-block-themeisle-blocks-advanced-columns-741ed573,
+#wp-block-themeisle-blocks-advanced-columns-a2f4acc3,
+#wp-block-themeisle-blocks-advanced-columns-0fef8f3d {
+	color: #fff;
+}
+
+.page-id-2575,
+#wp-block-themeisle-blocks-advanced-columns-0fef8f3d {
 	background-color: #000;
+}
+
+#wp-block-themeisle-blocks-advanced-columns-0fef8f3d {
+	margin-bottom: 0 !important;
+}
+
+#wp-block-themeisle-blocks-advanced-column-2848b19d .wp-block-embed-youtube {
+	max-width: 1200px;
+    margin: auto;
 }
 
 #footer {

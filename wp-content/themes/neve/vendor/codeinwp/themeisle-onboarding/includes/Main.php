@@ -16,7 +16,7 @@ class Main {
 	 *
 	 * @var string Version string.
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.1';
 	/**
 	 * Sites Library API URL.
 	 *
@@ -46,7 +46,7 @@ class Main {
 	 *
 	 * @var Admin
 	 */
-	protected $admin = null;
+	public $admin = null;
 
 	/**
 	 * Method to return path to child class in a Reflective Way.
