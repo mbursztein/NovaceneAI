@@ -180,8 +180,39 @@
 	margin: auto;
 }
 
+
+
+
+
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
+
+	body {
+		font-size: 16px;
+	}
+
+	.is-stacked-on-mobile .wp-block-media-text__content {
+		padding-top: 3em;
+		padding-bottom: 3em;
+	}
+
+	.nv-content-wrap .alignfull, .nv-content-wrap .alignwide {
+		margin: 0 !important;
+		width: 100%;
+		max-width: 100%;
+		margin-left: -15px;
+	}
+
+	.innerblocks-wrap .wp-block-themeisle-blocks-advanced-column {
+		margin: 0 !important;
+	}
+
+	.nv-single-page-wrap {
+		padding: 0;
+	}
+
+	
+
   .img-p img {
 		padding: 7%;
 	}
@@ -254,6 +285,48 @@
     #wp-block-themeisle-blocks-advanced-columns-5041da52 {
     	padding: 0 !important;
     }
+
+
+
+
+
+
+	/*/* Home page and paper-insight page */
+	#wp-block-themeisle-blocks-advanced-columns-a8029e0a,
+	#wp-block-themeisle-blocks-advanced-columns-5a212c8e,
+	#wp-block-themeisle-blocks-advanced-columns-5d2da63b,
+	#wp-block-themeisle-blocks-advanced-columns-85a9dc4e {
+		margin: 0 !important;
+		width: 100vw;
+		max-width: 100vw;
+		margin-left: -15px;
+	}
+
+	
+
+	.page-id-2662 .wp-block-embed-youtube {
+		width: auto;
+		margin: 0;
+		max-width: 100%;
+	}
+	
+	.alignfull img {
+		margin-left: -15px;
+		width: 376px !important;
+	}
+	
+	#wp-block-themeisle-blocks-advanced-column-4200ed21
+	{
+		padding: 3em 0 !important;
+		margin: 0 !important;
+	}
+
+	#wp-block-themeisle-blocks-advanced-column-c339613d {
+		margin: 0 !important;
+		padding: 0 1rem !important;
+	}*/
+
+
 
 }
 
