@@ -29,16 +29,6 @@ $header_classes = apply_filters( 'nv_header_classes', 'header' );
 
 	  gtag('config', 'UA-164348817-1');
 	</script>
-	<?php if ($_SERVER['REQUEST_URI'] == '/analytics-demo/') : ?>
-		<script>
-			gtag('send', {
-			hitType: 'event',
-			eventCategory: 'Videos',
-			eventAction: 'play',
-			eventLabel: 'NovaceneAI Platform Demo: The Advanced Analytics Module'
-			});
-		</script>
-	<?php endif; ?>
 	<script>
 	  (function(){
 
