@@ -29,6 +29,17 @@ $header_classes = apply_filters( 'nv_header_classes', 'header' );
 
 	  gtag('config', 'UA-164348817-1');
 	</script>
+	<!-- Note: plugin scripts must be included after the tracking snippet. -->
+	<script src="https://ipmeta.io/plugin.js"></script>
+
+	<script>
+	   provideGtagPlugin({
+	      apiKey: '229ca95fb726ef1a7a909b4bfd82ff4b8b177a8029bc66c366e912a91963807c',
+	      serviceProvider: 'dimension1',
+	      networkDomain: 'dimension2',
+	      networkType: 'dimension3',
+	   });
+	</script>
 	<script>
 	  (function(){
 
