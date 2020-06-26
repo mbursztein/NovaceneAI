@@ -1729,25 +1729,8 @@ class Post_Grid_3{
                 ],
             ],
             'pagiAlign' => [
-                'type' => 'string',
+                'type' => 'object',
                 'default' =>  (object)['lg' =>'left'],
-                //'style' => [(object)['selector' => '{{ULTP}} .ultp-next-prev-wrap ul, {{ULTP}} .ultp-loadmore { text-align:{{pagiAlign}}; }']]
-                // 'style' => [
-                //     (object)[
-                //         'depends' => [
-                //             (object)['key'=>'paginationType','condition'=>'==','value'=>'loadMore'],
-                //         ],
-                //         'selector'=>'{{ULTP}} .ultp-loadmore { text-align:{{pagiAlign}}; }'
-                //     ],
-                // ],
-                // 'style' => [
-                //     (object)[
-                //         'depends' => [
-                //             (object)['key'=>'paginationType','condition'=>'==','value'=>'navigation'],
-                //         ],
-                //         'selector'=>'{{ULTP}} .ultp-next-prev-wrap ul { text-align:{{pagiAlign}}; }'
-                //     ],
-                // ],
                 'style' => [
                     (object)[
                         'depends' => [

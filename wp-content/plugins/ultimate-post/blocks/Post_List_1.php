@@ -1827,7 +1827,7 @@ class Post_List_1{
                 ],
             ],
             'pagiAlign' => [
-                'type' => 'string',
+                'type' => 'object',
                 'default' =>  (object)['lg' =>'left'],
                 'style' => [
                     (object)[

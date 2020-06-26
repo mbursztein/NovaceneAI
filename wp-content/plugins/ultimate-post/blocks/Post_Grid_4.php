@@ -1696,7 +1696,7 @@ class Post_Grid_4{
                 ],
             ],
             'pagiAlign' => [
-                'type' => 'string',
+                'type' => 'object',
                 'default' =>  (object)['lg' =>'left'],
                 'style' => [
                     (object)[
