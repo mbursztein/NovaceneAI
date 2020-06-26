@@ -29,6 +29,25 @@ $header_classes = apply_filters( 'nv_header_classes', 'header' );
 
 	  gtag('config', 'UA-164348817-1');
 	</script>
+	
+	<!-- Global site tag (gtag.js) - Google Ads: 624384386 -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-624384386"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'AW-624384386');
+	</script>
+
+	<!-- Event snippet for Submit contact form conversion page -->
+	<?php if ( is_page(2412) ) : ?>
+		<script>
+		  gtag('event', 'conversion', {'send_to': 'AW-624384386/meDwCIWLpNUBEIKz3akC'});
+		</script>
+	<?php endif; ?>
+
+
 	<!-- Note: plugin scripts must be included after the tracking snippet. -->
 	<script src="https://ipmeta.io/plugin.js"></script>
 
