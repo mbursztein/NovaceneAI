@@ -1828,7 +1828,7 @@ class Post_Grid_1{
                 ],
             ],
             'pagiAlign' => [
-                'type' => 'string',
+                'type' => 'object',
                 'default' =>  (object)['lg' =>'center'],
                 'style' => [
                     (object)[

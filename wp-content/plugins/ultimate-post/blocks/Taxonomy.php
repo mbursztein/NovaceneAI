@@ -1760,7 +1760,7 @@ class Taxonomy{
                 ],
             ],
             'pagiAlign' => [
-                'type' => 'string',
+                'type' => 'object',
                 'default' =>  (object)['lg' =>'center'],
                 'style' => [
                     (object)[
