@@ -14,4 +14,4 @@ $time           = get_the_date();
 $comment        = get_comments_number();
 $view           = get_post_meta(get_the_ID(),'__post_views_count', true);
 $post_time      = human_time_diff(get_the_time('U'),current_time('U'));
-$reading_time   = ceil(strlen(get_the_content())/1200).__(' min read', 'ultimate-post');
+$reading_time   = ceil(strlen(strip_tags(get_the_content()))/1200).__(' min read', 'ultimate-post');

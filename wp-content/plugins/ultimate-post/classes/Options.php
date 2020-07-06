@@ -169,6 +169,9 @@ class Options{
     public static function get_settings_data() {
         $html = '';
         $option_data = get_option( 'ultp_options' );
+        if(!isset($option_data['css_save_as'])){
+			$option_data = ultimate_post()->init_set_data();	
+		}
         $data = self::get_option_settings();
         $html .= '<div class="ultp-settings">';
             $html .= '<input type="hidden" name="option_page" value="ultp_options" />';

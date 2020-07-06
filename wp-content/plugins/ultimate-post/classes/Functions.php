@@ -5,6 +5,19 @@ defined('ABSPATH') || exit;
 
 class Functions{
 
+    // Init data
+    public function init_set_data(){
+        $option_data = array(
+            'css_save_as' => 'wp_head',
+            'preloader_style' => 'style1',
+            'preloader_color' => '#1740f5',
+            'container_width' => '1140',
+            'hide_import_btn' => ''
+        );
+        update_option('ultp_options', $option_data);
+        return $option_data;
+    }
+
     // Excerpt
     public function excerpt( $post_id, $limit = 55 ) {
         return apply_filters( 'the_excerpt', wp_trim_words( get_the_content( $post_id ) , $limit ) );

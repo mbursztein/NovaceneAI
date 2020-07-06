@@ -17,6 +17,10 @@ class Post_Grid_1{
             //--------------------------
             //      Query Setting
             //--------------------------
+            // 'queryQuick' => [
+            //     'type' => 'string',
+            //     'default' =>'',
+            // ],
             'queryNumber' => [
                 'type' => 'string',
                 'default' =>5,

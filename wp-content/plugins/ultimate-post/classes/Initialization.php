@@ -73,6 +73,9 @@ class Initialization{
         
         $import = '';
         $options = get_option('ultp_options');
+        if(!isset($option_data['css_save_as'])){
+			$options = ultimate_post()->init_set_data();	
+		}
         if (isset($options['hide_import_btn'])) {
             if ($options['hide_import_btn']=='yes') {
                 $import = 'yes';
@@ -90,16 +93,8 @@ class Initialization{
     // Fire When Plugin First Install
     public function install_hook() {
         if (!get_option('ultp_options')) {
-            $option_data = array(
-                'css_save_as' => 'wp_head',
-                'preloader_style' => 'style1',
-                'preloader_color' => '#1740f5',
-                'container_width' => '1140',
-                'hide_import_btn' => ''
-            );
-            update_option('ultp_options', $option_data);
+            ultimate_post()->init_set_data();
         }
-        
     }
 
     public function activation_redirect($plugin) {
