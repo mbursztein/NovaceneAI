@@ -3,7 +3,7 @@ Contributors: yoast, joostdevalk, omarreiss, jipmoors, herregroen
 Tags: Yoast, Yoast SEO, development
 Requires at least: 5.4
 Tested up to: 5.4
-Stable tag: 1.7
+Stable tag: 1.8
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,17 @@ If you find bugs or would like to contribute, see our [GitHub repo](https://gith
 1. Screenshot of the Yoast test helper admin page.
 
 == Changelog ==
+
+= 1.8 =
+
+Enhancements:
+
+* Added resets for indexables related options when using the Yoast Test Helper to reset the indexables and migrations.
+* Added resets for prominent word related functionality when using the Yoast Test Helper to reset the prominent words calculation.
+
+Bugfixes:
+
+* Fixes the database versions keys the plugin checks for Video SEO and WooCommerce SEO as they've been changed in these plugins.
 
 = 1.7 =
 

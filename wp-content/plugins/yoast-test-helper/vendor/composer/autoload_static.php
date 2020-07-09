@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdc9a84d1e6bd79f77a2d80a71aae94d8
+class ComposerStaticInit4a66430055cc3115e8dd4bb8eb984851
 {
     public static $classMap = array (
         'Yoast\\WP\\Test_Helper\\Admin_Bar_Panel' => __DIR__ . '/../..' . '/src/admin-bar-panel.php',
@@ -42,7 +42,7 @@ class ComposerStaticInitdc9a84d1e6bd79f77a2d80a71aae94d8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInitdc9a84d1e6bd79f77a2d80a71aae94d8::$classMap;
+            $loader->classMap = ComposerStaticInit4a66430055cc3115e8dd4bb8eb984851::$classMap;
 
         }, null, ClassLoader::class);
     }
