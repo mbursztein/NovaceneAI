@@ -157,7 +157,7 @@ class Styles {
 	// Require CSS 
 	public function require_block_css(){
 		$option_data = get_option( 'ultp_options' );
-		if(!isset($option_data['css_save_as'])){
+		if(!$option_data){
 			$option_data = ultimate_post()->init_set_data();	
 		}
 		if( isset($option_data['css_save_as']) ){

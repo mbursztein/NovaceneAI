@@ -2287,7 +2287,9 @@ class Post_List_3{
                                         }
 
                                         // Meta
-                                        include ULTP_PATH.'blocks/template/meta.php';
+                                        if( $attr['metaPosition'] =='top' ) {
+                                            include ULTP_PATH.'blocks/template/meta.php';
+                                        }
 
                                         // Title
                                         if ($title && $attr['titleShow'] && $attr['titlePosition'] == 0 ){
@@ -2302,9 +2304,15 @@ class Post_List_3{
                                                 $post_loop .= '<div class="ultp-block-excerpt">'.get_the_excerpt().'</div>';
                                             }
                                         }
+
                                         // Read More
                                         if ($attr['readMore']) {
                                             $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                        }
+
+                                        // Meta
+                                        if( $attr['metaPosition'] =='bottom' ) {
+                                            include ULTP_PATH.'blocks/template/meta.php';
                                         }
                                     $post_loop .= '</div>';
                                 $post_loop .= '</div>';

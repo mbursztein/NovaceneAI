@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
 Tested up to: 5.4.1
 Requires PHP: 5.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -140,6 +140,14 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 6. Post Slider
 
 == Changelog ==
+= 1.2.3 - 16 July 2020 =
+* Fix: CSS added via file system Issue Fixed
+* Fix: Hide Button Issue Fixed
+* Fix: Post List 2  Blocks Meta Position Issue Fixed
+* Fix: Post Slider 1 Blocks Meta Position Issue Fixed
+* Fix: Post Grid 3 Blocks Meta Position Issue Fixed
+* Fix: Post Grid 4 Blocks Meta Position Issue Fixed
+
 = 1.2.2 - 02 July 2020 =
 * New: Multisite Support Added
 * Fix: Reading Time Issue Fixed

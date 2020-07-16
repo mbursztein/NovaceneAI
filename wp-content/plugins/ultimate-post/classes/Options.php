@@ -169,7 +169,7 @@ class Options{
     public static function get_settings_data() {
         $html = '';
         $option_data = get_option( 'ultp_options' );
-        if(!isset($option_data['css_save_as'])){
+        if(!$option_data){
 			$option_data = ultimate_post()->init_set_data();	
 		}
         $data = self::get_option_settings();
@@ -711,17 +711,19 @@ class Options{
                 </div>
                 <img src="<?php echo ULTP_URL.'assets/img/logo-option.svg'; ?>" alt="<?php _e('Gutenberg Post Blocks', 'ultimate-post'); ?>">
             </div>
+
+            <?php $section = isset($_GET['tab']) ? $_GET['tab'] :'started'; ?>
             <div class="ultp-tab-wrap">
                 <div class="ultp-tab-title-wrap">
-                    <div class="ultp-tab-title active"><?php _e('Getting Started', 'ultimate-post'); ?></div>
-                    <div class="ultp-tab-title"><?php _e('General Settings', 'ultimate-post'); ?></div>
-                    <div class="ultp-tab-title"><?php _e('Recommended Theme', 'ultimate-post'); ?></div>
-                    <div class="ultp-tab-title"><?php _e('Video Tutorials', 'ultimate-post'); ?></div>
-                    <div class="ultp-tab-title"><?php _e('Changelog', 'ultimate-post'); ?></div>
+                    <div data-title="started" class="ultp-tab-title<?php if($section == 'started'){ echo ' active'; } ?>"><?php _e('Getting Started', 'ultimate-post'); ?></div>
+                    <div data-title="settings" class="ultp-tab-title<?php if($section == 'settings'){ echo ' active'; } ?>"><?php _e('General Settings', 'ultimate-post'); ?></div>
+                    <div data-title="recommended" class="ultp-tab-title<?php if($section == 'recommended'){ echo ' active'; } ?>"><?php _e('Recommended Theme', 'ultimate-post'); ?></div>
+                    <div data-title="tutorials" class="ultp-tab-title<?php if($section == 'tutorials'){ echo ' active'; } ?>"><?php _e('Video Tutorials', 'ultimate-post'); ?></div>
+                    <div data-title="changelog" class="ultp-tab-title<?php if($section == 'changelog'){ echo ' active'; } ?>"><?php _e('Changelog', 'ultimate-post'); ?></div>
                 </div>
                 <div class="ultp-content-wrap">
                     <div class="ultp-tab-content-wrap">
-                        <div class="ultp-tab-content active"><!-- #Recommended Theme Content -->
+                        <div class="ultp-tab-content<?php if($section == 'started'){ echo ' active'; } ?>"><!-- #Recommended Theme Content -->
                             <div class="ultp-overview ultp-admin-card">
                                 <div class="ultp-overview-content">
                                     <div class="ultp-overview-text">
@@ -755,17 +757,17 @@ class Options{
                             </div><!--/.ultp-dashboard-->
                         
                         </div>
-                        <div class="ultp-tab-content"><!-- #Settings Content -->
+                        <div class="ultp-tab-content<?php if($section == 'settings'){ echo ' active'; } ?>"><!-- #Settings Content -->
                             <div class="ultp-overview ultp-admin-card"><!-- #Settings Content --> 
                                 <?php self::get_settings_data(); ?>
                             </div>
                         </div>
-                        <div class="ultp-tab-content"><!-- #Recommended Theme Content -->
+                        <div class="ultp-tab-content<?php if($section == 'recommended'){ echo ' active'; } ?>"><!-- #Recommended Theme Content -->
                             <div class="ultp-admin-themes"><!-- #Settings Content --> 
                                 <?php self::get_recommended_themes(); ?>
                             </div>
                         </div>
-                        <div class="ultp-tab-content"><!-- #Video Tutorial -->
+                        <div class="ultp-tab-content<?php if($section == 'tutorials'){ echo ' active'; } ?>"><!-- #Video Tutorial -->
                             <div class="ultp-video-tutorials">
                                 <div class="ultp-video-tutorial">
                                     <iframe src="https://www.youtube.com/embed/S0kU_FSa2wc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>  
@@ -801,7 +803,7 @@ class Options{
                                 </div>
                             </div>
                         </div>
-                        <div class="ultp-tab-content"><!-- #Changelog Content -->
+                        <div class="ultp-tab-content<?php if($section == 'changelog'){ echo ' active'; } ?>"><!-- #Changelog Content -->
                             <?php self::get_changelog_data(); ?>
                         </div>
                     </div>
@@ -814,6 +816,9 @@ class Options{
                     jQuery( document ).on( "click", '.ultp-tab-title', function(e){ 
                         jQuery(this).closest('.ultp-tab-wrap').find('.ultp-tab-title').removeClass('active').eq(jQuery(this).index()).addClass('active')
                         jQuery(this).closest('.ultp-tab-wrap').find('.ultp-tab-content').removeClass('active').eq(jQuery(this).index()).addClass('active');
+                        let refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + '?page=ultp-settings&tab='+jQuery(this).data('title');
+                        window.history.pushState({ path: refresh }, '', refresh);
+                        jQuery('input[name=_wp_http_referer]').val(window.location.pathname + '?page=ultp-settings&tab=settings');
                     });
                 });
             </script>

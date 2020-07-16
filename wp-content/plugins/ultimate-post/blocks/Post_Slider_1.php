@@ -2112,7 +2112,9 @@ class Post_Slider_1{
                                                 include ULTP_PATH.'blocks/template/title.php';
                                             }
                                             
-                                            include ULTP_PATH.'blocks/template/meta.php';
+                                            if( $attr['metaPosition'] =='top' ) {
+                                                include ULTP_PATH.'blocks/template/meta.php';
+                                            }
 
                                             if ($title && $attr['titleShow'] && !$attr['titlePosition']) {
                                                 include ULTP_PATH.'blocks/template/title.php';
@@ -2128,6 +2130,10 @@ class Post_Slider_1{
 
                                             if ($attr['readMore']) {
                                                 $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                            }
+
+                                            if( $attr['metaPosition'] =='bottom' ) {
+                                                include ULTP_PATH.'blocks/template/meta.php';
                                             }
                                             
                                         $post_loop .= '</div>'; //.ultp-block-content-inner

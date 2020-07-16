@@ -2151,7 +2151,9 @@ class Post_Grid_3{
                                             }
                                             
                                             // Meta
-                                            include ULTP_PATH.'blocks/template/meta.php';
+                                            if( $attr['metaPosition'] =='top' ) {
+                                                include ULTP_PATH.'blocks/template/meta.php';
+                                            }
                                             
                                             // Title
                                             if ($title && $attr['titleShow'] && $attr['titlePosition'] == 0) {
@@ -2170,6 +2172,11 @@ class Post_Grid_3{
                                             // Read More
                                             if ($attr['readMore'] && ($idx == 0 || $attr['showSmallBtn'])) {
                                                 $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                            }
+
+                                            // Meta
+                                            if( $attr['metaPosition'] =='bottom' ) {
+                                                include ULTP_PATH.'blocks/template/meta.php';
                                             }
                                         $post_loop .= '</div>';
                                     $post_loop .= '</div>';

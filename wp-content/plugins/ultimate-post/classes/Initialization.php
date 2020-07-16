@@ -73,7 +73,7 @@ class Initialization{
         
         $import = '';
         $options = get_option('ultp_options');
-        if(!isset($option_data['css_save_as'])){
+        if(!$options){
 			$options = ultimate_post()->init_set_data();	
 		}
         if (isset($options['hide_import_btn'])) {
