@@ -240,30 +240,6 @@ class Options{
         echo '<form method="post" action="options.php">'.$html.'</form>';
     }
 
-
-    public static function get_support_data() {
-        $html = '';
-        $html .= '<div class="ultp-admin-sidebar">';
-
-            $html .= '<div class="ultp-admin-card ultp-sidebar-card">';
-                $html .= '<h3 class="ultp-sidebar-title">'.esc_html__( 'Coblog Theme', 'ultimate-post' ).'</h3>';
-                $html .= '<p class="ultp-sidebar-content">'.esc_html__( 'Responsive WordPress Theme news theme built for personal blog, blogging, blogger, journal, lifestyle, magazine, photography, editorial, traveler and so on.', 'ultimate-post' ).'</p>';
-                $html .= '<h4>'.esc_html__( 'Core Features', 'ultimate-post' ).'</h4>';
-                $html .= '<ul class="ultp-sidebar-list">';
-                    $html .= '<li>'.esc_html__( 'Based On Gutenberg', 'ultimate-post' ).'</li>';
-                    $html .= '<li>'.esc_html__( 'Header Variations', 'ultimate-post' ).'</li>';
-                    $html .= '<li>'.esc_html__( 'Footer Variations', 'ultimate-post' ).'</li>';
-                    $html .= '<li>'.esc_html__( 'Advanced Option Panel', 'ultimate-post' ).'</li>';
-                    $html .= '<li>'.esc_html__( 'Box Width layout', 'ultimate-post' ).'</li>';
-                    $html .= '<li>'.esc_html__( 'Unlimited Color Options', 'ultimate-post' ).'</li>';
-                $html .= '</ul>';
-                $html .= '<a class="button button-success" target="_blank" href="https://wordpress.org/themes/coblog">'.__('Free Download', 'ultimate-post').'</a>';
-            $html .= '</div>';//ultp-admin-card
-
-        $html .= '</div>';//ultp-admin-sidebar
-        echo $html;
-    }
-
     /**
      * Settings page output
      */
@@ -328,97 +304,13 @@ class Options{
 
 
             /* ----common--- */
-            .ultp-admin-card {
-                box-shadow: 0 0 10px -5px rgba(0,0,0,0.5);
-                background-color: #fff;
-            }
-            .ultp-title {
-                margin-top:0;
-                color: #000;
-            }
-            .ultp-overview {
-                padding: 50px;
-                display:flex;
-            }
-            .ultp-overview-content {
-                max-width: 50%;
-                padding-right: 30px;
-            }
-            .wp-core-ui .button-primary {
-                background: #006ade;
-                border-color: #006ade;
-                border-radius: 2px;
-                padding: 3px 15px;
-                font-weight: 400;
-                height: auto;
-            }
-            .wp-core-ui .button.button-success {
-                background: #14bd62;
-                border-color: #14bd62;
-                color: #fff;
-                margin-left: 10px;
-                transition: 400ms;
-                border-radius: 2px;
-                padding: 3px 15px;
-                font-weight: 400;
-                height: auto;
-            }
-            .wp-core-ui .button.button-success:hover {
-                background: #14d26c;
-                border-color: #14d26c;
-            }
-            .wp-core-ui .button.button-primary:hover {
-                background: #007afe;
-                border-color: #007afe;
-            }
-            .wp-core-ui .button.button-success:focus {
-                box-shadow: 0 0 0 1px #10b35b;
-            }
-            .wp-core-ui .button.button-primary:focus {
-                box-shadow: 0 0 0 1px #016BDF;
-            }
-            .ultp-overview-text {
-                font-size: 14px;
-                font-weight: 300;
-                line-height: 25px;
-            }
-            .ultp-overview-text .button {
-                margin-top: 30px;
-            }
-            .ultp-overview-feature {
-                margin-top: 40px;
-            }
-
-            .ultp-dashboard-list {
-                list-style: none;
-                padding: 0;
-            }
-            .ultp-dashboard-list li {
-                font-size: 14px;
-                font-weight: 300;
-                line-height: 26px;
-                position: relative;
-                padding: 0 20px;
-                display: inline-block;
-                width: 40%;
-            }
-            .ultp-dashboard-list li:after {
-                content: "";
-                left: 0;
-                width: 8px;
-                height: 8px;
-                border-radius: 100px;
-                background: #dcdcdc;
-                position: absolute;
-                top: 50%;
-                margin-top: -4px;
-            }
 
 
 
             /* ----Sidebar--- */
             .ultp-sidebar-card {
                 padding: 0 20px 25px;
+                margin-bottom: 30px;
             }
             .ultp-sidebar-title {
                 margin: 0 -20px 0;
@@ -426,7 +318,7 @@ class Options{
                 padding: 15px 20px;
                 font-size: 16px;
                 border-bottom: 1px solid #EEEEEE;
-                color: #000;
+                color: #007AFF;
             }
             .ultp-sidebar-card h4 {
                 color: #000;
@@ -450,7 +342,7 @@ class Options{
                 width: 8px;
                 height: 8px;
                 border-radius: 100px;
-                background: #dcdcdc;
+                background: #c1c1c1;
                 position: absolute;
                 top: 50%;
                 margin-top: -4px;
@@ -510,75 +402,6 @@ class Options{
                 grid-template-columns: 0.8fr 1fr;
             }
 
-
-            /* ----Recomended--- */
-            .ultp-recommended-theme{
-                max-width: 100%;
-                background-color: #ffffff;
-                border-radius: 3px;
-                box-shadow: 0 0 10px -5px rgba(0,0,0,0.5);
-                margin-bottom: 30px;
-            }
-            .ultp-recommended-image, .ultp-recommended-name, .ultp-recommended-button {
-                display: inline-block;
-                vertical-align: middle;
-            }
-            .ultp-recommended-name {
-                font-size: 18px;
-                margin-left: 20px;
-            }
-            .ultp-recommended-name a {
-                transition: 400ms;
-                color: #000000;
-                text-decoration: none;
-                transition: 400ms;
-            }
-            .ultp-recommended-name a:hover {
-                color: #007AFF;
-            }
-            .ultp-recommended-image {
-                border-right: 1px solid #ececec;
-            }
-            .ultp-recommended-image img {
-                width: 70px;
-            }
-            .ultp-recommended-button {
-                float: right;
-                margin: 20px 20px 0 0;
-                position: relative;
-            }
-            .ultp-recommended-button a{
-                float: right;
-                transition: 200ms;
-                text-decoration: none;
-            }
-            .ultp-recommended-button a:hover{
-                cursor: pointer;
-            }
-
-            /* ---Video Tutorials--- */
-            .ultp-overview-video iframe {
-                box-shadow: 0 0 10px -5px rgba(0,0,0,0.5);
-            }
-            .ultp-video-tutorials {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                grid-gap: 30px;
-            }
-            .ultp-video-tutorial {
-                box-shadow: 0 0 10px -5px rgba(0,0,0,0.5);
-                background-color: #fff;
-            }
-            .ultp-video-tutorial iframe {
-                box-shadow: 0 0 10px -5px rgba(0,0,0,0.5);
-                width: 100%;
-                height: 207px;
-            }
-            .ultp-video-tutorial h4 {
-                color: #000;
-                margin: 0;
-                padding: 15px 20px 20px;
-            }
             /* ---Changelog--- */
             .ultp-changelog-wrap {
                 background-color: #ffffff;
@@ -712,102 +535,23 @@ class Options{
                 <img src="<?php echo ULTP_URL.'assets/img/logo-option.svg'; ?>" alt="<?php _e('Gutenberg Post Blocks', 'ultimate-post'); ?>">
             </div>
 
-            <?php $section = isset($_GET['tab']) ? $_GET['tab'] :'started'; ?>
+            <?php $section = isset($_GET['tab']) ? $_GET['tab'] :'settings'; ?>
             <div class="ultp-tab-wrap">
                 <div class="ultp-tab-title-wrap">
-                    <div data-title="started" class="ultp-tab-title<?php if($section == 'started'){ echo ' active'; } ?>"><?php _e('Getting Started', 'ultimate-post'); ?></div>
                     <div data-title="settings" class="ultp-tab-title<?php if($section == 'settings'){ echo ' active'; } ?>"><?php _e('General Settings', 'ultimate-post'); ?></div>
-                    <div data-title="recommended" class="ultp-tab-title<?php if($section == 'recommended'){ echo ' active'; } ?>"><?php _e('Recommended Theme', 'ultimate-post'); ?></div>
-                    <div data-title="tutorials" class="ultp-tab-title<?php if($section == 'tutorials'){ echo ' active'; } ?>"><?php _e('Video Tutorials', 'ultimate-post'); ?></div>
                     <div data-title="changelog" class="ultp-tab-title<?php if($section == 'changelog'){ echo ' active'; } ?>"><?php _e('Changelog', 'ultimate-post'); ?></div>
                 </div>
                 <div class="ultp-content-wrap">
                     <div class="ultp-tab-content-wrap">
-                        <div class="ultp-tab-content<?php if($section == 'started'){ echo ' active'; } ?>"><!-- #Recommended Theme Content -->
-                            <div class="ultp-overview ultp-admin-card">
-                                <div class="ultp-overview-content">
-                                    <div class="ultp-overview-text">
-                                        <h3 class="ultp-title"><?php esc_html_e( 'Quick Overview', 'ultimate-post' ); ?></h3>
-                                        <?php esc_html_e('Gutenberg Post Blocks is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds.', 'ultimate-post'); ?>
-                                        <div>
-                                        <a href="https://www.wpxpo.com/" class="button button-primary"><?php esc_html_e('Plugin Details', 'ultimate-post'); ?></a>
-                                        <a class="button button-success" target="_blank" href="https://demo.wpxpo.com/layouts/"><?php esc_html_e('Free Layout Pack', 'ultimate-post'); ?></a>
-                                        </div>
-                                    </div><!--/.ultp-about-text-->
-                                    <div class="ultp-overview-feature">
-                                        <h3 class="ultp-title"><?php esc_html_e( 'Core Features', 'ultimate-post' ); ?></h3>
-                                        <ul class="ultp-dashboard-list">
-                                            <li><?php esc_html_e( 'Infinite Load More', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Advanced Pagination', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Advanced Query', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Premade Layouts', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Premade Blocks', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Post List View', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Post Grid View', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Filter Option', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Post Carousel', 'ultimate-post' ); ?></li>
-                                            <li><?php esc_html_e( 'Image Overlay', 'ultimate-post' ); ?></li>
-                                        </ul>
-                                    </div><!--/.ultp-overview-feature-->
-                                </div><!--/.ultp-overview-content-->
-                                <div class="ultp-overview-video">
-                                    <h3 class="ultp-title"><?php esc_html_e( 'Getting started', 'ultimate-post' ); ?></h3>
-                                        <iframe width="500" height="315" src="https://www.youtube.com/embed/JZxIflYKOuM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                            </div><!--/.ultp-dashboard-->
-                        
-                        </div>
                         <div class="ultp-tab-content<?php if($section == 'settings'){ echo ' active'; } ?>"><!-- #Settings Content -->
                             <div class="ultp-overview ultp-admin-card"><!-- #Settings Content --> 
                                 <?php self::get_settings_data(); ?>
-                            </div>
-                        </div>
-                        <div class="ultp-tab-content<?php if($section == 'recommended'){ echo ' active'; } ?>"><!-- #Recommended Theme Content -->
-                            <div class="ultp-admin-themes"><!-- #Settings Content --> 
-                                <?php self::get_recommended_themes(); ?>
-                            </div>
-                        </div>
-                        <div class="ultp-tab-content<?php if($section == 'tutorials'){ echo ' active'; } ?>"><!-- #Video Tutorial -->
-                            <div class="ultp-video-tutorials">
-                                <div class="ultp-video-tutorial">
-                                    <iframe src="https://www.youtube.com/embed/S0kU_FSa2wc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>  
-                                    <h4><?php esc_html_e('How to Import Layouts','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe src="https://www.youtube.com/embed/lvRO359JuPw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use advaced query builder','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Eoz5yr8BAWY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use Post Slider','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe src="https://www.youtube.com/embed/gqaXZ9nQEV8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use Advanced Pagination','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/kwGhNfBD6AA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use Pre-made Blocks','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe src="https://www.youtube.com/embed/bcZJt2aN7hM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use Image Overlay','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe src="https://www.youtube.com/embed/2yIcx-2QkiE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use Category','ultimate-post'); ?></h4>
-                                </div>
-                                <div class="ultp-video-tutorial">
-                                    <iframe src="https://www.youtube.com/embed/WGRy7CHcMFU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    <h4><?php esc_html_e('How to use Meta','ultimate-post'); ?></h4>
-                                </div>
                             </div>
                         </div>
                         <div class="ultp-tab-content<?php if($section == 'changelog'){ echo ' active'; } ?>"><!-- #Changelog Content -->
                             <?php self::get_changelog_data(); ?>
                         </div>
                     </div>
-                    <?php self::get_support_data(); ?>
                 </div>
             </div>
             
