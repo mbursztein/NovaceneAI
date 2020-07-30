@@ -33,12 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="sui-box-body">
 				<div class="sui-form-field">
-					<label for="reporting-first-name" class="sui-label"><?php esc_html_e( 'First name', 'wphb' ); ?></label>
-					<input type="text" id="reporting-first-name" class="sui-form-control" placeholder="<?php esc_attr_e( 'E.g John', 'wphb' ); ?>">
+					<label for="reporting-first-name" id="reporting-name-label" class="sui-label"><?php esc_html_e( 'First name', 'wphb' ); ?></label>
+					<input type="text" id="reporting-first-name" aria-labelledby="reporting-name-label" class="sui-form-control" placeholder="<?php esc_attr_e( 'E.g John', 'wphb' ); ?>">
 				</div>
 				<div class="sui-form-field">
-					<label for="reporting-email" class="sui-label"><?php esc_html_e( 'Email address', 'wphb' ); ?></label>
-					<input type="text" id="reporting-email" class="sui-form-control" placeholder="<?php esc_attr_e( 'E.g john@doe.com', 'wphb' ); ?>">
+					<label for="reporting-email" id="reporting-email-label" class="sui-label"><?php esc_html_e( 'Email address', 'wphb' ); ?></label>
+					<input type="text" id="reporting-email" aria-labelledby="reporting-email-label" class="sui-form-control" placeholder="<?php esc_attr_e( 'E.g john@doe.com', 'wphb' ); ?>">
 				</div>
 			</div>
 
@@ -46,9 +46,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<button class="sui-button sui-button-ghost" data-modal-close="">
 					<?php esc_html_e( 'Cancel', 'wphb' ); ?>
 				</button>
-				<a class="sui-button" id="add-recipient">
+				<button class="sui-button" type="submit" id="add-recipient">
 					<?php esc_html_e( 'Add', 'wphb' ); ?>
-				</a>
+				</button>
 			</div>
 		</div>
 	</div>

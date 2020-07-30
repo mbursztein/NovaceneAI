@@ -93,6 +93,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</p>
 	<?php $code = '<span style="color:#3B78E7 !important">&lt;link</span> <span style="color:#8D00B1 !important">rel=</span>"preconnect" <span style="color:#8D00B1 !important">href=</span>"https://example.com"<span style="color:#3B78E7 !important">&gt;</span>'; ?>
-	<pre class="sui-code-snippet sui-no-copy" style="color:#1ABC9C"><?php echo wp_kses( $code, $allowed_tags ); ?></pre>
+	<pre class="sui-code-snippet sui-no-copy" style="color:#1ABC9C"><?php echo wp_kses_post( $code ); ?></pre>
 	<p><?php esc_html_e( 'The browser won’t begin fetching the resources before it needs them, but at least it can handle the connection aspects ahead of time, saving the user from waiting for several roundtrips when your browser is fetching the resources from this origin.', 'wphb' ); ?></p>
 <?php endif; ?>

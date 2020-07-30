@@ -83,6 +83,72 @@
         }
     }
 }
+/* Lazy Load Tab */
+.wpmud #wphb-box-advanced-lazy {
+
+    .sui-border-frame.sui-toggle-content {
+        margin-bottom: 15px;
+    }
+
+    #wphb-load-method-desc {
+        margin-bottom: 10px;
+    }
+    #button-style-header {
+        color: #aaa;
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 30px;
+    }
+    #wphb-button-styling {
+        button.sui-tab-item {
+            font-size: 12px;
+        }
+    }
+    #button-width-block-label {
+        margin-top: 28px;
+    }
+
+    #tab-content-btn-color {
+        div.sui-form-field {
+            padding-left: 0;
+        }
+    }
+
+    #align-options {
+        .sui-tab-item {
+            padding: 9px 12px;
+            .icon-align {
+                font-size: 16px;
+            }
+            &.active {
+                .icon-align {
+                    &:before {
+                        color: #17A8E3;
+                    }
+                }
+            }
+        }
+    }
+    #lazy_load-limit {
+        .sui-label-note {
+            font-weight: 500;
+        }
+    }
+    #sui-upsell-gravtar-caching {
+        margin-left: 44px;
+    }
+    .sui-upsell-row {
+        .sui-upsell-notice {
+            p {
+                border-left: 2px solid #17A8E3;
+                &:first-of-type::before {
+                    color: #17A8E3;
+                }
+            }
+        }
+    }
+}
 
 /* System information tab */
 .wpmud .box-advanced-system-info {

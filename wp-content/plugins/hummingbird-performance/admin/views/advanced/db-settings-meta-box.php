@@ -6,6 +6,8 @@
  * @since 1.8
  */
 
+use Hummingbird\Core\Utils;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -20,26 +22,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div><!-- end col-third -->
 	<div class="sui-box-settings-col-2">
-		<label class="sui-toggle sui-tooltip sui-tooltip-top-left" data-tooltip="<?php esc_attr_e( 'Enabled scheduled cleanups', 'wphb' ); ?>">
-			<input type="checkbox" name="scheduled_cleanup" id="scheduled_cleanup">
-			<span class="sui-toggle-slider"></span>
-		</label>
-		<label for="scheduled_cleanup"><?php esc_html_e( 'Enabled scheduled cleanups', 'wphb' ); ?></label>
+		<div class="sui-form-field">
+			<label for="scheduled_cleanup" class="sui-toggle">
+				<input type="checkbox" name="scheduled_cleanup" id="scheduled_cleanup" aria-labelledby="scheduled_cleanup-label">
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="scheduled_cleanup-label" class="sui-toggle-label"><?php esc_html_e( 'Enabled scheduled cleanups', 'wphb' ); ?></span>
+			</label>
+		</div>
 	</div>
 </div>
 
 <div class="sui-box-settings-row sui-upsell-row">
-	<img class="sui-image sui-upsell-image"
-		 src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-db-upsell.png' ); ?>"
-		 srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-db-upsell@2x.png' ); ?> 2x"
-		 alt="<?php esc_attr_e( 'Scheduled automated database cleanup', 'wphb' ); ?>">
+	<img class="sui-image sui-upsell-image" alt="<?php esc_attr_e( 'Scheduled automated database cleanup', 'wphb' ); ?>"
+		src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-db-upsell.png' ); ?>"
+		srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-db-upsell.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-db-upsell@2x.png' ); ?> 2x">
 
 	<div class="sui-upsell-notice">
-		<?php
-		printf(
-			__( '<p>Regular cleanups of your database ensures you’re regularly removing extra bloat which can slow down your host server. Upgrade to Hummingbird Pro as part of a WPMU DEV membership to unlock this feature today! <a href="%s" target="_blank">Learn More</a>.</p>', 'wphb' ),
-			\Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_dbcleanup_schedule_upsell_link' )
-		);
-		?>
+		<p>
+			<?php esc_html_e( 'Regular cleanups of your database ensures you’re regularly removing extra bloat which can slow down your host server. Upgrade to Hummingbird Pro as part of a WPMU DEV membership to unlock this feature today!', 'wphb' ); ?>
+			<br>
+			<a href="<?php Utils::get_link( 'plugin', 'hummingbird_dbcleanup_schedule_upsell_link' ); ?>" target="_blank">
+				<?php esc_html_e( 'Learn More', 'wphb' ); ?>
+			</a>
+		</p>
 	</div>
 </div>

@@ -34,11 +34,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<label class="sui-toggle sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_attr_e( 'Remove query strings from my assets', 'wphb' ); ?>">
-			<input type="checkbox" name="query_strings" id="query_strings" <?php checked( $query_stings ); ?> <?php disabled( apply_filters( 'wphb_query_strings_disabled', false ) ); ?>>
-			<span class="sui-toggle-slider"></span>
-		</label>
-		<label for="query_strings"><?php esc_html_e( 'Remove query strings from my assets', 'wphb' ); ?></label>
+		<div class="sui-form-field">
+			<label for="query_strings" class="sui-toggle">
+				<input type="checkbox" name="query_strings" id="query_strings" aria-labelledby="query_strings-label" <?php checked( $query_stings ); ?> <?php disabled( apply_filters( 'wphb_query_strings_disabled', false ) ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="query_strings-label" class="sui-toggle-label"><?php esc_html_e( 'Remove query strings from my assets', 'wphb' ); ?></span>
+			</label>
+		</div>
 	</div>
 </div>
 
@@ -50,15 +52,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<label class="sui-toggle sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_attr_e( 'Disable cart fragments', 'wphb' ); ?>">
-			<input type="checkbox" name="cart_fragments" id="cart_fragments" <?php checked( (bool) $cart_fragments ); ?> <?php disabled( apply_filters( 'wphb_cart_fragments_disabled', ! $woo_active ) ); ?>>
-			<span class="sui-toggle-slider"></span>
-		</label>
-		<label for="cart_fragments"><?php esc_html_e( 'Disable cart fragments', 'wphb' ); ?></label>
+		<div class="sui-form-field">
+			<label for="cart_fragments" class="sui-toggle">
+				<input type="checkbox" name="cart_fragments" id="cart_fragments" aria-labelledby="cart_fragments-label" <?php checked( (bool) $cart_fragments ); ?> <?php disabled( apply_filters( 'wphb_cart_fragments_disabled', ! $woo_active ) ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="cart_fragments-label" class="sui-toggle-label"><?php esc_html_e( 'Disable cart fragments', 'wphb' ); ?></span>
+			</label>
 
-		<div class="<?php echo $cart_fragments && $woo_active ? '' : 'sui-hidden'; ?>" id="cart_fragments_desc">
-			<div class="sui-border-frame sui-toggle-content">
-				<span class="sui-description">
+			<div
+				tabindex="0"
+				id="cart_fragments_desc"
+				class="sui-toggle-content sui-border-frame"
+				aria-labelledby="cart-fragment-description"
+				style="display: <?php echo $cart_fragments && $woo_active ? 'block' : 'none'; ?>;"
+			>
+				<span class="sui-description" id="cart-fragment-description">
 					<?php esc_html_e( 'Choose whether to disable this feature on only non-WooCommerce pages, or all pages.', 'wphb' ); ?>
 				</span>
 				<div class="sui-form-field sui-no-margin-bottom">
@@ -88,15 +96,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</p>
 				</div>
 			</div>
-		</div>
 
-		<?php if ( ! $woo_active ) : ?>
-			<div class="sui-notice" style="margin: 10px 0 0 48px">
-				<p>
-					<?php esc_html_e( 'This option requires WooCommerce to be installed and activated.', 'wphb' ); ?>
-				</p>
-			</div>
-		<?php endif; ?>
+			<?php if ( ! $woo_active ) : ?>
+				<div class="sui-toggle-content" style="margin-top: 10px">
+					<div class="sui-notice">
+						<p>
+							<?php esc_html_e( 'This option requires WooCommerce to be installed and activated.', 'wphb' ); ?>
+						</p>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
 	</div>
 </div>
 
@@ -108,11 +118,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<label class="sui-toggle sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_attr_e( 'Remove the default Emoji JS & CSS files', 'wphb' ); ?>">
-			<input type="checkbox" name="emojis" id="emojis" <?php checked( $emoji ); ?> <?php disabled( apply_filters( 'wphb_emojis_disabled', false ) ); ?>>
-			<span class="sui-toggle-slider"></span>
-		</label>
-		<label for="emojis"><?php esc_html_e( 'Remove the default Emoji JS & CSS files', 'wphb' ); ?></label>
+		<div class="sui-form-field">
+			<label for="emojis" class="sui-toggle">
+				<input type="checkbox" name="emojis" id="emojis" aria-labelledby="emojis-label" <?php checked( $emoji ); ?> <?php disabled( apply_filters( 'wphb_emojis_disabled', false ) ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="emojis-label" class="sui-toggle-label"><?php esc_html_e( 'Remove the default Emoji JS & CSS files', 'wphb' ); ?></span>
+			</label>
+		</div>
 	</div>
 </div>
 
@@ -124,7 +136,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<textarea class="sui-form-control" name="url_strings" placeholder="//fonts.googleapis.com
+		<div class="sui-form-field">
+			<textarea
+				placeholder="//fonts.googleapis.com
 //fonts.gstatic.com
 //ajax.googleapis.com
 //apis.google.com
@@ -132,15 +146,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 //www.google-analytics.com
 //ssl.google-analytics.com
 //youtube.com
-//s.gravatar.com"><?php echo esc_html( $prefetch ); ?></textarea>
-		<span class="sui-description">
-			<?php esc_html_e( 'Add one host entry per line replacing the http:// or https:// with // e.g. //fonts.googleapis.com. We’ve added a few common DNS requests to get you started.', 'wphb' ); ?>
-			<?php
-			printf(
-				'<a href="#" id="wphb-adv-paste-value">%s</a>',
-				esc_html__( 'Paste in recommended defaults.', 'wphb' )
-			);
-			?>
-		</span>
+//s.gravatar.com"
+				id="url_strings"
+				name="url_strings"
+				class="sui-form-control"
+				aria-label="<?php esc_html_e( 'Prefetch DNS Requests', 'wphb' ); ?>"
+				aria-describedby="url_strings-id"
+			><?php echo esc_html( $prefetch ); ?></textarea>
+			<span id="url_strings-id" class="sui-description">
+				<?php esc_html_e( 'Add one host entry per line replacing the http:// or https:// with // e.g. //fonts.googleapis.com. We’ve added a few common DNS requests to get you started.', 'wphb' ); ?>
+				<a href="#" id="wphb-adv-paste-value"><?php esc_html_e( 'Paste in recommended defaults.', 'wphb' ); ?></a>
+			</span>
+		</div>
 	</div>
 </div>

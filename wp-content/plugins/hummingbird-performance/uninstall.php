@@ -41,8 +41,8 @@ if ( $settings['remove_settings'] ) {
 	delete_site_option( 'wphb_settings' );
 
 	delete_site_option( 'wphb_version' );
+	delete_site_option( 'wphb_run_onboarding' );
 
-	delete_site_option( 'wphb-quick-setup' );
 	delete_site_option( 'wphb-new-user-tour' );
 	delete_site_option( 'wphb-free-install-date' );
 

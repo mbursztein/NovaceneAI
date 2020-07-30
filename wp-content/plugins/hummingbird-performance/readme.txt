@@ -1,14 +1,14 @@
 === Hummingbird – Speed Optimize, Cache, Minify & Defer Critical CSS/Javascript ===
 Plugin Name: Hummingbird – Speed Optimize, Cache, Minify & Defer Critical CSS/Javascript
-Version: 2.4.2
+Version: 2.5.1
 Author: WPMU DEV
 Author URI: http://premium.wpmudev.org/
 Contributors: WPMUDEV
 Tags: defer css javascript, critical css, minify css, minify javascript, cache, speed up wordpress, wordpress speed optimization, page speed, wordpress cache plugin, wordpress performance optimization, lazy loa
 Requires at least: 4.6
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 2.4.2
+Stable tag: 2.5.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -172,6 +172,34 @@ Asset Optimization is a great way to speed up your site but moving, combining, m
 4. Use suggestions to make improvements and speed up your site.
 
 == Changelog ==
+
+= 2.5.1 ( 2020-07-21 ) =
+- Enhance: WordPress 5.5 compatibility
+- Fix: Performance scans getting stuck on a loop
+- Fix: Settings reset functionality
+
+= 2.5.0 ( 2020-07-20 ) =
+- New: Redis object cache
+- New: Comment lazy loading
+- Enhance: Performance report functionality
+- Enhance: Try to fetch latest performance report, if present on the Hub
+- Enhance: Compatibility with Oxygen builder
+- Enhance: Asset Optimization UI
+- Enhance: Performance reporting UI
+- Enhance: Uptime reporting UI
+- Enhance: Page cache handling of advanced-cache.php file
+- Fix: Asset Optimization not returning some assets back to WordPress queue
+- Fix: Asset Optimization not updating assets on version change
+- Fix: Cache clear from Hub
+- Fix: Deactivate button in Gzip module
+- Fix: Smush links in dashboard meta box
+- Fix: class-oembed.php is deprecated error
+
+= 2.4.4 ( 2020-06-11 ) =
+- Enhance: Compatibility with new plans
+
+= 2.4.3 ( 2020-06-04 ) =
+- Enhance: Dashboard plugin compatibility
 
 = 2.4.2 ( 2020-03-17 ) =
 - Fix: Plugin deactivation not removing advanced-cache.php file

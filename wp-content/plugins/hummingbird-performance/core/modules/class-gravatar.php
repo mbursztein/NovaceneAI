@@ -63,7 +63,7 @@ class Gravatar extends Module {
 		}
 
 		// Everything else is only for frontend.
-		if ( is_admin() ) {
+		if ( is_admin() && !( wp_doing_ajax() && isset( $_REQUEST['action'] ) && 'get_comments_template' === $_REQUEST['action'] ) ) {
 			return;
 		}
 

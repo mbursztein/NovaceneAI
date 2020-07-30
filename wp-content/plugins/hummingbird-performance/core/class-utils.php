@@ -51,8 +51,21 @@ class Utils {
 	 * @return bool
 	 */
 	public static function is_member() {
-		if ( function_exists( 'is_wpmudev_member' ) ) {
-			return is_wpmudev_member();
+		if ( class_exists( 'WPMUDEV_Dashboard' ) ) {
+			if ( method_exists( 'WPMUDEV_Dashboard_Api', 'get_membership_projects' ) && method_exists( 'WPMUDEV_Dashboard_Api', 'get_membership_type' ) ) {
+				$type     = WPMUDEV_Dashboard::$api->get_membership_type();
+				$projects = WPMUDEV_Dashboard::$api->get_membership_projects();
+
+				if ( ( 'unit' === $type && in_array( 1081721, $projects, true ) ) || ( 'single' === $type && 1081721 === $projects ) ) {
+					return true;
+				}
+
+				if ( function_exists( 'is_wpmudev_member' ) ) {
+					return is_wpmudev_member();
+				}
+
+				return false;
+			}
 		}
 
 		return false;
@@ -123,10 +136,22 @@ class Utils {
 			'errorRecheckStatus'     => __( 'There was an error re-checking the caching status, please try again later.', 'wphb' ),
 			'successRecheckStatus'   => __( 'Browser caching status updated.', 'wphb' ),
 			'successCloudflarePurge' => __( 'Cloudflare cache successfully purged. Please wait 30 seconds for the purge to complete.', 'wphb' ),
+			'successRedisPurge'      => __( 'Your cache has been cleared.', 'wphb' ),
 		);
 		wp_localize_script( 'wphb-admin', 'wphbCachingStrings', $i10n );
 
+		$performance = self::get_module( 'performance' );
+		$last_report = $performance::get_last_report();
+		$mobile_score  = '-';
+		$desktop_score = '-';
+		if ( is_object( $last_report ) && isset( $last_report->data ) ) {
+			$desktop_score = is_object( $last_report->data->desktop ) ? $last_report->data->desktop->score : '-';
+			$mobile_score  = is_object( $last_report->data->mobile ) ? $last_report->data->mobile->score : '-';
+		}
+
 		$i10n = array(
+			'previousScoreMobile'  => $mobile_score,
+			'previousScoreDesktop' => $desktop_score,
 			'finishedTestURLsLink' => self::get_admin_menu_url( 'performance' ) . '&view=audits',
 			'removeButtonText'     => __( 'Remove', 'wphb' ),
 			'youLabelText'         => __( 'You', 'wphb' ),
@@ -173,7 +198,8 @@ class Utils {
 				'db_entries'            => __( 'database entries', 'wphb' ),
 				'db_backup'             => __( 'Make sure you have a current backup just in case.', 'wphb' ),
 				'successRecipientAdded' => __( ' has been added as a recipient but you still need to save your changes below to set this live.', 'wphb' ),
-				'confirmRecipient'      => __( 'Your changes have been saved successfully. We have sent an email to new recipients to confirm their subscription.', 'wphb' ),
+				'confirmRecipient'      => __( 'Your changes have been saved successfully. Any new recipients will receive an email shortly to confirm their subscription to these emails.', 'wphb' ),
+				'awaitingConfirmation'  => __( 'Awaiting confirmation', 'wphb' ),
 				'resendEmail'           => __( 'Resend email', 'wphb' ),
 			),
 		);
@@ -209,6 +235,27 @@ class Utils {
 				)
 			);
 		}
+
+		global $wpdb, $wp_version;
+
+		$i10n = array_merge_recursive(
+			$i10n,
+			array(
+				'mixpanel' => array(
+					'enabled'        => Settings::get_setting( 'tracking', 'settings' ),
+					'plugin'         => 'Hummingbird',
+					'plugin_type'    => self::is_member() ? 'pro' : 'free',
+					'plugin_version' => WPHB_VERSION,
+					'wp_version'     => $wp_version,
+					'wp_type'        => is_multisite() ? 'multisite' : 'single',
+					'locale'         => get_locale(),
+					'active_theme'   => wp_get_theme()->get( 'Name' ),
+					'php_version'    => PHP_VERSION,
+					'mysql_version'  => $wpdb->db_version(),
+					'server_type'    => Module_Server::get_server_type(),
+				),
+			)
+		);
 
 		wp_localize_script( 'wphb-admin', 'wphb', $i10n );
 	}
@@ -585,7 +632,7 @@ class Utils {
 				break;
 			case 'support':
 				if ( self::is_member() ) {
-					$link = "{$domain}/forum/support#question{$utm_tags}";
+					$link = "{$domain}/forums/forum/support#question{$utm_tags}";
 				} else {
 					$link = "{$wp_org}/support/plugin/hummingbird-performance";
 				}
@@ -751,7 +798,7 @@ class Utils {
 	 *
 	 * @param string $module Module slug.
 	 *
-	 * @return bool|Module|Modules\Page_Cache|Modules\GZip|Modules\Minify|Modules\Cloudflare|Modules\Uptime|Modules\Performance|Modules\Advanced
+	 * @return bool|Module|Modules\Page_Cache|Modules\GZip|Modules\Minify|Modules\Cloudflare|Modules\Uptime|Modules\Performance|Modules\Advanced|Modules\Redis
 	 */
 	public static function get_module( $module ) {
 		$modules = self::get_modules();
@@ -889,17 +936,6 @@ class Utils {
 		}
 
 		return ( count( $collection['scripts'] ) + count( $collection['styles'] ) );
-	}
-
-	/**
-	 * Remove quick setup
-	 *
-	 * @since 1.5.0
-	 */
-	public static function remove_quick_setup() {
-		$quick_setup             = get_option( 'wphb-quick-setup' );
-		$quick_setup['finished'] = true;
-		update_option( 'wphb-quick-setup', $quick_setup );
 	}
 
 }

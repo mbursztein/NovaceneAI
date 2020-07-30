@@ -1,79 +1,50 @@
 <?php
 /**
- * Default Constants
+ * Defaults
  *
  * @package wp-fail2ban
- * @since 4.2.0
+ * @since   4.3.0
  */
 namespace org\lecklider\charles\wordpress\wp_fail2ban;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') or exit;
 
 /**
- * Allow custom openlog options.
- * e.g. you may not want the PID if logging remotely.
+ * Define default values
  *
- * @since 3.6.0     Add LOG_NDELAY
- * @since 3.5.0
+ * @since 4.3.0 Refactored
+ *
+ * @return void
  */
-if (!defined('WP_FAIL2BAN_OPENLOG_OPTIONS')) {
-    define('WP_FAIL2BAN_OPENLOG_OPTIONS', DEFAULT_WP_FAIL2BAN_OPENLOG_OPTIONS);
-}
-/**
- * Make sure all custom logs are defined.
- * @since 3.5.0
- */
-if (!defined('WP_FAIL2BAN_AUTH_LOG')) {
-    define('WP_FAIL2BAN_AUTH_LOG', DEFAULT_WP_FAIL2BAN_AUTH_LOG);
-}
-if (!defined('WP_FAIL2BAN_COMMENT_LOG')) {
-    define('WP_FAIL2BAN_COMMENT_LOG', DEFAULT_WP_FAIL2BAN_COMMENT_LOG);
-}
-if (!defined('WP_FAIL2BAN_PINGBACK_LOG')) {
-    define('WP_FAIL2BAN_PINGBACK_LOG', DEFAULT_WP_FAIL2BAN_PINGBACK_LOG);
-}
-/**
- * @since 4.0.0
- */
-if (!defined('WP_FAIL2BAN_PASSWORD_REQUEST_LOG')) {
-    define('WP_FAIL2BAN_PASSWORD_REQUEST_LOG', DEFAULT_WP_FAIL2BAN_PASSWORD_REQUEST_LOG);
-}
-if (!defined('WP_FAIL2BAN_SPAM_LOG')) {
-    define('WP_FAIL2BAN_SPAM_LOG', DEFAULT_WP_FAIL2BAN_SPAM_LOG);
-}
-/**
- * @since 4.0.5
- */
-if (!defined('WP_FAIL2BAN_COMMENT_EXTRA_LOG')) {
-    define('WP_FAIL2BAN_COMMENT_EXTRA_LOG', DEFAULT_WP_FAIL2BAN_COMMENT_EXTRA_LOG);
-}
-if (!defined('WP_FAIL2BAN_PINGBACK_ERROR_LOG')) {
-    define('WP_FAIL2BAN_PINGBACK_ERROR_LOG', DEFAULT_WP_FAIL2BAN_PINGBACK_ERROR_LOG);
-}
-/**
- * @since 4.2.0
- */
-if (!defined('WP_FAIL2BAN_PLUGIN_AUTH_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_AUTH_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_AUTH_LOG);
-}
-if (!defined('WP_FAIL2BAN_PLUGIN_COMMENT_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_COMMENT_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_COMMENT_LOG);
-}
-if (!defined('WP_FAIL2BAN_PLUGIN_OTHER_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_OTHER_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_OTHER_LOG);
-}
-if (!defined('WP_FAIL2BAN_PLUGIN_PASSWORD_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_PASSWORD_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_PASSWORD_LOG);
-}
-if (!defined('WP_FAIL2BAN_PLUGIN_REST_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_REST_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_REST_LOG);
-}
-if (!defined('WP_FAIL2BAN_PLUGIN_SPAM_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_SPAM_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_SPAM_LOG);
-}
-if (!defined('WP_FAIL2BAN_PLUGIN_XMLRPC_LOG')) {
-    define('WP_FAIL2BAN_PLUGIN_XMLRPC_LOG', DEFAULT_WP_FAIL2BAN_PLUGIN_XMLRPC_LOG);
+function init_defaults()
+{
+    // phpcs:disable Generic.Functions.FunctionCallArgumentSpacing
+    /**
+     * Defaults
+     *
+     * @since 4.0.0
+     */
+    define('DEFAULT_WP_FAIL2BAN_OPENLOG_OPTIONS',       LOG_PID|LOG_NDELAY);
+    define('DEFAULT_WP_FAIL2BAN_AUTH_LOG',              LOG_AUTH);
+    define('DEFAULT_WP_FAIL2BAN_COMMENT_LOG',           LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_PINGBACK_LOG',          LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_PASSWORD_REQUEST_LOG',  LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_SPAM_LOG',              LOG_AUTH);
+    /**
+     * @since 4.0.5
+     */
+    define('DEFAULT_WP_FAIL2BAN_COMMENT_EXTRA_LOG',     LOG_AUTH);
+    define('DEFAULT_WP_FAIL2BAN_PINGBACK_ERROR_LOG',    LOG_AUTH);
+    /**
+     * @since 4.2.0
+     */
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_AUTH_LOG',       LOG_AUTH);
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_COMMENT_LOG',    LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_OTHER_LOG',      LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_PASSWORD_LOG',   LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_REST_LOG',       LOG_USER);
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_SPAM_LOG',       LOG_AUTH);
+    define('DEFAULT_WP_FAIL2BAN_PLUGIN_XMLRPC_LOG',     LOG_USER);
+    // phpcs:enable
 }
 

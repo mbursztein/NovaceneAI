@@ -64,6 +64,7 @@ class Core {
 	private function init() {
 		// Register private policy text.
 		add_action( 'admin_init', array( $this, 'privacy_policy_content' ) );
+		add_action( 'admin_init', array( $this, 'upsell_notice' ) );
 
 		// Init the API.
 		$this->api = new Api\API();
@@ -96,7 +97,7 @@ class Core {
 		 */
 		$modules = apply_filters(
 			'wp_hummingbird_modules',
-			array( 'minify', 'gzip', 'caching', 'performance', 'uptime', 'cloudflare', 'gravatar', 'page_cache', 'advanced', 'rss' )
+			array( 'minify', 'gzip', 'caching', 'performance', 'uptime', 'cloudflare', 'gravatar', 'page_cache', 'advanced', 'rss', 'redis' )
 		);
 
 		array_walk( $modules, array( $this, 'load_module' ) );
@@ -269,6 +270,52 @@ class Core {
 		wp_add_privacy_policy_content(
 			__( 'Hummingbird', 'wphb' ),
 			wp_kses_post( wpautop( $content, false ) )
+		);
+	}
+
+	/**
+	 * Show upsell notice for the newsletter.
+	 *
+	 * @since 2.5.0
+	 */
+	public function upsell_notice() {
+		if ( ! defined( 'WPHB_WPORG' ) || ! WPHB_WPORG ) {
+			return;
+		}
+
+		if ( ! file_exists( WPHB_DIR_PATH . 'core/externals/free-dashboard/module.php' ) ) {
+			return;
+		}
+
+		/* @noinspection PhpIncludeInspection */
+		require_once WPHB_DIR_PATH . 'core/externals/free-dashboard/module.php';
+
+		// Add the Mailchimp group value.
+		add_action(
+			'frash_subscribe_form_fields',
+			function ( $mc_list_id ) {
+				if ( '4b14b58816' === $mc_list_id ) {
+					echo '<input type="hidden" id="mce-group[53]-53-1" name="group[53][4]" value="4" />';
+				}
+			}
+		);
+
+		// Register the current plugin.
+		do_action(
+			'wdev-register-plugin',
+			/* 1             Plugin ID */ WPHB_BASENAME,
+			/* 2          Plugin Title */ 'Hummingbird',
+			/* 3 https://wordpress.org */ '/plugins/hummingbird-performance/',
+			/* 4      Email Button CTA */ __( 'Get Fast!', 'wphb' ),
+			/* 5  Mailchimp List id for the plugin - e.g. 4b14b58816 is list id for Smush */ '4b14b58816'
+		);
+
+		// The email message contains 1 variable: plugin-name.
+		add_filter(
+			'wdev-email-message-' . WPHB_BASENAME,
+			function () {
+				return "You're awesome for installing %s! Make sure you get the most out of it, boost your Google PageSpeed score with these tips and tricks - just for users of Hummingbird!";
+			}
 		);
 	}
 

@@ -7,6 +7,7 @@
  *
  * @var string $site_language     Site language.
  * @var string $translation_link  Link to translations.
+ * @var bool   $tracking          Tracking status.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -47,6 +48,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 				?>
 			</span>
+		</div>
+	</div>
+</div>
+
+<div class="sui-box-settings-row">
+	<div class="sui-box-settings-col-1">
+		<span class="sui-settings-label"><?php esc_html_e( 'Usage Tracking', 'wphb' ); ?></span>
+		<span class="sui-description">
+			<?php esc_html_e( "Help make Hummingbird better by letting our designers learn how you're using the plugin.", 'wphb' ); ?>
+		</span>
+	</div>
+	<div class="sui-box-settings-col-2">
+		<div class="sui-form-field">
+			<form method="post" class="settings-frm">
+				<label for="tracking" class="sui-toggle">
+					<input type="hidden" name="tracking" value="0" />
+					<input
+						type="checkbox"
+						id="tracking"
+						name="tracking"
+						aria-labelledby="tracking-label"
+						aria-describedby="tracking-description"
+						<?php checked( $tracking ); ?>
+					/>
+					<span class="sui-toggle-slider" aria-hidden="true"></span>
+					<span id="tracking-label" class="sui-toggle-label">
+						<?php esc_html_e( 'Allow usage tracking', 'wphb' ); ?>
+					</span>
+					<span id="tracking-description" class="sui-description">
+						<?php
+						printf(
+							__( "Note: Usage tracking is completely anonymous. We are only tracking what features you are/aren't using to make our feature decision more informed. You can read about what data will be collected <a href='%s' target='_blank'>here</a>.", 'wphb' ),
+							'https://premium.wpmudev.org/docs/privacy/our-plugins/#usage-tracking'
+						);
+						?>
+					</span>
+				</label>
+			</form>
 		</div>
 	</div>
 </div>

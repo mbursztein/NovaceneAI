@@ -14,24 +14,26 @@
  * @var string $report_type        Performance report type: desktop or mobile.
  */
 
+use Hummingbird\Core\Modules\Performance;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 ?>
 
-<div class="sui-summary-image-space"></div>
+<div class="sui-summary-image-space" aria-hidden="true"></div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">
 		<?php if ( $last_report && ! is_wp_error( $last_report ) && ! $report_dismissed ) : ?>
 			<span class="sui-summary-large"><?php echo esc_html( $last_report->{$report_type}->score ); ?></span>
-			<i class="sui-icon-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $last_report->{$report_type}->score, 'icon' ) ); ?> sui-md sui-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $last_report->{$report_type}->score ) ); ?>"></i>
+			<i aria-hidden="true" class="sui-icon-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$report_type}->score, 'icon' ) ); ?> sui-md sui-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$report_type}->score ) ); ?>"></i>
 			<span class='sui-summary-percent'>/100</span>
 		<?php elseif ( $is_doing_report ) : ?>
 			<div class="sui-progress-text sui-icon-loader sui-loading"></div>
 		<?php elseif ( $report_dismissed && isset( $last_report->{$report_type}->score ) ) : ?>
 			<span class="sui-summary-large"><?php echo esc_html( $last_report->{$report_type}->score ); ?></span>
-			<i class="sui-icon-info sui-md"></i>
+			<i aria-hidden="true" class="sui-icon-info sui-md"></i>
 			<span class='sui-summary-percent'>/100</span>
 		<?php else : ?>
 			&mdash;
@@ -56,9 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 			?>
 		</span>
-			<span class="sui-summary-sub">
-			<?php esc_html_e( 'Last test date', 'wphb' ); ?>
-		</span>
+		<span class="sui-summary-sub"><?php esc_html_e( 'Last test date', 'wphb' ); ?></span>
 	</div>
 </div>
 <div class="sui-summary-segment">
@@ -66,29 +66,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'Page Caching', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
-				<?php if ( $caching_enabled ) : ?>
-					<span class="sui-tag sui-tag-success">
-						<?php esc_html_e( 'Active', 'wphb' ); ?>
-					</span>
-				<?php else : ?>
-					<span class="sui-tag">
-						<?php esc_html_e( 'Inactive', 'wphb' ); ?>
-					</span>
-				<?php endif; ?>
+				<span class="<?php echo $caching_enabled ? 'sui-tag sui-tag-success' : 'sui-tag'; ?>">
+					<?php $caching_enabled ? esc_html_e( 'Active', 'wphb' ) : esc_html_e( 'Inactive', 'wphb' ); ?>
+				</span>
 			</span>
 		</li>
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'Asset Optimization', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
-				<?php if ( $minify_enabled ) : ?>
-					<span class="sui-tag sui-tag-success">
-						<?php esc_html_e( 'Active', 'wphb' ); ?>
-					</span>
-				<?php else : ?>
-					<span class="sui-tag">
-						<?php esc_html_e( 'Inactive', 'wphb' ); ?>
-					</span>
-				<?php endif; ?>
+				<span class="<?php echo $minify_enabled ? 'sui-tag sui-tag-success' : 'sui-tag'; ?>">
+					<?php $minify_enabled ? esc_html_e( 'Active', 'wphb' ) : esc_html_e( 'Inactive', 'wphb' ); ?>
+				</span>
 			</span>
 		</li>
 		<li>

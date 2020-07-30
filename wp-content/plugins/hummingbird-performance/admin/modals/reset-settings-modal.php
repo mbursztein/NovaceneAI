@@ -32,13 +32,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="sui-box-body">
 				<div class="sui-block-content-center">
-					<a class="sui-button sui-button-ghost" data-modal-close="">
+					<button type="button" class="sui-button sui-button-ghost" data-modal-close="">
 						<?php esc_html_e( 'Cancel', 'wphb' ); ?>
-					</a>
-					<a class="sui-button sui-button-ghost sui-button-red" onclick="WPHB_Admin.settings.confirmReset()">
+					</button>
+
+					<button type="button" class="sui-button sui-button-ghost sui-button-red" onclick="WPHB_Admin.settings.confirmReset()">
 						<i class="sui-icon-trash" aria-hidden="true"></i>
 						<?php esc_html_e( 'Reset settings', 'wphb' ); ?>
-					</a>
+					</button>
 				</div>
 			</div>
 		</div>

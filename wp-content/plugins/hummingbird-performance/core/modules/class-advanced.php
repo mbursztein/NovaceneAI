@@ -45,6 +45,17 @@ class Advanced extends Module {
 		// Process HB cleanup task.
 		add_action( 'wphb_hummingbird_cleanup', array( $this, 'hb_cleanup_cron' ) );
 
+		// Ajax handler to return the comment template.
+		add_action( 'wp_ajax_get_comments_template', array( $this, 'comment_template' ) );
+		add_action( 'wp_ajax_nopriv_get_comments_template', array( $this, 'comment_template' ) );
+
+		if ( isset( $options['lazy_load'] ) && $options['lazy_load']['enabled'] ) {
+			/* Divi Compatibility  */
+			add_filter( 'et_builder_load_requests', array( $this, 'add_divi_support' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_global' ) );
+		}
+		add_filter( 'paginate_links', array( $this, 'strip_params' ) );
+
 		// Everything else is only for frontend.
 		if ( is_admin() ) {
 			return;
@@ -61,6 +72,11 @@ class Advanced extends Module {
 
 		// DNS prefetch.
 		add_filter( 'wp_resource_hints', array( $this, 'prefetch_dns' ), 10, 2 );
+
+		// Filter comment template if lazy load is enabled.
+		if ( isset( $options['lazy_load'] ) && $options['lazy_load']['enabled'] ) {
+			add_filter( 'comments_template', array( $this, 'filter_comments_template' ), 100 );
+		}
 	}
 
 	/**
@@ -709,6 +725,290 @@ class Advanced extends Module {
 		} else {
 			return __( 'TRUE', 'wphb' );
 		}
+	}
+
+	/**
+	 * Enqueue lazy load scripts on single page/post.
+	 *
+	 * @since 2.5.0
+	 */
+	public function enqueue_global() {
+		$lazy_load_comment_js = is_singular();
+		$lazy_load_comment_js = apply_filters( 'wphb_lazy_load_comment_js', $lazy_load_comment_js );
+		// Do not load sitewide.
+		if ( ! $lazy_load_comment_js ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'wphb-lazy-load',
+			WPHB_DIR_URL . 'admin/assets/js/wphb-lazy-load.min.js',
+			array(),
+			WPHB_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'wphb-lazy-load',
+			'wphbGlobal',
+			array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			)
+		);
+	}
+
+	/**
+	 * Checks for the user agent to validate if the visitor is a bot
+	 *
+	 * @since 2.5.0
+	 *
+	 * @return bool
+	 */
+	public function visitor_is_a_bot() {
+		/* No User agent, Or the useragent string matches the basic pattern */
+		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) || preg_match( '/bot|crawl|slurp|spider/i', sanitize_key( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Validates if we should be lazy loading comments or not
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $options plugin settings.
+	 *
+	 * @return bool True|False
+	 */
+	public function should_lazy_load( $options ) {
+		global $wp_query;
+
+		$lazy_load = true;
+
+		if ( $this->visitor_is_a_bot() ) {
+			$lazy_load = false;
+		}
+
+		$comment_count = get_comments_number();
+
+		if ( ! $comment_count ) {
+			// If there are no comments.
+			$lazy_load = false;
+		} elseif ( (int) $options['lazy_load']['threshold'] > $comment_count ) {
+			// if threshold is lower than total comment count.
+			$lazy_load = false;
+		} elseif ( ! empty( $wp_query->comment_count ) && (int) $options['lazy_load']['threshold'] > $wp_query->comment_count ) {
+			// If there is a comment pagination, and the comment_count for the page < threshold.
+			$lazy_load = false;
+		}
+
+		return $lazy_load;
+	}
+
+	/**
+	 * Filters the default comment template to Lazy Load markup ( Button or a Scroll div )
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Current comment template.
+	 *
+	 * @return string HTML markup for the button or a div used to load comments template on scroll
+	 */
+	public function filter_comments_template( $template ) {
+		$options = $this->get_options();
+
+		$should_lazy_load = $this->should_lazy_load( $options );
+
+		/* Return the original template if we should not lazy load */
+		if ( ! apply_filters( 'wphb_should_lazy_load_comment', $should_lazy_load ) ) {
+			return $template;
+		}
+
+		/* Set "separate-comments" transient if not set already */
+		if ( false === get_transient( 'wphb-separate-comments' ) ) {
+			global $wp_query;
+
+			// Check if separate comments is set.
+			$separate_comments = ! empty( $wp_query ) && ! empty( $wp_query->comments_by_type ) ? 1 : 0;
+
+			set_transient( 'wphb-separate-comments', $separate_comments, 60 );
+		}
+
+		set_query_var( 'lazy_load_settings', $options['lazy_load'] );
+
+		return WPHB_DIR_PATH . 'core/views/comment-template.php';
+	}
+
+	/**
+	 * Strip parameters.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $link  URL.
+	 *
+	 * @return bool|string
+	 */
+	public function strip_params( $link ) {
+		if ( ! isset( $_GET['action'] ) || 'get_comments_template' !== sanitize_key( wp_unslash( $_GET['action'] ) ) ) {
+			return $link;
+		}
+
+		return remove_query_arg( array( 'action', 'id', '_nonce' ), $link );
+	}
+
+	/**
+	 * Ajax handler to load the actual comment template on front-end.
+	 *
+	 * @since 2.5.0
+	 */
+	public function comment_template() {
+		if ( empty( $_GET['_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_GET['_nonce'] ), 'comments_template' ) ) {
+			$message = '<div class="wphb-lazy-load-error sui-error">' . esc_html__( 'We could not validate the request, try reloading the page.', 'wphb' ) . '</div>';
+			wp_send_json_error( array( 'content' => $message ) );
+		}
+
+		/* Return an error if post id isn't set */
+		if ( empty( $_GET['id'] ) ) {
+			$message = '<div class="wphb-lazy-load-error sui-error">' . esc_html__( 'Something went wrong. Try reloading the page to see if the comments load for you.', 'wphb' ) . '</div>';
+			wp_send_json_error( array( 'content' => $message ) );
+		}
+
+		$cpage_num = ! empty( $_GET['cpage_num'] ) ? absint( $_GET['cpage_num'] ) : '';
+
+		$separate_comments = get_transient( 'wphb-separate-comments' );
+
+		/* Remove our comment template filter to be able to get the original content */
+		remove_filter( 'comments_template', array( $this, 'filter_comments_template' ), 100 );
+
+		/**
+		 * Allow plugin/themes to hook-in, to enable support for loading custom comments template over AJAX
+		 */
+		do_action( 'wphb_ajax_get_comments_template' );
+
+		query_posts( array( 'p' => absint( $_GET['id'] ) ) );
+
+		/* Restore original Post Data */
+		wp_reset_postdata();
+		if ( have_posts() ) {
+			the_post();
+
+			// Workaround :( .
+			$orig_uri               = $_SERVER['REQUEST_URI'];
+			$_SERVER['REQUEST_URI'] = get_the_permalink( get_the_ID() );
+			if ( ! empty( $cpage_num ) ) {
+				set_query_var( 'cpage', $cpage_num );
+				/**
+				 * Override page_comments decision set from discussion settings page.
+				 * By default comment pagination is ignored when page_comments is false.
+				 * See in function comments_template() in wp-includes/comment-template.php
+				 * We need it always true to get comments for specific cpage.
+				 */
+				add_filter( 'option_page_comments', array( $this, 'filter_option_page_comments' ), 100 );
+
+				/**
+				 * As we override page_comments decision, function comments_template() calculate max_num_comment_pages and set to wp_query
+				 * Theme comment template tries to generate comment pagination by
+				 * using the_comments_pagination/get_the_comments_pagination function
+				 * This function needs comment page count. If comment page count is more than 1 , it generates pagination
+				 * get_comment_pages_count() function usages max_num_comment_pages
+				 * We don't want to show pagination, We will reset max_num_comment_pages value to 1 so that get_comment_pages_count retuns 1
+				 * comments_template function usages a filter for comments_template file.
+				 * We will use this filter to reset wp_query->max_num_comment_pages.
+				 */
+				add_filter( 'comments_template', array( $this, 'reset_wp_query_max_num_comment_pages' ), 1 );
+
+				/**
+				 * Override comment_order decision set from discussion settings page.
+				 * When default_comments_page value is 'newest' we want comment_order 'desc'.
+				 * When default_comments_page value is 'oldest' we want comment_order 'asc'.
+				 */
+				add_filter( 'option_comment_order', array( $this, 'filter_option_comment_order' ), 100 );
+
+			}
+			ob_start();
+
+			comments_template( '', $separate_comments );
+			$content = ob_get_contents();
+
+			ob_end_clean();
+			$_SERVER['REQUEST_URI'] = $orig_uri;
+		}
+
+		if ( ! empty( $content ) ) {
+			wp_send_json_success( array( 'content' => $content ) );
+		}
+
+		die();
+	}
+
+	/**
+	 * Add Lazy load action to the list of supported ajax action in Divi theme comment template.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @return array
+	 */
+	public function add_divi_support() {
+		return array( 'action' => array( 'get_comments_template' ) );
+	}
+
+	/**
+	 * Set page_comments option true.
+	 *
+	 * Return TRUE only one time when the filter option_page_comments called in
+	 * function comments_template() in wp-includes/comment-template.php
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param mixed $value  Value.
+	 *
+	 * @return bool|mixed
+	 */
+	public function filter_option_page_comments( $value ) {
+		static $n;
+
+		if ( ! empty( $n ) ) {
+			return $value;
+		}
+
+		$n = 1;
+
+		return true;
+	}
+
+	/**
+	 * This is a fake callback function for comments_template filter
+	 * We will not change $template value
+	 * We will change max_num_comment_pages var from $wp_query object
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template The path to the theme template file.
+	 *
+	 * @return string
+	 */
+	public function reset_wp_query_max_num_comment_pages( $template ) {
+		global $wp_query;
+		$wp_query->max_num_comment_pages = 1;
+		return $template;
+	}
+
+	/**
+	 * Filter comment_order option value.
+	 * When default_comments_page value is 'newest' we want comment_order 'desc'.
+	 * When default_comments_page value is 'oldest' we want comment_order 'asc'.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $order
+	 *
+	 * @return string
+	 */
+	public function filter_option_comment_order( $order ) {
+		$dcp = get_option( 'default_comments_page' );
+		return ( 'newest' === $dcp ) ? 'desc' : 'asc';
 	}
 
 }

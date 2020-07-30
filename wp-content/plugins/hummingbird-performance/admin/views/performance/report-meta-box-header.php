@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="sui-actions-right">
 	<?php if ( true === $can_run_test ) : ?>
-		<a href="<?php echo esc_url( $run_url ); ?>" class="sui-button">
+		<a href="<?php echo esc_url( $run_url ); ?>" class="sui-button" id="performance-run-test">
 			<?php esc_html_e( 'New Test', 'wphb' ); ?>
 		</a>
 	<?php else : ?>

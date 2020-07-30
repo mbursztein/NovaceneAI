@@ -1,24 +1,83 @@
 <?php
-
 /**
  * Config
  *
  * @package wp-fail2ban
- * @since 4.0.0
+ * @since   4.0.0
  */
 namespace org\lecklider\charles\wordpress\wp_fail2ban;
 
-if ( !defined( 'ABSPATH' ) ) {
-    exit;
-}
+defined('ABSPATH') or exit;
+
 require_once 'lib/tab.php';
-foreach ( glob( __DIR__ . '/config/*.php' ) as $filename ) {
-    require_once $filename;
+require_once 'lib/logging.php';
+require_once 'config/block.php';
+require_once 'config/logging.php';
+require_once 'config/plugins.php';
+require_once 'config/remote-ips.php';
+require_once 'config/syslog.php';
+
+/**
+ * Init
+ *
+ */
+function init_tabs($init)
+{
+    if (!$init) {
+        new TabBlock();
+        new TabLogging();
+        new TabPlugins();
+        new TabRemoteIPs();
+        new TabSyslog();
+    }
+    return true;
 }
+add_filter('wp_fail2ban_init_tabs', __NAMESPACE__.'\init_tabs');
+
+/**
+ * Display settings messages.
+ *
+ * @since 4.3.0
+ */
+function admin_notices()
+{
+    $screen = get_current_screen();
+    switch ($screen->id) {
+        case 'security_page_wp-fail2ban-premium':
+        case 'wp-fail2ban_page_wpf2b-settings':
+            settings_errors();
+            break;
+    }
+}
+add_action('admin_notices', __NAMESPACE__.'\admin_notices');
+
+/**
+ * Get network settings messages.
+ *
+ * @since 4.3.0
+ */
+function network_admin_notices()
+{
+    $screen = get_current_screen();
+    switch ($screen->id) {
+        case 'security_page_wp-fail2ban-premium-network':
+        case 'wp-fail2ban_page_wpf2b-settings-network':
+            if ($transients = get_site_transient('settings_errors')) {
+                global $wp_settings_errors;
+
+                $wp_settings_errors = array_merge((array)$wp_settings_errors, $transients);
+                delete_site_transient('settings_errors');
+            }
+            settings_errors();
+            break;
+    }
+}
+add_action('network_admin_notices', __NAMESPACE__.'\network_admin_notices');
+
 /**
  * Render Security settings.
  *
- * @since 4.2.6
+ * @since 4.3.0
  */
 function security()
 {
@@ -26,135 +85,104 @@ function security()
         'logging',
         'syslog',
         'block',
-        'remote-ips'
+        'remote-ips',
+        'plugins'
     ];
-    if ( version_compare( PHP_VERSION, '5.6.0', '>=' ) ) {
-        $tabs[] = 'plugins';
-    }
-    $page = 'wp-fail2ban';
-    if ( wf_fs()->is_premium() ) {
-        $page .= '-premium';
-    }
-    render_tabs( $tabs, 'logging', $page );
+    $tabs = apply_filters(__METHOD__.'.tabs', $tabs);
+    $page = apply_filters(__METHOD__.'.page', plugin_basename(WP_FAIL2BAN_DIR));
+
+    render_tabs($tabs, $page);
 }
 
 /**
  * Render Settings.
  *
- * @since 4.2.6
+ * @since 4.0.0
  */
 function settings()
 {
     $tabs = [];
-    
-    if ( !function_exists( '\\add_security_page' ) ) {
+
+    if (!function_exists('\add_security_page')) {
         $tabs = [
             'logging',
             'syslog',
             'block',
             'remote-ips'
         ];
-        if ( version_compare( PHP_VERSION, '5.6.0', '>=' ) ) {
+        if (version_compare(PHP_VERSION, '5.6.0', '>=')) {
             $tabs[] = 'plugins';
         }
     }
-    
-    $default = 'logging';
-    render_tabs( $tabs, $default, 'wpf2b-settings' );
+    $tabs = apply_filters(__METHOD__.'.tabs', $tabs);
+
+    render_tabs($tabs, 'wpf2b-settings');
 }
 
 /**
  * Render Tabs.
  *
- * @since 4.2.6
+ * @since 4.3.0
  *
  * @param array     $tabs       List of slugs of tabs to render
- * @param string    $default    Default tab slug
  * @param string    $menu       Menu slug
  */
-function render_tabs( array $tabs, $default, $menu )
+function render_tabs(array $tabs, $menu)
 {
+    $active_tab = TabBase::getActiveTab();
+
     ?>
 <div class="wrap">
-    <?php 
-    echo  apply_filters( __METHOD__ . '.title', "<h1>WP fail2ban</h1>" ) ;
-    ?>
+    <?=apply_filters(__METHOD__.'.title', sprintf('<h1>%s</h1>', __('Settings', 'wp-fail2ban')))?>
   <hr class="wp-header-end">
 
   <h2 class="nav-tab-wrapper wp-clearfix">
-    <?php 
-    $active_tab = Tab::getActiveTab( $default );
-    foreach ( $tabs as $slug ) {
+    <?php
+    foreach ($tabs as $slug) {
         $class = 'nav-tab';
-        if ( $active_tab->getSlug() == $slug ) {
+        if ($active_tab->getSlug() == $slug) {
             $class .= ' nav-tab-active';
         }
-        $params = apply_filters( __METHOD__ . '.params', [
+        $params = apply_filters(__METHOD__.'.params', [
             'page' => $menu,
-            'tab'  => $slug,
-        ] );
-        printf(
-            '<a class="%s" href="?%s">%s</a>',
-            $class,
-            http_build_query( $params ),
-            Tab::getTabName( $slug )
-        );
+            'tab' => $slug
+        ]);
+        printf('<a class="%s" href="?%s">%s</a>', $class, http_build_query($params), TabBase::getTabName($slug));
     }
     ?>
   </h2>
 
-  <form action="options.php?tab=<?php 
-    echo  $active_tab->getSlug() ;
-    ?>" method="post">
-    <?php 
-    settings_fields( 'wp-fail2ban' );
+    <?php
+    // Because the settings API was never finished we need an ugly hack
+    $action = sprintf(
+        '%s?tab=%s',
+        admin_url(is_network_admin()
+            ? 'admin-post.php'
+            : 'options.php'),
+        $active_tab->getSlug()
+    );
+    ?>
+
+  <form action="<?=$action?>" method="post">
+    <?php
+    settings_fields('wp-fail2ban');
     $active_tab->render();
-    echo  '<hr><p>' . __( '<strong>Note:</strong> The Free version of <em>WP fail2ban</em> is configured by defining constants in <tt>wp-config.php</tt>; these tabs display those values.' ) . '<br>' . __( 'Upgrade to the Premium version to enable this interface.' ) . '</p>' ;
     ?>
   </form>
 </div>
-    <?php 
+    <?php
 }
 
 /**
- * Proxy for api.wp-fail2ban.com
+ * Helper: filtered defined(...)
  *
- * @since 4.2.6
+ * @since 4.3.0
+ *
+ * @param  string   $define
+ * @return mixed
  */
-function remote_tools()
+function have_defined($define)
 {
-    global  $current_user ;
-    ?>
-<div class="wrap">
-<h1>Remote Tools (&beta;)</h1>
-<hr class="wp-header-end">
-    <?php 
-    
-    if ( function_exists( '\\org\\lecklider\\charles\\wordpress\\wp_fail2ban\\addons\\remote_tools\\tab' ) ) {
-        \org\lecklider\charles\wordpress\wp_fail2ban\addons\remote_tools\tab();
-    } else {
-        ?>
-    <h2 class="nav-tab-wrapper wp-clearfix">
-        <a class="nav-tab nav-tab-active" href="#">Overview</a>
-    </h2>
-    <div class="card">
-        <h2>Remote Tools Add-on</h2>
-        <p>This add-on provides features that make life with WP fail2ban easier, all from a remote server. This gives access to valuable but infrequently used tools without bloating the core plugin.</p>
-        <p>The first of these is a <strong>Custom Filter Tool</strong> (CFT).</p>
-        <blockquote>
-            <p>The filter files included are intended only as a starting point for those who want <em>WPf2b</em> to work “out of the box”.</p>
-            <p>There is no &ldquo;one size fits all&rdquo; configuration possible for <em>fail2ban</em> - what may be a soft failure for one site should be treated as a hard failure for another, and vice versa.</p>
-        </blockquote>
-        <p>You could simply edit the filter files included, but it&lsquo;s surprisingly easy to make a mistake; I learned this the hard way with earlier versions of <em>WPf2b</em>.... The CFT removes most of the opportunities for human error - always a good thing!</p>
-        <hr>
-        <p>The Remote Tools Add-on is available from the <a href="<?php 
-        echo  admin_url( 'admin.php?page=wp-fail2ban-addons' ) ;
-        ?>">Add-Ons menu</a>.</p>
-    </div>
-<?php 
-    }
-    
-    ?>
-</div>
-    <?php 
+    return apply_filters(__NAMESPACE__.'\have_defined', defined($define), $define);
 }
+

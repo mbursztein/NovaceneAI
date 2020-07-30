@@ -236,57 +236,46 @@ class Uptime extends Page {
 
 		// Icons in the submenu.
 		add_filter( 'wphb_admin_after_tab_' . $this->get_slug(), array( $this, 'after_tab' ) );
+		// Header actions.
+		add_action( 'wphb_sui_header_sui_actions_right', array( $this, 'add_header_actions' ) );
 	}
 
 	/**
-	 * Render header.
+	 * Add content to the header.
+	 *
+	 * @since 2.5.0
 	 */
-	public function render_header() {
-		if ( ! Utils::is_member() || ( defined( 'WPHB_WPORG' ) && WPHB_WPORG ) ) {
-			parent::render_header();
+	public function add_header_actions() {
+		if ( ! Utils::is_member() || ( defined( 'WPHB_WPORG' ) && WPHB_WPORG ) || ! $this->uptime->is_active() ) {
 			return;
 		}
 
 		$data_ranges         = $this->get_data_ranges();
 		$data_range_selected = $this->get_current_data_range();
 		?>
-
-		<div class="sui-header">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<div class="sui-actions-right">
-				<?php if ( Utils::is_member() && $this->uptime->is_active() ) : ?>
-					<label for="wphb-uptime-data-range" class="inline-label header-label sui-hidden-xs sui-hidden-sm">
-						<?php esc_html_e( 'Reporting period', 'wphb' ); ?>
-					</label>
-					<select name="wphb-uptime-data-range" class="uptime-data-range sui-select-sm" id="wphb-uptime-data-range">
-						<?php
-						foreach ( $data_ranges as $range => $label ) :
-							$data_url = add_query_arg(
-								array(
-									'view'       => $this->get_current_tab(),
-									'data-range' => $range,
-								),
-								Utils::get_admin_menu_url( 'uptime' )
-							);
-							?>
-							<option value="<?php echo esc_attr( $range ); ?>"
-								<?php selected( $data_range_selected, $range ); ?>
-									data-url="<?php echo esc_url( $data_url ); ?>">
-								<?php echo esc_html( $label ); ?>
-							</option>
-						<?php endforeach; ?>
-					</select>
-				<?php endif; ?>
-				<?php if ( ! apply_filters( 'wpmudev_branding_hide_doc_link', false ) ) : ?>
-					<a href="<?php echo esc_url( Utils::get_documentation_url( $this->slug, $this->get_current_tab() ) ); ?>" target="_blank" class="sui-button sui-button-ghost">
-						<i class="sui-icon-academy" aria-hidden="true"></i>
-						<?php esc_html_e( 'View Documentation', 'wphb' ); ?>
-					</a>
-				<?php endif; ?>
-			</div>
-		</div><!-- end header -->
+		<label for="wphb-uptime-data-range" class="inline-label header-label sui-hidden-xs sui-hidden-sm">
+			<?php esc_html_e( 'Reporting period', 'wphb' ); ?>
+		</label>
+		<select name="wphb-uptime-data-range" class="uptime-data-range sui-select-sm" id="wphb-uptime-data-range">
+			<?php
+			foreach ( $data_ranges as $range => $label ) :
+				$data_url = add_query_arg(
+					array(
+						'view'       => $this->get_current_tab(),
+						'data-range' => $range,
+					),
+					Utils::get_admin_menu_url( 'uptime' )
+				);
+				?>
+				<option value="<?php echo esc_attr( $range ); ?>"
+					<?php selected( $data_range_selected, $range ); ?> data-url="<?php echo esc_url( $data_url ); ?>">
+					<?php echo esc_html( $label ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
 		<?php
 	}
+
 
 	/**
 	 * We need to insert an extra label to the tabs sometimes
@@ -297,16 +286,9 @@ class Uptime extends Page {
 		if ( 'notifications' === $tab || 'reports' === $tab ) {
 			$options = Settings::get_setting( $tab, 'uptime' );
 
+			$class = empty( $options['recipients'] ) || ! $options['enabled'] ? 'sui-icon-check-tick sui-success sui-hidden' : 'sui-icon-check-tick sui-success';
 			// Nothing to display if not enabled.
-			if ( ! $options['enabled'] ) {
-				return;
-			}
-
-			if ( ! empty( $options['recipients'] ) ) {
-				echo '<i class="sui-icon-check-tick sui-success" aria-hidden="true"></i>';
-			} else {
-				echo '<i class="sui-icon-warning-alert sui-warning" aria-hidden="true"></i>';
-			}
+			echo '<i class="' . esc_attr( $class ) . '" aria-hidden="true"></i>';
 		}
 	}
 

@@ -1,108 +1,132 @@
 <?php
-
 /**
  * XML-RPC functionality
  *
  * @package wp-fail2ban
- * @since 4.0.0
+ * @since   4.0.0
  */
-namespace org\lecklider\charles\wordpress\wp_fail2ban;
+namespace org\lecklider\charles\wordpress\wp_fail2ban\feature;
 
-if ( !defined( 'ABSPATH' ) ) {
-    exit;
-}
+use function org\lecklider\charles\wordpress\wp_fail2ban\bail;
+use function org\lecklider\charles\wordpress\wp_fail2ban\openlog;
+use function org\lecklider\charles\wordpress\wp_fail2ban\syslog;
+use function org\lecklider\charles\wordpress\wp_fail2ban\closelog;
+
+defined('ABSPATH') or exit;
+
 /**
- * @since 4.0.5 Guard
+ * Catch multiple XML-RPC authentication failures
+ *
+ * This is redundant in CP and newer versions of WP
+ *
+ * @see \wp_xmlrpc_server::login()
+ *
+ * @since 4.3.0 Added action
+ * @since 4.0.0 Return $error
+ * @since 3.5.0 Refactored for unit testing
+ * @since 3.0.0
+ *
+ * @param \IXR_Error    $error
+ * @param \WP_Error     $user
+ *
+ * @return \IXR_Error
+ *
+ * @wp-f2b-hard XML-RPC multicall authentication failure
  */
+function xmlrpc_login_error($error, $user)
+{
+    static $attempts = 0;
 
-if ( !function_exists( __NAMESPACE__ . '\\xmlrpc_login_error' ) ) {
-    /**
-     * Catch multiple XML-RPC authentication failures
-     *
-     * @see \wp_xmlrpc_server::login()
-     *
-     * @since 4.0.0 Return $error
-     * @since 3.5.0 Refactored for unit testing
-     * @since 3.0.0
-     *
-     * @param \IXR_Error    $error
-     * @param \WP_Error     $user
-     *
-     * @return \IXR_Error
-     *
-     * @wp-f2b-hard XML-RPC multicall authentication failure
-     */
-    function xmlrpc_login_error( $error, $user )
-    {
-        static  $attempts = 0 ;
-        
-        if ( ++$attempts > 1 ) {
-            openlog();
-            syslog( LOG_NOTICE, 'XML-RPC multicall authentication failure' );
+    if (++$attempts > 1) {
+        if (openlog()) {
+            syslog(LOG_NOTICE, 'XML-RPC multicall authentication failure');
             closelog();
-            // @codeCoverageIgnoreEnd
-            bail();
-        } else {
-            return $error;
         }
-    
+
+        do_action(__FUNCTION__, $error, $user);
+
+        bail();
+    } else {
+        return $error;
     }
-    
-    add_action(
-        'xmlrpc_login_error',
-        __NAMESPACE__ . '\\xmlrpc_login_error',
-        10,
-        2
-    );
-}
+} // @codeCoverageIgnore
 
 /**
- * @since 4.0.5 Guard
+ * Catch failed pingbacks
+ *
+ * @see \wp_xmlrpc_server::pingback_error()
+ *
+ * @since 4.3.0 Added action
+ * @since 4.0.0 Return $ixr_error
+ * @since 3.5.0 Refactored for unit testing
+ * @since 3.0.0
+ *
+ * @param \IXR_Error    $ixr_error
+ *
+ * @return \IXR_Error
+ *
+ * @wp-f2b-hard Pingback error .* generated
  */
-
-if ( !function_exists( __NAMESPACE__ . '\\xmlrpc_pingback_error' ) ) {
-    /**
-     * Catch failed pingbacks
-     *
-     * @see \wp_xmlrpc_server::pingback_error()
-     *
-     * @since 4.0.0 Return $ixr_error
-     * @since 3.5.0 Refactored for unit testing
-     * @since 3.0.0
-     *
-     * @param \IXR_Error    $ixr_error
-     *
-     * @return \IXR_Error
-     *
-     * @wp-f2b-hard Pingback error .* generated
-     */
-    function xmlrpc_pingback_error( $ixr_error )
-    {
-        
-        if ( 48 !== $ixr_error->code ) {
-            openlog();
-            syslog( LOG_NOTICE, 'Pingback error ' . $ixr_error->code . ' generated' );
+function xmlrpc_pingback_error($ixr_error)
+{
+    if (48 !== $ixr_error->code) {
+        if (openlog()) {
+            syslog(LOG_NOTICE, 'Pingback error '.$ixr_error->code.' generated');
             closelog();
-            // @codeCoverageIgnoreEnd
         }
-        
-        return $ixr_error;
+
+        do_action(__FUNCTION__, $ixr_error);
     }
-    
-    add_filter( 'xmlrpc_pingback_error', __NAMESPACE__ . '\\xmlrpc_pingback_error', 5 );
+    return $ixr_error;
 }
 
 /**
- * @since 4.0.0 Refactored
+ * Log pingbacks
+ *
+ * @since 4.3.0 Added actions
+ * @since 3.5.0 Refactored for unit testing
  * @since 2.2.0
+ *
+ * @param string    $call
  */
-if ( defined( 'WP_FAIL2BAN_LOG_PINGBACKS' ) && true === WP_FAIL2BAN_LOG_PINGBACKS ) {
-    require_once 'xmlrpc/pingback.php';
+function xmlrpc_call($call)
+{
+    if ('pingback.ping' == $call) {
+        if (openlog('WP_FAIL2BAN_PINGBACK_LOG')) {
+            syslog(LOG_INFO, 'Pingback requested');
+            closelog();
+        }
+
+        do_action(__FUNCTION__.'::pingback.ping');
+    }
+
+    do_action(__FUNCTION__, $call);
 }
+
 /**
- * @since 4.0.0 Refactored
+ * Log XML-RPC requests
+ *
+ * It seems attackers are doing weird things with XML-RPC. This makes it easy to
+ * log them for analysis and future blocking.
+ *
+ * @since 4.3.0 Refactored
+ * @since 4.0.0 Fix: Removed HTTP_RAW_POST_DATA
+ *              https://wordpress.org/support/?p=10971843
  * @since 3.6.0
+ *
+ * @codeCoverageIgnore
  */
-if ( defined( 'WP_FAIL2BAN_XMLRPC_LOG' ) && '' < WP_FAIL2BAN_XMLRPC_LOG ) {
-    require_once 'xmlrpc/log.php';
+function xmlrpc_log()
+{
+    if (false === ($fp = fopen(WP_FAIL2BAN_XMLRPC_LOG, 'a+'))) {
+        // TODO: decided whether to log this
+    } else {
+        $raw_data = (version_compare(PHP_VERSION, '7.0.0') >= 0)
+            ? file_get_contents('php://input')
+            : $HTTP_RAW_POST_DATA;
+
+        fprintf($fp, "# ---\n# Date: %s\n# IP: %s\n\n%s\n", date(DATE_ATOM), remote_addr(), $raw_data);
+        fclose($fp);
+    }
 }
+

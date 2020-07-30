@@ -199,6 +199,16 @@ class Logger {
 	 * @param  string $module   Module slug.
 	 */
 	private function write_file( $mode, $message = '', $module = '' ) {
+		/**
+		 * @since 2.5.0
+		 * Return if log directory is not exist.
+		 * Some log requests come after running Hummingbird\Core\Logger::cleanup() by WP_Hummingbird::flush_cache();
+		 * At this moment log directory is not exist.
+		 */
+		if( ! file_exists( $this->log_dir ) ) {
+			return;
+		}
+
 		try {
 			$fp = fopen( $this->files[ $module ], $mode );
 			flock( $fp, LOCK_EX );

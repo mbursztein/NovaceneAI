@@ -21,7 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</span>
 
 	<div class="sui-tooltip sui-tooltip-constrained" data-tooltip="<?php esc_attr_e( 'Added/removed plugins or themes? Update your file list to include new files, and remove old ones', 'wphb' ); ?>">
-		<input type="submit" class="sui-button sui-button-ghost" name="recheck-files" value="<?php esc_attr_e( 'Re-Check Files', 'wphb' ); ?>">
+		<button role="button" type="submit" class="sui-button sui-button-ghost" name="recheck-files">
+			<i class="sui-icon-update" aria-hidden="true"></i> <?php esc_html_e( 'Re-Check Files', 'wphb' ); ?>
+		</button>
 	</div>
 
 	<div class="sui-tooltip sui-tooltip-constrained sui-tooltip-top-right" data-tooltip="<?php esc_attr_e( 'Clears all local or hosted assets and recompresses files that need it', 'wphb' ); ?>">

@@ -28,9 +28,8 @@ class Installer {
 		}
 
 		update_site_option( 'wphb_version', WPHB_VERSION );
-
-		// Add uptime notice.
-		update_site_option( 'wphb-notice-uptime-info-show', 'yes' );
+		update_site_option( 'wphb-notice-uptime-info-show', 'yes' ); // Add uptime notice.
+		update_site_option( 'wphb_run_onboarding', true );
 	}
 
 	/**
@@ -38,7 +37,7 @@ class Installer {
 	 */
 	public static function activate_blog() {
 		update_option( 'wphb_version', WPHB_VERSION );
-
+		update_option( 'wphb_run_onboarding', true );
 		do_action( 'wphb_activate' );
 	}
 
@@ -106,6 +105,14 @@ class Installer {
 				self::upgrade_2_2_1();
 			}
 
+			if ( version_compare( $version, '2.5.0', '<' ) ) {
+				self::upgrade_2_5_0();
+			}
+
+			if ( version_compare( $version, '2.5.1', '<' ) ) {
+				self::upgrade_2_5_1();
+			}
+
 			update_site_option( 'wphb_version', WPHB_VERSION );
 		}
 	}
@@ -171,6 +178,38 @@ class Installer {
 
 		$preload = new \Hummingbird\Core\Modules\Caching\Preload();
 		$preload->cancel();
+	}
+
+	/**
+	 * Upgrade to 2.5.0
+	 *
+	 * Update advanced-cache.php file.
+	 *
+	 * @since 2.5.0
+	 */
+	private static function upgrade_2_5_0() {
+		// Force new quick setup (with tracking option).
+		delete_option( 'wphb-quick-setup' );
+
+		$adv_cache_file = dirname( get_theme_root() ) . '/advanced-cache.php';
+		if ( Settings::get_settings( 'page_cache' ) && file_exists( $adv_cache_file ) ) {
+			unlink( $adv_cache_file );
+		}
+	}
+
+	/**
+	 * Upgrade to 2.5.1
+	 *
+	 * Remove possible cron schedule loop.
+	 *
+	 * @since 2.5.1
+	 */
+	private static function upgrade_2_5_1() {
+		if ( ! function_exists( 'wp_unschedule_hook' ) ) {
+			return;
+		}
+
+		wp_unschedule_hook( 'wphb_performance_fetch_report' );
 	}
 
 }

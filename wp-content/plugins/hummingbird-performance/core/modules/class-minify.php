@@ -275,6 +275,9 @@ class Minify extends Module {
 			// Only show items that have a handle and a source.
 			if ( isset( $wp_dependencies->registered[ $handle ] ) && ! empty( $wp_dependencies->registered[ $handle ]->src ) ) {
 				$this->sources_collector->add_to_collection( $wp_dependencies->registered[ $handle ], $type );
+			} else {
+				// Not registered for some reason - return to WP.
+				$return_to_wp = array_merge( $return_to_wp, array( $handle ) );
 			}
 
 			// If we aren't in footer, remove handles that need to go to footer.
@@ -563,7 +566,7 @@ class Minify extends Module {
 				 *               with $registered_dependency->extra
 				 */
 				if ( $registered_dependency->src || 0 < count( $registered_dependency->extra ) ) {
-					$new_group->add_handle( $handle, $registered_dependency->src );
+					$new_group->add_handle( $handle, $registered_dependency->src, $registered_dependency->ver );
 
 					// Add dependencies.
 					$new_group->add_handle_dependency( $handle, $wp_dependencies->registered[ $handle ]->deps );
@@ -879,17 +882,20 @@ class Minify extends Module {
 	 *
 	 * Clear the module cache.
 	 *
-	 * @param bool $reset_settings  If set to true will set Asset Optimization settings to default (that includes files positions).
-	 * @param bool $reset_minify    Reset minify settings.
+	 * @param bool $reset_settings   If set to true will set Asset Optimization settings to default (that includes files positions).
+	 * @param bool $reset_minify     Reset minify settings.
+	 * @param bool $keep_collection  Keep collections. If removed, will require to visit the homepage.
 	 *
 	 * @return bool
 	 */
-	public function clear_cache( $reset_settings = true, $reset_minify = true ) {
+	public function clear_cache( $reset_settings = true, $reset_minify = true, $keep_collection = false ) {
 		$this->clear_files();
 
 		if ( $reset_settings ) {
 			// This one when cleared will trigger a new scan.
-			Minify\Sources_Collector::clear_collection();
+			if ( ! $keep_collection ) {
+				Minify\Sources_Collector::clear_collection();
+			}
 
 			$options         = $this->get_options();
 			$default_options = Settings::get_default_settings();

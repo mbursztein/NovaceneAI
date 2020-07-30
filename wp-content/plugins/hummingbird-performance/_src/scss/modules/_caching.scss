@@ -47,14 +47,13 @@
 /**
  * Summary meta box
  */
-.wpmud .box-caching-summary {
+.wpmud #wphb-box-summary {
     .sui-summary-segment {
         overflow: visible !important;
     }
 
     .sui-icon-info {
         top: 2px !important;
-        left: 10px !important;
     }
 
     .sui-summary-details .sui-summary-detail {
@@ -76,7 +75,7 @@
 /**
  * Page caching meta box
  */
-.wpmud .box-caching-page-caching {
+.wpmud .box-caching-page {
     /* Two column layouts: used in page types table */
     .wphb-dash-table.three-columns > .wphb-dash-table-row > div {
         flex-basis: 25%;
@@ -155,9 +154,30 @@
     }
 }
 
+/**
+ * Browser caching configure meta box
+ */
 .wpmud .box-caching-settings {
-    .sui-box-settings-col-1 {
-        vertical-align: top;
+    .sui-border-frame .sui-form-field {
+        margin-bottom: 10px;
+    }
+
+    .wphb-expiry-changes .update-htaccess {
+        margin-top: 10px;
+    }
+
+    .wphb-server-instructions p,
+    .wphb-server-instructions .wphb-listing li {
+        color: #888888;
+        font-size: 13px;
+        line-height: 22px;
+    }
+    .wphb-server-instructions .sui-notice p {
+        color: #333;
+    }
+
+    .wphb-server-instructions .wphb-listing li {
+        margin-top: 0;
     }
 
     .cloudflare-submit {
@@ -187,48 +207,16 @@
 }
 
 /**
- * Browser caching configure meta box
+ * Integrations meta box
+ * @since 2.5.0
  */
-.wpmud .box-caching-settings {
-    .sui-border-frame .sui-form-field {
-        margin-bottom: 10px;
-    }
+.wpmud .box-integrations {
+    .sui-accordion:not(.sui-table):not(.sui-accordion-block):not(.sui-builder-fields).sui-accordion-flushed {
+        margin: 0 -30px;
+        border-top: 0;
 
-    .wphb-expiry-changes .update-htaccess {
-        margin-top: 10px;
-    }
-
-    .wphb-server-instructions p,
-    .wphb-server-instructions .wphb-listing li {
-        color: #888888;
-        font-size: 13px;
-        line-height: 22px;
-    }
-    .wphb-server-instructions .sui-notice p {
-        color: #333;
-    }
-
-    .wphb-server-instructions .wphb-listing li {
-        margin-top: 0;
+        &:last-child { border-bottom: 1px solid #E6E6E6; }
+        .sui-image { margin-right: 10px; }
+        .sui-accordion-item .sui-accordion-item-header .sui-icon-plus { margin-right: 0; }
     }
 }
-
-/**
- * RSS caching meta box
- */
-.wpmud .box-caching-rss {
-    .sui-box-settings-row {
-        input[type="text"] {
-            margin: 0;
-            display: inline-block;
-            width: 80px;
-        }
-
-        label {
-            margin-left: 10px;
-            margin-top: -5px;
-            color: #666;
-        }
-    }
-}
-

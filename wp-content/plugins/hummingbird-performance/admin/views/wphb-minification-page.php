@@ -56,6 +56,10 @@ if ( 'advanced' === $this->mode ) {
 $this->modal( 'found-assets' );
 $this->modal( 'minification-tour' );
 
+if ( ! \Hummingbird\Core\Utils::is_member() ) {
+	$this->modal( 'membership' );
+}
+
 $tour = Settings::get( 'wphb-new-user-tour' );
 ?>
 

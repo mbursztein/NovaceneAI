@@ -42,6 +42,7 @@ class Settings {
 		'advanced',
 		'rss',
 		'settings',
+		'redis',
 	);
 
 	/**
@@ -69,7 +70,8 @@ class Settings {
 	/**
 	 * Settings constructor.
 	 */
-	private function __construct() {}
+	private function __construct() {
+	}
 
 	/**
 	 * Return the plugin default settings.
@@ -190,6 +192,31 @@ class Settings {
 				'prefetch'       => array(),
 				'db_cleanups'    => false,
 				'cart_fragments' => false,
+				'lazy_load'      => array(
+					'enabled'   => false,
+					'method'    => 'click',
+					'button'    => array(
+						'dimensions' => array(
+							'height' => 0,
+							'width'  => 0,
+							'radius' => 0,
+						),
+						'color'      => array(
+							'background' => '',
+							'border'     => '',
+							'hover'      => '',
+						),
+						'alignment'  => array(
+							'align'      => 'center',
+							'full_width' => 'on',
+							'left'       => 0,
+							'right'      => 0,
+							'top'        => 0,
+							'bottom'     => 0,
+						),
+					),
+					'threshold' => 10,
+				),
 			),
 			'rss'         => array(
 				'enabled'  => true,
@@ -199,6 +226,10 @@ class Settings {
 				'accessible_colors' => false,
 				'remove_settings'   => false,
 				'remove_data'       => false,
+				'tracking'          => false,
+			),
+			'redis'       => array(
+				'enabled' => false,
 			),
 		);
 
@@ -273,6 +304,8 @@ class Settings {
 	 * This can be moved out to update_settings, because it's almost identical.
 	 */
 	public static function reset_to_defaults() {
+		Utils::get_module( 'redis' )->disable();
+		
 		$defaults = self::get_default_settings();
 
 		if ( ! is_multisite() ) {
@@ -449,12 +482,16 @@ class Settings {
 	/**
 	 * Update option.
 	 *
-	 * @param string $option  WP Hummingbird option name.
-	 * @param mixed  $value   WP Hummingbird option value.
+	 * @param string      $option   WP Hummingbird option name.
+	 * @param mixed       $value    WP Hummingbird option value.
+	 * @param string|bool $autoload Optional. Whether to load the option when WordPress starts up. For existing options,
+	 *                              `$autoload` can only be updated using `update_option()` if `$value` is also changed.
+	 *                              Accepts 'yes'|true to enable or 'no'|false to disable. For non-existent options,
+	 *                              the default value is 'yes'. Default null.
 	 */
-	public static function update( $option, $value ) {
+	public static function update( $option, $value, $autoload = null ) {
 		if ( ! is_main_site() ) {
-			update_option( $option, $value );
+			update_option( $option, $value, $autoload );
 		} else {
 			update_site_option( $option, $value );
 		}

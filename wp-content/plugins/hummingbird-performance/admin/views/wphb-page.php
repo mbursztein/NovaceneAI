@@ -25,39 +25,51 @@ $this->do_meta_boxes( 'main' ); ?>
 	</div>
 	<div class="sui-row sui-cross-sell-modules">
 		<div class="sui-col-md-4">
-			<div class="wphb-cross-smush"><span></span></div>
+			<!-- Cross-Sell Banner #1 -->
+			<div aria-hidden="true" class="sui-cross-1">
+				<span></span>
+			</div>
+
 			<div class="sui-box">
 				<div class="sui-box-body">
 					<h3><?php esc_html_e( 'Smush Image Compression and Optimization', 'wphb' ); ?></h3>
 					<p><?php esc_html_e( 'Resize, optimize and compress all of your images with the incredibly powerful and award-winning, 100% free WordPress image optimizer.', 'wphb' ); ?></p>
 					<a href="https://wordpress.org/plugins/wp-smushit/" class="sui-button sui-button-ghost" target="_blank">
-						<?php esc_html_e( 'View features', 'wphb' ); ?>
+						<?php esc_html_e( 'View features', 'wphb' ); ?>  <i aria-hidden="true" class="sui-icon-arrow-right"></i>
 					</a>
 				</div>
 			</div>
 		</div>
 
 		<div class="sui-col-md-4">
-			<div class="wphb-cross-defender"><span></span></div>
+			<!-- Cross-Sell Banner #2 -->
+			<div aria-hidden="true" class="sui-cross-2">
+				<span></span>
+			</div>
+
 			<div class="sui-box">
 				<div class="sui-box-body">
 					<h3><?php esc_html_e( 'Defender Security, Monitoring, and Hack Protection', 'wphb' ); ?></h3>
 					<p><?php esc_html_e( 'Security Tweaks & Recommendations, File & Malware Scanning, Login & 404 Lockout Protection, Two-Factor Authentication & more.', 'wphb' ); ?></p>
 					<a href="https://wordpress.org/plugins/defender-security/" class="sui-button sui-button-ghost" target="_blank">
-						<?php esc_html_e( 'View features', 'wphb' ); ?>
+						<?php esc_html_e( 'View features', 'wphb' ); ?> <i aria-hidden="true" class="sui-icon-arrow-right"></i>
 					</a>
 				</div>
 			</div>
 		</div>
 
 		<div class="sui-col-md-4">
-			<div class="wphb-cross-crawl"><span></span></div>
+			<!-- Cross-Sell Banner #3 -->
+			<div aria-hidden="true" class="sui-cross-3">
+				<span></span>
+			</div>
+
 			<div class="sui-box">
 				<div class="sui-box-body">
 					<h3><?php esc_html_e( 'SmartCrawl Search Engine Optimization', 'wphb' ); ?></h3>
 					<p><?php esc_html_e( 'Customize Titles & Meta Data, OpenGraph, Twitter & Pinterest Support, Auto-Keyword Linking, SEO & Readability Analysis, Sitemaps, URL Crawler & more.', 'wphb' ); ?></p>
 					<a href="https://wordpress.org/plugins/smartcrawl-seo/" class="sui-button sui-button-ghost" target="_blank">
-						<?php esc_html_e( 'View features', 'wphb' ); ?>
+						<?php esc_html_e( 'View features', 'wphb' ); ?> <i aria-hidden="true" class="sui-icon-arrow-right"></i>
 					</a>
 				</div>
 			</div>
@@ -76,10 +88,7 @@ $this->do_meta_boxes( 'main' ); ?>
 			srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/dev-team@2x.png' ); ?> 2x"
 			alt="<?php esc_attr_e( 'Try pro features for free!', 'wphb' ); ?>">
 	</div>
-
-	<?php
-endif;
-?>
+<?php endif; ?>
 
 <script>
 	jQuery( document).ready( function () {

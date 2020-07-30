@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div class="sui-box-body">
-	<p><?php esc_html_e( 'Configure Hummingbird to automatically and regularly test your website and email you reports.', 'wphb' ); ?></p>
+	<p><?php esc_html_e( 'Enable scheduled performance tests and get the customized results emailed directly to your inbox.', 'wphb' ); ?></p>
 </div>
 <div class="sui-box-settings-row sui-disabled">
 	<div class="sui-box-settings-col-1">
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="sui-toggle-slider"></span>
 		</label>
 		<label for="chk1">
-			<?php esc_html_e( 'Run regular scans & reports', 'wphb' ); ?>
+			<?php esc_html_e( 'Send scheduled performance reports', 'wphb' ); ?>
 		</label>
 	</div>
 </div>
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 			printf(
 				/* translators: %1$s - upsell link start, %2$s - closing a tag */
-				esc_html__( "Schedule automated performance tests and receive email reports direct to your inbox. You'll get Hummingbird Pro plus 100+ WPMU DEV plugins & 24/7 WP support. %1\$sTry Pro for FREE today!%2\$s", 'wphb' ),
+				esc_html__( 'Schedule automated performance tests and receive customized email reports direct to your inbox. Get reporting as part of a WPMU DEV membership with 24/7 support and lots of handy site management tools. %1$sTry Pro for FREE today!%2$s', 'wphb' ),
 				'<a href="' . esc_url( \Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_test_upsell_link' ) ) . '" target="_blank">',
 				'</a>'
 			);

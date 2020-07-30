@@ -2,6 +2,10 @@ $summary-image: '../../admin/assets/image/graphic-hb-minify-summary@2x.png';
 $upgrade-image: '../../admin/assets/image/hero@2x.png';
 $upgrade-image-mobile: '../../admin/assets/image/hero-mobile@2x.png';
 
+$cross-sell-1: 'smush';
+$cross-sell-2: 'defender';
+$cross-sell-3: 'smartcrawl';
+
 /* ****************************************************************************
  * MAIN APP SCSS FILE
  */
@@ -49,6 +53,7 @@ $sui-font-path: '~@wpmudev/shared-ui/dist/fonts/';
 @import "~@wpmudev/shared-ui/scss/color-accessibility";
 @import "~@wpmudev/shared-ui/scss/upgrade-page";
 @import "~@wpmudev/shared-ui/scss/reviews";
+@import "~@wpmudev/shared-ui/scss/colorpickers";
 
 // Common
 @import "common/variables";
@@ -60,6 +65,7 @@ $sui-font-path: '~@wpmudev/shared-ui/dist/fonts/';
 @import "components/notices";
 @import "components/pills";
 @import "components/border_frame";
+@import "components/accordions";
 
 // Modules
 @import "modules/dashboard";

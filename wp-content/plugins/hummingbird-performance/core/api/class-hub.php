@@ -94,6 +94,7 @@ class Hub {
 			foreach ( $status as $status_name => $status_value ) {
 				$result['gzip']['status'][ strtolower( $status_name ) ] = $status_value;
 			}
+			$result['gzip']['server'] = $module::get_server_type();
 		}
 
 		/**
@@ -173,6 +174,26 @@ class Hub {
 
 		$result['rss-caching']['status']   = $options['enabled'];
 		$result['rss-caching']['duration'] = $options['duration'];
+
+		/**
+		 * Database cleanup.
+		 *
+		 * @since 2.5.1
+		 */
+		$module  = Utils::get_module( 'advanced' );
+		$options = $module->get_options();
+
+		$result['db-cleanup']['status']    = $options['db_cleanups'];
+		$result['db-cleanup']['frequency'] = $options['db_frequency'];
+
+		/**
+		 * Advanced tools.
+		 *
+		 * @since 2.5.1
+		 */
+		$result['advanced']['query_string']   = $options['query_string'];
+		$result['advanced']['emoji']          = $options['emoji'];
+		$result['advanced']['cart_fragments'] = $options['cart_fragments'];
 
 		/**
 		 * Reports
@@ -585,7 +606,7 @@ class Hub {
 	 * @return void|WP_Error
 	 */
 	public function action_purge_all_cache( $params, $action ) {
-		WP_Hummingbird::flush_cache( true, false, false );
+		WP_Hummingbird::flush_cache( false, false, false );
 		wp_send_json_success();
 	}
 

@@ -67,10 +67,9 @@ class Cloudflare extends Module {
 		$options = $this->get_options();
 
 		$is_cloudflare_db = isset( $options['connected'] ) ? $options['connected'] : false;
-		$last_check       = isset( $options['last_check'] ) ? $options['last_check'] : false;
 
 		// Check once every hour.
-		if ( $last_check && $last_check + HOUR_IN_SECONDS >= time() && ! $force ) {
+		if ( ! $force && isset( $options['last_check'] ) && ( (int) $options['last_check'] + HOUR_IN_SECONDS ) >= time() ) {
 			return $is_cloudflare_db;
 		}
 

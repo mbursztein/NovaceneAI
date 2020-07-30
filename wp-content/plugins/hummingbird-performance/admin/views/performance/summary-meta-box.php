@@ -14,26 +14,25 @@
  */
 
 use Hummingbird\Core\Modules\Performance;
-use Hummingbird\Core\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$perf_link = Utils::get_admin_menu_url( 'performance' ) . '&view=audits&type=' . $type;
+$perf_link = \Hummingbird\Core\Utils::get_admin_menu_url( 'performance' ) . '&view=audits&type=' . $type;
 ?>
 
-<div class="sui-summary-image-space"></div>
+<div class="sui-summary-image-space" aria-hidden="true"></div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">
 		<?php if ( $last_report && ! is_wp_error( $last_report ) && ! $report_dismissed ) : ?>
 			<span class="sui-summary-large"><?php echo esc_html( $last_report->{$type}->score ); ?></span>
-			<i class="sui-icon-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$type}->score, 'icon' ) ); ?> sui-md sui-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$type}->score ) ); ?>"></i>
+			<i aria-hidden="true" class="sui-icon-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$type}->score, 'icon' ) ); ?> sui-md sui-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$type}->score ) ); ?>"></i>
 			<span class='sui-summary-percent'>/100</span>
 		<?php elseif ( $report_dismissed ) : ?>
 			<?php if ( isset( $last_report->{$type}->score ) ) : ?>
 				<span class="sui-summary-large"><?php echo esc_html( $last_report->{$type}->score ); ?></span>
-				<i class="sui-icon-info sui-md"></i>
+				<i aria-hidden="true" class="sui-icon-info sui-md"></i>
 				<span class='sui-summary-percent'>/100</span>
 			<?php else : ?>
 				<span class="sui-summary-large">-</span>
@@ -61,9 +60,7 @@ $perf_link = Utils::get_admin_menu_url( 'performance' ) . '&view=audits&type=' .
 			}
 			?>
 		</span>
-		<span class="sui-summary-sub">
-			<?php esc_html_e( 'Last test date', 'wphb' ); ?>
-		</span>
+		<span class="sui-summary-sub"><?php esc_html_e( 'Last test date', 'wphb' ); ?></span>
 	</div>
 </div>
 <div class="sui-summary-segment">
@@ -96,9 +93,9 @@ $perf_link = Utils::get_admin_menu_url( 'performance' ) . '&view=audits&type=' .
 						<?php if ( is_null( $last_report->{$type}->audits->diagnostics ) ) : ?>
 							<i aria-hidden="true" class="sui-icon-check-tick sui-lg sui-success"></i>
 						<?php else : ?>
-							<span class="sui-tag sui-tag-<?php echo esc_attr( Performance::get_audits_class( $last_report->{$type}->audits->diagnostics ) ); ?>" style="cursor: pointer;">
-								<?php echo esc_html( $diagnostics ); ?>
-							</span>
+						<span class="sui-tag sui-tag-<?php echo esc_attr( Performance::get_audits_class( $last_report->{$type}->audits->diagnostics ) ); ?>" style="cursor: pointer;">
+							<?php echo esc_html( $diagnostics ); ?>
+						</span>
 						<?php endif; ?>
 					</a>
 				<?php endif; ?>

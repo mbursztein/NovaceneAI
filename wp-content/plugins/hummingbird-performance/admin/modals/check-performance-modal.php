@@ -11,8 +11,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class="sui-modal sui-modal-lg run-performance-test-modal">
-	<div role="dialog" class="sui-modal-content" id="run-performance-test-modal" aria-modal="true" aria-labelledby="runPerformanceScan" aria-describedby="dialogDescription">
+<div class="sui-modal sui-modal-lg">
+	<div
+		role="dialog"
+		id="run-performance-test-modal"
+		class="sui-modal-content"
+		aria-modal="true"
+		aria-labelledby="runPerformanceScan"
+		aria-describedby="dialogDescription"
+	>
 		<div class="sui-box">
 			<div class="sui-box-header">
 				<h3 class="sui-box-title" id="runPerformanceScan">
@@ -44,10 +51,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 			<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
-				<img class="sui-image"
-					src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-modal-quicksetup.png' ); ?>"
-					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-modal-quicksetup@2x.png' ); ?> 2x"
-					alt="<?php esc_attr_e( 'Reduce your page load time!', 'wphb' ); ?>">
+				<img class="sui-image" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-modal-quicksetup.png' ); ?>"
+				     srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-modal-quicksetup.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-modal-quicksetup@2x.png' ); ?> 2x">
 			<?php endif; ?>
 		</div>
 	</div>

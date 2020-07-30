@@ -16,23 +16,27 @@
  * @var bool   $report_dismissed   Last report dismissed warning.
  */
 
+use Hummingbird\Core\Modules\Performance;
+use Hummingbird\Core\Utils;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 ?>
-<div class="sui-summary-image-space"></div>
+
+<div class="sui-summary-image-space" aria-hidden="true"></div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">
 		<?php if ( $last_report && ! is_wp_error( $last_report ) && ! $report_dismissed ) : ?>
 			<span class="sui-summary-large"><?php echo esc_html( $last_report->{$report_type}->score ); ?></span>
-			<i class="sui-icon-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $last_report->{$report_type}->score, 'icon' ) ); ?> sui-md sui-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $last_report->{$report_type}->score ) ); ?>"></i>
+			<i aria-hidden="true" class="sui-icon-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$report_type}->score, 'icon' ) ); ?> sui-md sui-<?php echo esc_attr( Performance::get_impact_class( $last_report->{$report_type}->score ) ); ?>"></i>
 			<span class='sui-summary-percent'>/100</span>
 		<?php elseif ( $is_doing_report ) : ?>
 			<div class="sui-progress-text sui-icon-loader sui-loading"></div>
 		<?php elseif ( $report_dismissed && isset( $last_report->{$report_type}->score ) ) : ?>
 			<span class="sui-summary-large"><?php echo esc_html( $last_report->{$report_type}->score ); ?></span>
-			<i class="sui-icon-info sui-md"></i>
+			<i aria-hidden="true" class="sui-icon-info sui-md"></i>
 			<span class='sui-summary-percent'>/100</span>
 		<?php else : ?>
 			&mdash;
@@ -57,8 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 			?>
 		</span>
-		<span class="sui-summary-sub">
-	<?php esc_html_e( 'Last test date', 'wphb' ); ?>
+		<span class="sui-summary-sub"><?php esc_html_e( 'Last test date', 'wphb' ); ?></span>
 	</div>
 </div>
 <div class="sui-summary-segment">
@@ -66,52 +69,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'Browser Caching', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
-					<?php if ( $cf_active ) : ?>
-						<?php if ( 691200 <= $cf_current ) : ?>
-							<i class="sui-icon-check-tick sui-lg sui-success" aria-hidden="true"></i>
-						<?php else : ?>
-							<span class="sui-tag sui-tag-warning">5</span>
-						<?php endif; ?>
-					<?php else : ?>
-						<?php if ( $caching_issues ) : ?>
-							<span class="sui-tag sui-tag-warning"><?php echo intval( $caching_issues ); ?></span>
-						<?php else : ?>
-							<i class="sui-icon-check-tick sui-lg sui-success" aria-hidden="true"></i>
-						<?php endif; ?>
-					<?php endif; ?>
-				</span>
+				<?php if ( ( $cf_active && 691200 <= $cf_current ) || ( ! $cf_active && ! $caching_issues ) ) : ?>
+					<i class="sui-icon-check-tick sui-lg sui-success" aria-hidden="true"></i>
+				<?php elseif ( $cf_active && 691200 > $cf_current ) : ?>
+					<span class="sui-tag sui-tag-warning">5</span>
+				<?php else : ?>
+					<span class="sui-tag sui-tag-warning"><?php echo intval( $caching_issues ); ?></span>
+				<?php endif; ?>
+			</span>
 		</li>
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'GZIP Compression', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
-					<?php if ( $gzip_issues ) : ?>
-						<span class="sui-tag sui-tag-warning"><?php echo intval( $gzip_issues ); ?></span>
-					<?php else : ?>
-						<i class="sui-icon-check-tick sui-lg sui-success" aria-hidden="true"></i>
-					<?php endif; ?>
-				</span>
+				<?php if ( $gzip_issues ) : ?>
+					<span class="sui-tag sui-tag-warning"><?php echo intval( $gzip_issues ); ?></span>
+				<?php else : ?>
+					<i class="sui-icon-check-tick sui-lg sui-success" aria-hidden="true"></i>
+				<?php endif; ?>
+			</span>
 		</li>
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'Last Down', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
-					<?php if ( ! \Hummingbird\Core\Utils::is_member() ) : ?>
-						<a class="sui-button sui-button-ghost sui-button-green"  href="<?php echo \Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_dash_summary_pro_tag' ); ?>" target="_blank">
-							<?php esc_html_e( 'Pro Feature', 'wphb' ); ?>
-						</a>
-					<?php elseif ( is_wp_error( $uptime_report ) || ( ! $uptime_active ) ) : ?>
-						<span class="sui-tag sui-tag-disabled">
-							<?php esc_html_e( 'Uptime Inactive', 'wphb' ); ?>
-						</span>
-						<?php
-					elseif ( empty( $site_date ) ) :
-						esc_html_e( 'Website is reported down', 'wphb' );
-						?>
-						<?php
-					else :
-						echo esc_html( $site_date );
-					endif;
-					?>
-				</span>
+				<?php if ( ! Utils::is_member() ) : ?>
+					<a class="sui-button sui-button-ghost sui-button-green" href="<?php echo esc_url( Utils::get_link( 'plugin', 'hummingbird_dash_summary_pro_tag' ) ); ?>" target="_blank">
+						<?php esc_html_e( 'Pro Feature', 'wphb' ); ?>
+					</a>
+				<?php elseif ( is_wp_error( $uptime_report ) || ( ! $uptime_active ) ) : ?>
+					<span class="sui-tag sui-tag-disabled">
+						<?php esc_html_e( 'Uptime Inactive', 'wphb' ); ?>
+					</span>
+				<?php elseif ( empty( $site_date ) ) : ?>
+					<?php esc_html_e( 'Website is reported down', 'wphb' ); ?>
+				<?php else : ?>
+					<?php echo esc_html( $site_date ); ?>
+				<?php endif; ?>
+			</span>
 		</li>
 	</ul>
 </div>

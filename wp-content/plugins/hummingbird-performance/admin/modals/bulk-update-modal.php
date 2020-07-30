@@ -55,20 +55,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			</div>
 			<div class="sui-box-footer sui-flatten sui-content-center sui-no-padding-top">
-				<div class="sui-button sui-button-ghost" data-modal-close="">
+				<button class="sui-button sui-button-ghost" data-modal-close="">
 					<?php esc_html_e( 'Cancel', 'wphb' ); ?>
-				</div>
+				</button>
 
-				<a class="save-batch sui-button" data-modal-close="">
+				<button class="save-batch sui-button" data-modal-close="">
 					<?php esc_html_e( 'Apply', 'wphb' ); ?>
-				</a>
+				</button>
 			</div>
 
 			<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
-				<img class="sui-image"
-					src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?>"
-					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@2x.png' ); ?> 2x"
-					alt="<?php esc_attr_e( 'Hummingbird', 'wphb' ); ?>">
+				<img class="sui-image" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?>"
+					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@2x.png' ); ?> 2x">
 			<?php endif; ?>
 		</div>
 	</div>

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p><?php esc_html_e( 'Page caching is currently active.', 'wphb' ); ?></p>
 	</div>
 <?php else : ?>
-	<a href="<?php echo esc_url( $activate_url ); ?>" class="sui-button sui-button-blue" id="activate-page-caching">
+	<a href="<?php echo esc_url( $activate_url ); ?>" class="sui-button sui-button-blue" id="activate-page-caching" onclick="WPHB_Admin.Tracking.enableFeature( 'Page Caching' )">
 		<?php esc_html_e( 'Activate', 'wphb' ); ?>
 	</a>
 <?php endif; ?>

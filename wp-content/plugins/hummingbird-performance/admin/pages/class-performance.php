@@ -73,52 +73,50 @@ class Performance extends Page {
 	 * Render header.
 	 */
 	public function render_header() {
+		if ( filter_input( INPUT_GET, 'report-dismissed' ) ) {
+			$this->admin_notices->show( 'updated', __( 'You have successfully ignored this performance test.', 'wphb' ), 'success' );
+		}
+
+		add_action( 'wphb_sui_header_sui_actions_right', array( $this, 'add_header_actions' ) );
+
+		parent::render_header();
+	}
+
+	/**
+	 * Add content to the header.
+	 *
+	 * @since 2.5.0
+	 */
+	public function add_header_actions() {
+		if ( ! Performance_Report::get_last_report() ) {
+			return;
+		}
+
 		$types = array(
 			'desktop' => __( 'Desktop', 'wphb' ),
 			'mobile'  => __( 'Mobile', 'wphb' ),
 		);
-
-		if ( isset( $_GET['report-dismissed'] ) ) { // Input var ok.
-			$this->admin_notices->show( 'updated', __( 'You have successfully ignored this performance test.', 'wphb' ), 'success' );
-		}
 		?>
-		<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-notice-performance-report-settings-updated">
-			<p><?php esc_html_e( 'Settings updated', 'wphb' ); ?></p>
-		</div>
-		<div class="sui-header">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-
-			<div class="sui-actions-right">
-				<?php if ( Performance_Report::get_last_report() ) : ?>
-					<label for="wphb-performance-report-type" class="inline-label header-label sui-hidden-xs sui-hidden-sm">
-						<?php esc_html_e( 'Show results for', 'wphb' ); ?>
-					</label>
-					<select name="wphb-performance-report-type" class="sui-select-sm" id="wphb-performance-report-type">
-						<?php foreach ( $types as $type => $label ) : ?>
-							<?php
-							$data_url = add_query_arg(
-								array(
-									'view'       => $this->get_current_tab(),
-									'data-range' => $type,
-								),
-								Utils::get_admin_menu_url( 'performance' )
-							);
-							?>
-							<option value="<?php echo esc_attr( $type ); ?>"
-								<?php selected( $this->type, $type ); ?> data-url="<?php echo esc_url( $data_url ); ?>">
-								<?php echo esc_html( $label ); ?>
-							</option>
-						<?php endforeach; ?>
-					</select>
-				<?php endif; ?>
-				<?php if ( ! apply_filters( 'wpmudev_branding_hide_doc_link', false ) ) : ?>
-					<a href="<?php echo esc_url( Utils::get_documentation_url( $this->slug, $this->get_current_tab() ) ); ?>" target="_blank" class="sui-button sui-button-ghost">
-						<i class="sui-icon-academy" aria-hidden="true"></i>
-						<?php esc_html_e( 'View Documentation', 'wphb' ); ?>
-					</a>
-				<?php endif; ?>
-			</div>
-		</div><!-- end header -->
+		<label for="wphb-performance-report-type" class="inline-label header-label sui-hidden-xs sui-hidden-sm">
+			<?php esc_html_e( 'Show results for', 'wphb' ); ?>
+		</label>
+		<select name="wphb-performance-report-type" class="sui-select-sm" id="wphb-performance-report-type">
+			<?php foreach ( $types as $type => $label ) : ?>
+				<?php
+				$data_url = add_query_arg(
+					array(
+						'view'       => $this->get_current_tab(),
+						'data-range' => $type,
+					),
+					Utils::get_admin_menu_url( 'performance' )
+				);
+				?>
+				<option value="<?php echo esc_attr( $type ); ?>"
+					<?php selected( $this->type, $type ); ?> data-url="<?php echo esc_url( $data_url ); ?>">
+					<?php echo esc_html( $label ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
 		<?php
 	}
 
@@ -146,7 +144,7 @@ class Performance extends Page {
 			'main'     => __( 'Score Metrics', 'wphb' ),
 			'audits'   => __( 'Audits', 'wphb' ),
 			'historic' => __( 'Historic Field Data', 'wphb' ),
-			'reports'  => __( 'Reports', 'wphb' ),
+			'reports'  => __( 'Reporting', 'wphb' ),
 			'settings' => __( 'Settings', 'wphb' ),
 		);
 
@@ -347,7 +345,7 @@ class Performance extends Page {
 			if ( is_multisite() && is_network_admin() || ! is_multisite() ) {
 				$this->add_meta_box(
 					'performance/reporting',
-					__( 'Reports', 'wphb' ),
+					__( 'Reporting', 'wphb' ),
 					null,
 					null,
 					null,

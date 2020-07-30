@@ -153,53 +153,43 @@ class Dashboard extends Page {
 	 * From WPMU DEV Dashboard
 	 */
 	public function render_header() {
-		if ( isset( $_GET['wphb-cache-cleared'] ) ) { // Input var ok.
+		if ( filter_input( INPUT_GET, 'wphb-cache-cleared' ) ) {
 			$this->admin_notices->show( 'updated', __( 'Your cache has been successfully cleared. Your assets will regenerate the next time someone visits your website.', 'wphb' ), 'success' );
 		}
 
-		if ( isset( $_GET['wphb-cache-cleared-with-cloudflare'] ) ) { // Input var ok.
+		if ( filter_input( INPUT_GET, 'wphb-cache-cleared-with-cloudflare' ) ) {
 			$this->admin_notices->show( 'updated', __( 'Your local and Cloudflare caches have been successfully cleared. Your assets will regenerate the next time someone visits your website.', 'wphb' ), 'success' );
 		}
 
-		$tooltip          = '';
-		$modules          = Utils::get_active_cache_modules();
-		$show_clear_cache = false;
+		add_action( 'wphb_sui_header_sui_actions_right', array( $this, 'add_header_actions' ) );
 
-		if ( count( $modules ) > 0 ) {
-			$show_clear_cache = true;
-			if ( count( $modules ) === 1 ) {
-				/* translators: %s: module name. */
-				$tooltip = sprintf( __( 'This will clear your %s cache', 'wphb' ), array_pop( $modules ) );
-			} else {
-				$last         = array_pop( $modules );
-				$module_names = implode( ', ', $modules ) . ' & ' . $last;
-				/* translators: %s: module name. */
-				$tooltip = sprintf( __( 'This will clear your %s caches', 'wphb' ), $module_names );
-			}
+		parent::render_header();
+	}
+
+	/**
+	 * Add content to the header.
+	 *
+	 * @since 2.5.0
+	 */
+	public function add_header_actions() {
+		$modules = Utils::get_active_cache_modules();
+		if ( count( $modules ) <= 0 ) {
+			return;
 		}
+
+		$module_names = array_pop( $modules );
+		if ( count( $modules ) !== 0 ) {
+			$module_names = implode( ', ', $modules ) . ' & ' . $module_names;
+
+		}
+
+		/* translators: %s: module name. */
+		$tooltip         = sprintf( __( 'This will clear your %s caches', 'wphb' ), $module_names );
+		$clear_cache_url = wp_nonce_url( add_query_arg( 'wphb-clear-files', 'true' ), 'wphb-clear-files' );
 		?>
-		<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-notice-settings-updated">
-			<p><?php esc_html_e( 'Settings Updated', 'wphb' ); ?></p>
-		</div>
-		<div class="sui-header">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<div class="sui-actions-right">
-				<?php
-				if ( $show_clear_cache ) {
-					$clear_cache_url = wp_nonce_url( add_query_arg( 'wphb-clear-files', 'true' ), 'wphb-clear-files' );
-					?>
-					<a href="<?php echo esc_url( $clear_cache_url ); ?>" class="sui-button sui-tooltip sui-tooltip-bottom-right sui-tooltip-constrained" data-tooltip="<?php echo esc_attr( $tooltip ); ?>" aria-hidden="true">
-						<?php esc_html_e( 'Clear Cache', 'wphb' ); ?>
-					</a>
-				<?php } ?>
-				<?php if ( ! apply_filters( 'wpmudev_branding_hide_doc_link', false ) ) : ?>
-					<a href="<?php echo esc_url( Utils::get_documentation_url( $this->slug, $this->get_current_tab() ) ); ?>" target="_blank" class="sui-button sui-button-ghost">
-						<i class="sui-icon-academy" aria-hidden="true"></i>
-						<?php esc_html_e( 'View Documentation', 'wphb' ); ?>
-					</a>
-				<?php endif; ?>
-			</div>
-		</div><!-- end header -->
+		<a href="<?php echo esc_url( $clear_cache_url ); ?>" class="sui-button sui-tooltip sui-tooltip-bottom-right sui-tooltip-constrained" data-tooltip="<?php echo esc_attr( $tooltip ); ?>" aria-hidden="true">
+			<?php esc_html_e( 'Clear Cache', 'wphb' ); ?>
+		</a>
 		<?php
 	}
 
@@ -283,8 +273,7 @@ class Dashboard extends Page {
 				'box-dashboard-left'
 			);
 		} elseif ( ! $this->performance->is_doing_report && $this->performance->last_report && ! $this->performance->report_dismissed ) {
-			$module  = Utils::get_module( 'performance' );
-			$options = $module->get_options();
+			$options = Utils::get_module( 'performance' )->get_options();
 			if ( ! is_multisite() || is_network_admin() || ( $options['subsite_tests'] && is_super_admin() ) || ( ! is_network_admin() && true === $options['subsite_tests'] ) ) {
 				$this->add_meta_box(
 					'dashboard-performance-module',
@@ -377,9 +366,8 @@ class Dashboard extends Page {
 			/**
 			 * Gravatar caching
 			 */
-			$module = Utils::get_module( 'gravatar' );
 			$footer = null;
-			if ( $module->is_active() ) {
+			if ( Utils::get_module( 'gravatar' )->is_active() ) {
 				$footer = array( $this, 'dashboard_gravatar_caching_module_metabox_footer' );
 			}
 			$this->add_meta_box(
@@ -607,9 +595,7 @@ class Dashboard extends Page {
 	 */
 	public function dashboard_network_summary_metabox() {
 		$db_items = Advanced::get_db_count();
-
-		$module  = Utils::get_module( 'minify' );
-		$options = $module->get_options();
+		$options  = Utils::get_module( 'minify' )->get_options();
 
 		$this->view(
 			'dashboard/welcome/subsite-meta-box',
@@ -695,7 +681,7 @@ class Dashboard extends Page {
 			'issues'                => $issues,
 			'cf_notice'             => $cf_notice,
 			'show_cf_notice'        => $show_cf_notice,
-			'cf_connect_url'        => Utils::get_admin_menu_url( 'caching' ) . '&view=caching&connect-cloudflare=true',
+			'cf_connect_url'        => Utils::get_admin_menu_url( 'caching' ) . '&view=caching&connect-cloudflare=true#connect-cloudflare',
 			'caching_type_tooltips' => $caching->get_types(),
 			'configure_caching_url' => Utils::get_admin_menu_url( 'caching' ) . '&view=caching#wphb-box-caching-settings',
 		);
@@ -751,7 +737,6 @@ class Dashboard extends Page {
 	 * @since 1.7.0
 	 */
 	public function dashboard_page_caching_module_metabox() {
-		$module       = Utils::get_module( 'page_cache' );
 		$activate_url = add_query_arg(
 			array(
 				'action' => 'enable',
@@ -761,7 +746,7 @@ class Dashboard extends Page {
 		);
 		$activate_url = wp_nonce_url( $activate_url, 'wphb-caching-actions' );
 
-		$is_active = $module->is_active();
+		$is_active = Utils::get_module( 'page_cache' )->is_active();
 
 		if ( 'blog-admins' === $is_active ) {
 			$is_active = true;
@@ -786,7 +771,6 @@ class Dashboard extends Page {
 	 * @since 1.7.0
 	 */
 	public function dashboard_gravatar_caching_module_metabox() {
-		$module       = Utils::get_module( 'gravatar' );
 		$activate_url = add_query_arg(
 			array(
 				'action' => 'enable',
@@ -797,7 +781,7 @@ class Dashboard extends Page {
 		);
 		$activate_url = wp_nonce_url( $activate_url, 'wphb-caching-actions' );
 
-		$is_active = $module->is_active();
+		$is_active = Utils::get_module( 'gravatar' )->is_active();
 
 		$this->view( 'dashboard/caching/gravatar-module-meta-box', compact( 'is_active', 'activate_url' ) );
 	}

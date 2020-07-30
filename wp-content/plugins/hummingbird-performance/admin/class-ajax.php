@@ -107,6 +107,15 @@ class AJAX {
 		// Save settings for rss caching module.
 		add_action( 'wp_ajax_wphb_rss_save_settings', array( $this, 'rss_save_settings' ) );
 
+		/* INTEGRATIONS */
+
+		// Save Redis settings.
+		add_action( 'wp_ajax_wphb_redis_save_settings', array( $this, 'redis_save_settings' ) );
+		// Toggle Redis object cache setting.
+		add_action( 'wp_ajax_wphb_redis_toggle_object_cache', array( $this, 'redis_toggle_object_cache' ) );
+		add_action( 'wp_ajax_wphb_redis_cache_purge', array( $this, 'redis_cache_purge' ) );
+		add_action( 'wp_ajax_wphb_redis_disconnect', array( $this, 'redis_disconnect' ) );
+
 		/* CACHE SETTINGS */
 
 		// Parse settings form.
@@ -165,6 +174,8 @@ class AJAX {
 		add_action( 'wp_ajax_wphb_admin_settings_save_settings', array( $this, 'admin_settings_save_settings' ) );
 		// Reset settings.
 		add_action( 'wp_ajax_wphb_reset_settings', array( $this, 'reset_settings' ) );
+		// Toggle tracking.
+		add_action( 'wp_ajax_wphb_toggle_tracking', array( $this, 'toggle_tracking' ) );
 	}
 
 	/**
@@ -228,13 +239,9 @@ class AJAX {
 			die();
 		}
 
-		Utils::remove_quick_setup();
+		delete_option( 'wphb_run_onboarding' );
 
-		wp_send_json_success(
-			array(
-				'finished' => false,
-			)
-		);
+		wp_send_json_success();
 	}
 
 	/**
@@ -295,12 +302,6 @@ class AJAX {
 			die();
 		}
 
-		// Remove quick setup only when running regular performance report.
-		$quick_setup = get_option( 'wphb-quick-setup' );
-		if ( ! isset( $quick_setup['finished'] ) ) {
-			Utils::remove_quick_setup();
-		}
-
 		$started_at = Performance::is_doing_report();
 		if ( ! $started_at ) {
 			Utils::get_module( 'performance' )->init_scan();
@@ -309,10 +310,19 @@ class AJAX {
 
 		$now = current_time( 'timestamp' );
 		if ( $now >= ( $started_at + 15 ) ) {
+			$mobile  = '-';
+			$desktop = '-';
+
 			// If we're over 1 minute - timeout.
 			if ( $now >= ( $started_at + 90 ) ) {
 				Performance::set_doing_report( false );
-				wp_send_json_success( array( 'finished' => true ) );
+				wp_send_json_success(
+					array(
+						'finished'     => true,
+						'mobileScore'  => $mobile,
+						'desktopScore' => $desktop,
+					)
+				);
 			}
 
 			// The report should be finished by this time, let's get the results.
@@ -329,7 +339,20 @@ class AJAX {
 				}
 			}
 
-			wp_send_json_success( array( 'finished' => true ) );
+			if ( isset( $report ) && isset( $report->data->mobile->score ) ) {
+				$mobile = $report->data->mobile->score;
+			}
+			if ( isset( $report ) && isset( $report->data->desktop->score ) ) {
+				$desktop = $report->data->desktop->score;
+			}
+
+			wp_send_json_success(
+				array(
+					'finished'     => true,
+					'mobileScore'  => $mobile,
+					'desktopScore' => $desktop,
+				)
+			);
 		}
 
 		// Just do nothing until the report is finished.
@@ -1035,6 +1058,94 @@ class AJAX {
 	}
 
 	/**
+	 * Save Redis cache settings.
+	 *
+	 * @since 2.5.0
+	 */
+	public function redis_save_settings() {
+		check_ajax_referer( 'wphb-fetch', 'nonce' );
+
+		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
+			die();
+		}
+
+		$host = filter_input( INPUT_POST, 'host', FILTER_VALIDATE_IP );
+		$post = filter_input( INPUT_POST, 'port', FILTER_VALIDATE_INT );
+		$pass = filter_input( INPUT_POST, 'password', FILTER_SANITIZE_STRING );
+
+		$redis_mod = Utils::get_module( 'redis' );
+		$result    = $redis_mod->test_redis_connection( $host, $post, $pass );
+
+		if ( 'success' === $result['status'] ) {
+			$redis_mod->enable( $host, $post, $pass );
+			wp_send_json_success(
+				array(
+					'success' => true,
+				)
+			);
+		} else {
+			wp_send_json_success(
+				array(
+					'success' => false,
+					/* translators: %s - error message */
+					'message' => sprintf( __( 'Redis connection error : %s', 'wphb' ), $result['error'] ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Toggle Redis object cache setting.
+	 *
+	 * @since 2.5.0
+	 */
+	public function redis_toggle_object_cache() {
+		check_ajax_referer( 'wphb-fetch', 'nonce' );
+
+		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
+			die();
+		}
+
+		$value = filter_input( INPUT_POST, 'value', FILTER_VALIDATE_BOOLEAN );
+
+		Utils::get_module( 'redis' )->toggle_object_cache( $value );
+
+		wp_send_json_success( array( 'success' => true ) );
+	}
+
+	/**
+	 * Purge Redis cache.
+	 *
+	 * @since 2.5.0
+	 */
+	public function redis_cache_purge() {
+		check_ajax_referer( 'wphb-fetch', 'nonce' );
+
+		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
+			die();
+		}
+
+		Utils::get_module( 'redis' )->clear_cache();
+		wp_send_json_success( array( 'success' => true ) );
+	}
+
+	/**
+	 * Disconnect Redis.
+	 *
+	 * @since 2.5.0
+	 */
+	public function redis_disconnect() {
+		check_ajax_referer( 'wphb-fetch', 'nonce' );
+
+		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
+			die();
+		}
+
+		Utils::get_module( 'redis' )->disable();
+		wp_send_json_success( array( 'success' => true ) );
+	}
+
+	/**
 	 * *************************
 	 * ASSET OPTIMIZATION AJAX ACTIONS
 	 ***************************/
@@ -1107,7 +1218,7 @@ class AJAX {
 		Settings::update_setting( 'view', $type, 'minify' );
 
 		if ( 'basic' === $type ) {
-			Utils::get_module( 'minify' )->clear_cache( true, false );
+			Utils::get_module( 'minify' )->clear_cache( true, false, true );
 		}
 
 		wp_send_json_success();
@@ -1464,6 +1575,17 @@ class AJAX {
 			$options['db_tables']    = $tables;
 		}
 
+		// Lazy load tab.
+		if ( 'advanced-lazy-settings' === $form ) {
+			$options['lazy_load'] = array(
+				'enabled'   => ( isset( $data['lazy_load'] ) && 'on' === $data['lazy_load'] ) ? true : false,
+				'method'    => isset( $data['method'] ) ? $data['method'] : 'click',
+				'button'    => isset( $data['button'] ) ? $data['button'] : '',
+				'threshold' => isset( $data['threshold'] ) ? $data['threshold'] : 0,
+			);
+
+		}
+
 		$adv_module->update_options( $options );
 		wp_send_json_success(
 			array(
@@ -1565,6 +1687,25 @@ class AJAX {
 		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
 			die();
 		}
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Toggle tracking from quick setup modal.
+	 *
+	 * @since 2.5.0
+	 */
+	public function toggle_tracking() {
+		check_ajax_referer( 'wphb-fetch', 'nonce' );
+
+		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
+			die();
+		}
+
+		$status = filter_input( INPUT_POST, 'status', FILTER_VALIDATE_BOOLEAN );
+
+		Settings::update_setting( 'tracking', $status, 'settings' );
 
 		wp_send_json_success();
 	}

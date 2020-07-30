@@ -24,6 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Advanced extends Page {
 
+	use \Hummingbird\Core\Traits\Smush;
+
 	/**
 	 * Function triggered when the page is loaded before render any content.
 	 */
@@ -32,21 +34,9 @@ class Advanced extends Page {
 		$this->tabs = array(
 			'main'   => __( 'General', 'wphb' ),
 			'db'     => __( 'Database Cleanup', 'wphb' ),
+			'lazy'   => __( 'Lazy Load', 'wphb' ),
 			'system' => __( 'System Information', 'wphb' ),
 		);
-	}
-
-	/**
-	 * Render the template header.
-	 */
-	public function render_header() {
-		?>
-		<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-notice-advanced-tools">
-			<p><?php esc_html_e( 'Settings updated', 'wphb' ); ?></p>
-		</div>
-		<?php
-
-		parent::render_header();
 	}
 
 	/**
@@ -56,14 +46,7 @@ class Advanced extends Page {
 		/**
 		 * General meta box.
 		 */
-		$this->add_meta_box(
-			'advanced/general',
-			__( 'General', 'wphb' ),
-			array( $this, 'advanced_general_metabox' ),
-			null,
-			null,
-			'main'
-		);
+		$this->add_meta_box( 'advanced/general', __( 'General', 'wphb' ), array( $this, 'advanced_general_metabox' ) );
 
 		/**
 		 * Database cleanup meta boxes.
@@ -78,6 +61,22 @@ class Advanced extends Page {
 			array(
 				'box_footer_class' => Utils::is_member() ? 'sui-box-footer' : 'sui-box-footer wphb-db-cleanup-no-membership',
 			)
+		);
+
+		/**
+		 * Lazy load meta boxes.
+		 *
+		 * @since 2.5.0
+		 */
+		$this->add_meta_box(
+			'advanced/lazy',
+			__( 'Lazy Load', 'wphb' ),
+			array( $this, 'advanced_lazy_metabox' ),
+			null,
+			function() {
+				$this->view( 'advanced/general-meta-box-footer' );
+			},
+			'lazy'
 		);
 
 		/**
@@ -150,6 +149,7 @@ class Advanced extends Page {
 	public function advanced_db_metabox() {
 		$fields = Advanced_Module::get_db_fields();
 		$data   = Advanced_Module::get_db_count();
+
 		foreach ( $fields as $type => $field ) {
 			$fields[ $type ]['value'] = $data->$type;
 		}
@@ -166,22 +166,49 @@ class Advanced extends Page {
 	 * System Information meta box.
 	 */
 	public function system_info_metabox() {
-		$php_info    = Advanced_Module::get_php_info();
-		$db_info     = Advanced_Module::get_db_info();
-		$wp_info     = Advanced_Module::get_wp_info();
-		$server_info = Advanced_Module::get_server_info();
-
-		$system_info = array(
-			'php'    => $php_info,
-			'db'     => $db_info,
-			'wp'     => $wp_info,
-			'server' => $server_info,
-		);
-
 		$this->view(
 			'advanced/system-info-meta-box',
 			array(
-				'system_info' => $system_info,
+				'system_info' => array(
+					'php'    => Advanced_Module::get_php_info(),
+					'db'     => Advanced_Module::get_db_info(),
+					'wp'     => Advanced_Module::get_wp_info(),
+					'server' => Advanced_Module::get_server_info(),
+				),
+			)
+		);
+	}
+
+	/**
+	 * *************************
+	 * Lazy load page meta boxes.
+	 *
+	 * @since 2.5.0
+	 ***************************/
+
+	/**
+	 * Lazy load meta box.
+	 *
+	 * @since 2.5.0
+	 */
+	public function advanced_lazy_metabox() {
+		$options = Settings::get_settings( 'advanced' );
+
+		$this->view(
+			'advanced/lazy-load-meta-box',
+			array(
+				'is_enabled'               			=> $options['lazy_load']['enabled'],
+				'method'                   			=> $options['lazy_load']['method'],
+				'button'                   			=> $options['lazy_load']['button'],
+				'threshold'                			=> $options['lazy_load']['threshold'],
+				'smush_activate_url'       			=> wp_nonce_url( 'plugins.php?action=activate&amp;plugin=wp-smushit/wp-smush.php', 'activate-plugin_wp-smushit/wp-smush.php' ),
+				'smush_activate_pro_url'   			=> wp_nonce_url( 'plugins.php?action=activate&amp;plugin=wp-smush-pro/wp-smush.php', 'activate-plugin_wp-smush-pro/wp-smush.php' ),
+				'activate_smush_lazy_load_url' 		=> self_admin_url( 'admin.php?page=smush&view=lazy_load' ),
+				'is_smush_lazy_load_configurable' 	=> $this->is_lazy_load_configurable(),
+				'is_smush_active'          			=> $this->is_smush_enabled(),
+				'is_smush_installed'       			=> $this->is_smush_installed(),
+				'is_smush_pro'             			=> $this->is_smush_pro,
+				'smush_lazy_load'          			=> $this->is_lazy_load_enabled(),
 			)
 		);
 	}

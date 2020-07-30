@@ -55,17 +55,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</p>
 
 				<div class="sui-block-content-center">
-					<a target="_blank" class="sui-button sui-button-green" id="upgrade-to-pro-button"
+					<a role="button" target="_blank" class="sui-button sui-button-green" id="upgrade-to-pro-button"
 						href="<?php echo esc_url( \Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_footer_upgrade_button' ) ); ?>" >
 						<?php esc_html_e( 'Upgrade to PRO', 'wphb' ); ?>
 					</a>
 				</div>
 			</div>
 
-			<img class="sui-image sui-image-center"
-				src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/dev-team.png' ); ?>"
-				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/dev-team@2x.png' ); ?> 2x"
-				alt="<?php esc_attr_e( 'Hummingbird', 'wphb' ); ?>">
+			<img class="sui-image sui-image-center" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/dev-team.png' ); ?>"
+				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/dev-team.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/dev-team@2x.png' ); ?> 2x">
 		</div>
 	</div>
 </div>

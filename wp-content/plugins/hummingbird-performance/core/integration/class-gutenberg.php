@@ -8,9 +8,6 @@
 
 namespace Hummingbird\Core\Integration;
 
-use Hummingbird\Core\Settings;
-use Hummingbird\Core\Utils;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

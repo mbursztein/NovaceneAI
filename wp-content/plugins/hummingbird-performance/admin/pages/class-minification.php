@@ -107,7 +107,7 @@ class Minification extends Page {
 	}
 
 	/**
-	 * Set up naviagation for module.
+	 * Set up navigation for module.
 	 *
 	 * @since 1.8.2
 	 */
@@ -172,13 +172,29 @@ class Minification extends Page {
 				'success'
 			);
 		}
-		?>
-		<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-notice-minification-advanced-settings-updated">
-			<p><?php esc_html_e( 'Settings updated', 'wphb' ); ?></p>
-		</div>
 
-		<?php
+		add_action( 'wphb_sui_header_sui_actions_right', array( $this, 'add_header_actions' ) );
+
 		parent::render_header();
+	}
+
+	/**
+	 * Add content to the header.
+	 *
+	 * @since 2.5.0
+	 */
+	public function add_header_actions() {
+		if ( ! apply_filters( 'wp_hummingbird_is_active_module_minify', false ) || is_network_admin() ) {
+			return;
+		}
+
+		$dialog = isset( $this->mode ) && 'advanced' === $this->mode ? 'wphb-advanced-minification-modal' : 'wphb-minification-tour';
+		?>
+		<a class="sui-button sui-button-ghost" data-modal-open="<?php echo esc_attr( $dialog ); ?>" data-modal-open-focus="dialog-close-div" data-modal-mask="true" id="bulk-update">
+			<i class="sui-icon-web-globe-world" aria-hidden="true"></i>
+			<?php esc_html_e( 'Take a Tour', 'wphb' ); ?>
+		</a>
+		<?php
 	}
 
 	/**
@@ -342,6 +358,11 @@ class Minification extends Page {
 	public function enqueued_files_metabox() {
 		$module     = Utils::get_module( 'minify' );
 		$collection = $module->get_resources_collection();
+
+		if ( isset( $collection['scripts'] ) && empty( $collection['scripts'] ) && isset( $collection['styles'] ) && empty( $collection['styles'] ) ) {
+			$this->view( 'minification/empty-collection-meta-box' );
+			return;
+		}
 
 		// Prepare filters.
 		$active_plugins = get_option( 'active_plugins', array() );

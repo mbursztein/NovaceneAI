@@ -319,6 +319,13 @@ class Notices {
 			return;
 		}
 
+		// If the Pro version files are not there, or plugin is not active - bail.
+		if ( ! file_exists( WP_PLUGIN_DIR . '/wp-hummingbird/wp-hummingbird.php' ) || ! is_plugin_active( 'wp-hummingbird/wp-hummingbird.php' ) ) {
+			// Probably a stored notice from a previous install - remove the notice.
+			delete_site_option( 'wphb-notice-free-deactivated-show' );
+			return;
+		}
+
 		if ( $this->is_dismissed( 'free-deactivated', 'option' ) ) {
 			return;
 		}

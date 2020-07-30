@@ -10,8 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-use Hummingbird\Core\Utils;
-
 ?>
 
 <div class="sui-modal sui-modal-sm">
@@ -40,16 +38,14 @@ use Hummingbird\Core\Utils;
 				</div>
 
 				<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
-					<img class="sui-image sui-margin-top"
-						src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@2x.png' ); ?> 2x"
-						alt="<?php esc_attr_e( 'Hummingbird', 'wphb' ); ?>">
+					<img class="sui-image sui-margin-top" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@2x.png' ); ?> 2x">
 				<?php endif; ?>
 			</div>
 
-			<a class="sui-modal-skip" onclick="WPHB_Admin.minification.skipTour()" data-modal-close="">
+			<button class="sui-modal-skip" onclick="WPHB_Admin.minification.skipTour()" data-modal-close="">
 				<?php esc_html_e( 'Skip this', 'wphb' ); ?>
-			</a>
+			</button>
 		</div>
 
 		<div id="tour-slide-two" class="sui-box sui-modal-slide" data-modal-size="sm">
@@ -65,11 +61,11 @@ use Hummingbird\Core\Utils;
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-grey-compress.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-grey-compress@2x.png' ); ?> 2x"/>
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-grey-compress.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-grey-compress.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-grey-compress@2x.png' ); ?> 2x"/>
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( "Greyed-out icons like this mean that the file has already been optimized (like *.min.js and *.min.css.), we can't compress these files any further so it's safe to ignore them.", 'wphb' ); ?>
 				</p>
 			</div>
@@ -94,11 +90,11 @@ use Hummingbird\Core\Utils;
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-white-compress.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-white-compress@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-white-compress.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-white-compress.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-white-compress@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( "For files that can be compressed, click the 'Compress' icon and when you save your changes we'll do our best to optimize and reduce its file size.", 'wphb' ); ?>
 				</p>
 			</div>
@@ -123,11 +119,11 @@ use Hummingbird\Core\Utils;
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-blue-compress.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-blue-compress@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-blue-compress.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-blue-compress.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-blue-compress@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( "When an optimization option is active you'll see a blue icon (like the above). Note: compressing files can take a few minutes before they will be appear optimized on your web pages.", 'wphb' ); ?>
 				</p>
 			</div>
@@ -152,11 +148,11 @@ use Hummingbird\Core\Utils;
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-advanced-mode.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-advanced-mode@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-advanced-mode.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-advanced-mode.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-advanced-mode@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'We also offer combining files, moving files to the footer, inlining CSS, deferring scripts and removing them completely. Switch to advanced mode to take full control of your assets.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -167,8 +163,8 @@ use Hummingbird\Core\Utils;
 				</button>
 			</div>
 
-			<img width="120" class="sui-image" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top.png' ); ?>"
-				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top@2x.png' ); ?> 2x" style="margin: 0 auto;">
+			<img alt="" width="120" class="sui-image" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top.png' ); ?>"
+				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top@2x.png' ); ?> 2x" style="margin: 0 auto;">
 		</div>
 	</div>
 </div>

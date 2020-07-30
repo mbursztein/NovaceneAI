@@ -62,34 +62,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</p>
 					</div>
 				<?php endif; ?>
-				<?php
-				$cdn_status = \Hummingbird\Core\Utils::get_module( 'minify' )->get_cdn_status();
 
-				if ( ! is_multisite() && \Hummingbird\Core\Utils::is_member() ) :
-					?>
+				<?php $cdn_status = \Hummingbird\Core\Utils::get_module( 'minify' )->get_cdn_status(); ?>
+				<?php if ( ! is_multisite() && \Hummingbird\Core\Utils::is_member() ) : ?>
 					<form method="post" class="sui-border-frame" id="enable-cdn-form">
-						<label class="sui-toggle">
-							<input type="checkbox" name="enable_cdn" id="enable_cdn" <?php checked( $cdn_status ); ?>>
-							<span class="sui-toggle-slider"></span>
-						</label>
-						<label><?php esc_html_e( 'Store my files on the WPMU DEV CDN', 'wphb' ); ?></label>
-						<span class="sui-description sui-toggle-description">
-							<?php esc_html_e( 'By default your files are hosted on your own server. With this pro setting enabled we will host your files on WPMU DEV’s secure and hyper fast CDN.', 'wphb' ); ?>
-						</span>
-						<span class="sui-description sui-toggle-description" style="margin-top: 10px">
-							<?php esc_html_e( 'Note: Some externally hosted files can cause issues when added to the CDN. You can exclude these files from being hosted in the Settings tab.', 'wphb' ); ?>
-						</span>
+						<div class="sui-form-field">
+							<label for="enable_cdn" class="sui-toggle">
+								<input type="checkbox" name="enable_cdn" id="enable_cdn" aria-labelledby="enable_cdn-label" aria-describedby="enable_cdn-description" <?php checked( $cdn_status ); ?>>
+								<span class="sui-toggle-slider" aria-hidden="true"></span>
+								<span id="enable_cdn-label" class="sui-toggle-label">
+									<?php esc_html_e( 'Store my files on the WPMU DEV CDN', 'wphb' ); ?>
+								</span>
+								<span id="enable_cdn-description" class="sui-description">
+									<?php esc_html_e( 'By default your files are hosted on your own server. With this pro setting enabled we will host your files on WPMU DEV’s secure and hyper fast CDN.', 'wphb' ); ?>
+								</span>
+								<span class="sui-description sui-toggle-description">
+									<?php esc_html_e( 'Note: Some externally hosted files can cause issues when added to the CDN. You can exclude these files from being hosted in the Settings tab.', 'wphb' ); ?>
+								</span>
+							</label>
+						</div>
 					</form>
 				<?php elseif ( is_multisite() && \Hummingbird\Core\Utils::is_member() ) : ?>
-					<input type="checkbox" class="sui-hidden" name="enable_cdn" id="enable_cdn" <?php checked( $cdn_status ); ?>>
+					<input type="checkbox" aria-hidden="true" name="enable_cdn" id="enable_cdn" <?php checked( $cdn_status ); ?> style="display: none" hidden>
 				<?php endif; ?>
 
 			</div>
 			<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
-				<img class="sui-image"
-					src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?>"
-					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary@2x.png' ); ?> 2x"
-					alt="<?php esc_attr_e( 'Reduce your page load time!', 'wphb' ); ?>">
+				<img class="sui-image" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?>"
+					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary@2x.png' ); ?> 2x">
 			<?php endif; ?>
 		</div>
 	</div>

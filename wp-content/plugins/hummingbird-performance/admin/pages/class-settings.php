@@ -40,7 +40,7 @@ class Settings extends Page {
 			__( 'General', 'wphb' ),
 			array( $this, 'general_metabox' ),
 			null,
-			null,
+			array( $this, 'accessibility_metabox_footer' ),
 			'general'
 		);
 
@@ -107,7 +107,6 @@ class Settings extends Page {
 		if ( 'en_US' === $site_locale ) {
 			$site_language = 'English';
 		} else {
-			/* @noinspection PhpIncludeInspection */
 			require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 			$translations  = wp_get_available_translations();
 			$site_language = isset( $translations[ $site_locale ] ) ? $translations[ $site_locale ]['native_name'] : __( 'Error detecting language', 'wphb' );
@@ -118,6 +117,7 @@ class Settings extends Page {
 			array(
 				'site_language'    => $site_language,
 				'translation_link' => $link,
+				'tracking'         => Settings_Module::get_setting( 'tracking', 'settings' ),
 			)
 		);
 	}

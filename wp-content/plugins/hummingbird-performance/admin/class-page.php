@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class Page {
 
+	use MetaBox;
+
 	/**
 	 * Page slug.g
 	 *
@@ -247,6 +249,12 @@ abstract class Page {
 		if ( sanitize_title( __( 'Hummingbird Pro', 'wphb' ) ) . '_page_wphb-uptime' === $hook || 'historic' === $this->get_current_tab() ) {
 			wp_enqueue_script( 'wphb-google-chart', 'https://www.gstatic.com/charts/loader.js', array(), WPHB_VERSION, true );
 		}
+
+		// Enqueue Color picker.
+		if ( sanitize_title( __( 'Hummingbird Pro', 'wphb' ) ) . '_page_wphb-advanced' === $hook || 'lazy' === $this->get_current_tab() ) {
+			wp_enqueue_script( 'wp-color-picker-alpha', WPHB_DIR_URL . 'admin/assets/dist/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), WPHB_VERSION, true );
+			wp_enqueue_style( 'wp-color-picker' );
+		}
 	}
 
 	/**
@@ -256,6 +264,8 @@ abstract class Page {
 
 	/**
 	 * Add meta box.
+	 *
+	 * @deprecated 2.5.0  Use MetaBox trait instead.
 	 *
 	 * @param string   $id               Meta box ID.
 	 * @param string   $title            Meta box title.
@@ -277,10 +287,6 @@ abstract class Page {
 
 		if ( ! isset( $this->meta_boxes[ $this->slug ] ) ) {
 			$this->meta_boxes[ $this->slug ] = array();
-		}
-
-		if ( ! isset( $this->meta_boxes[ $this->slug ][ $context ] ) ) {
-			$this->meta_boxes[ $this->slug ][ $context ] = array();
 		}
 
 		if ( ! isset( $this->meta_boxes[ $this->slug ][ $context ] ) ) {
@@ -353,16 +359,13 @@ abstract class Page {
 	 */
 	protected function render_header() {
 		?>
+		<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-ajax-update-notice">
+			<p><?php esc_html_e( 'Settings Updated', 'wphb' ); ?></p>
+		</div>
 		<div class="sui-header">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<div class="sui-actions-right"><!-- TODO:  -->
-				<?php if ( 'wphb-minification' === $this->slug && apply_filters( 'wp_hummingbird_is_active_module_minify', false ) && ! is_network_admin() ) : ?>
-					<?php $dialog = isset( $this->mode ) && 'advanced' === $this->mode ? 'wphb-advanced-minification-modal' : 'wphb-minification-tour'; ?>
-					<a class="sui-button sui-button-ghost" data-modal-open="<?php echo esc_attr( $dialog ); ?>" data-modal-open-focus="dialog-close-div" data-modal-mask="true" id="bulk-update">
-						<i class="sui-icon-web-globe-world" aria-hidden="true"></i>
-						<?php esc_html_e( 'Take a Tour', 'wphb' ); ?>
-					</a>
-				<?php endif; ?>
+			<h1 class="sui-header-title"><?php echo esc_html( get_admin_page_title() ); ?></h1>
+			<div class="sui-actions-right">
+				<?php do_action( 'wphb_sui_header_sui_actions_right' ); ?>
 				<?php if ( ! apply_filters( 'wpmudev_branding_hide_doc_link', false ) ) : ?>
 					<a href="<?php echo esc_url( Utils::get_documentation_url( $this->slug, $this->get_current_tab() ) ); ?>" target="_blank" class="sui-button sui-button-ghost">
 						<i class="sui-icon-academy" aria-hidden="true"></i>
@@ -370,7 +373,7 @@ abstract class Page {
 					</a>
 				<?php endif; ?>
 			</div>
-		</div><!-- end header -->
+		</div>
 		<?php
 	}
 
@@ -385,8 +388,8 @@ abstract class Page {
 				<p><?php esc_html_e( 'Settings updated', 'wphb' ); ?></p>
 			</div>
 			<?php
-			if ( filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN ) ) {
-				$this->admin_notices->show( 'updated', __( 'Your changes have been saved.', 'wphb' ), 'success' );
+			if ( filter_input( INPUT_GET, 'updated', FILTER_SANITIZE_STRING ) ) {
+				$this->admin_notices->show( 'updated', apply_filters( 'wphb_update_notice_text', __( 'Your changes have been saved.', 'wphb' ) ), 'success' );
 			}
 
 			$this->render_header();
@@ -394,13 +397,13 @@ abstract class Page {
 			$this->render_footer();
 
 			if ( WP_Hummingbird::get_instance()->admin->show_quick_setup ) :
-				$this->modal( 'quick-setup' );
-				$this->modal( 'check-performance' );
+				$this->modal( 'tracking' );
+				$this->modal( 'check-performance-onboard' );
 				?>
 				<script>
 					window.addEventListener("load", function(){
 						window.WPHB_Admin.getModule( 'dashboard' );
-						window.SUI.openModal( 'wphb-quick-setup-modal', 'wpbody-content', undefined, false );
+						window.SUI.openModal( 'tracking-modal', 'wpbody-content', undefined, false );
 					});
 				</script>
 			<?php endif; ?>

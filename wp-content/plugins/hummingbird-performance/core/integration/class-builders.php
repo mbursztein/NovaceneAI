@@ -37,7 +37,7 @@ class Builders {
 			return;
 		}
 
-		WP_Hummingbird::flush_cache( true, false, false );
+		WP_Hummingbird::flush_cache( false, false, false );
 	}
 
 }

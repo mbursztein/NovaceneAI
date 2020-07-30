@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( $this->has_meta_boxes( 'summary' ) ) {
-	$this->do_meta_boxes( 'summary' );
+if ( $this->has_meta_boxes( 'main' ) ) {
+	$this->do_meta_boxes( 'main' );
 }
 
 if ( $this->has_meta_boxes( 'box-caching' ) ) {

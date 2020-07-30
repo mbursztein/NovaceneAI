@@ -42,8 +42,8 @@ class Performance extends Module {
 	 */
 	public function clear_cache() {
 		Settings::delete( 'wphb-last-report' );
-		Settings::delete( 'wphb-doing-report' );
 		Settings::delete( 'wphb-stop-report' );
+		delete_transient( 'wphb-doing-report' );
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Performance extends Module {
 		$this->clear_cache();
 
 		// Start the test.
-		self::set_doing_report( true );
+		self::set_doing_report();
 		$api = Utils::get_api();
 		$api->performance->ping();
 
@@ -76,7 +76,7 @@ class Performance extends Module {
 	 */
 	public static function cron_scan() {
 		// Start the test.
-		self::set_doing_report( true );
+		self::set_doing_report();
 		$api    = Utils::get_api();
 		$report = $api->performance->check();
 		// Stop the test.
@@ -102,17 +102,7 @@ class Performance extends Module {
 	 * @return false|int Timestamp when the report started, false if there's no report being executed
 	 */
 	public static function is_doing_report() {
-		$stopped = Settings::get( 'wphb-stop-report' );
-		return $stopped ? false : Settings::get( 'wphb-doing-report' );
-	}
-
-	/**
-	 * Check if Performance Scan is currently halted
-	 *
-	 * @return bool
-	 */
-	public static function stopped_report() {
-		return (bool) Settings::get( 'wphb-stop-report' );
+		return (bool) Settings::get( 'wphb-stop-report' ) ? false : get_transient( 'wphb-doing-report' );
 	}
 
 	/**
@@ -124,13 +114,14 @@ class Performance extends Module {
 	 */
 	public static function set_doing_report( $status = true ) {
 		if ( ! $status ) {
-			Settings::delete( 'wphb-doing-report' );
-			Settings::update( 'wphb-stop-report', true );
-		} else {
-			// Set time when we started the report.
-			Settings::update( 'wphb-doing-report', current_time( 'timestamp' ) );
-			Settings::delete( 'wphb-stop-report' );
+			delete_transient( 'wphb-doing-report' );
+			Settings::update( 'wphb-stop-report', true, false );
+			return;
 		}
+
+		// Set time when we started the report.
+		set_transient( 'wphb-doing-report', current_time( 'timestamp' ), 300 ); // save for 5 minutes.
+		Settings::delete( 'wphb-stop-report' );
 	}
 
 	/**
@@ -183,7 +174,7 @@ class Performance extends Module {
 		}
 
 		// Only save reports from Performance module.
-		Settings::update( 'wphb-last-report', $results );
+		Settings::update( 'wphb-last-report', $results, false );
 	}
 
 	/**
@@ -333,11 +324,10 @@ class Performance extends Module {
 			return;
 		}
 
-		$performance        = Utils::get_module( 'performance' );
-		$options            = $performance->get_options();
+		$options            = $this->get_options();
 		$options['reports'] = false;
 
-		$performance->update_options( $options );
+		$this->update_options( $options );
 	}
 
 }

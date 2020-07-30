@@ -5,8 +5,6 @@
  * @package Hummingbird
  */
 
-use Hummingbird\Core\Utils;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -41,21 +39,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 
 			<div class="sui-box-body sui-content-center">
-				<a class="sui-button sui-button-ghost" id="take-the-tour" data-modal-slide="slide-two" data-modal-slide-focus="slide-next" data-modal-slide-intro="next">
+				<button class="sui-button sui-button-ghost" id="take-the-tour" data-modal-slide="slide-two" data-modal-slide-focus="slide-next" data-modal-slide-intro="next">
 					<i class="sui-icon-web-globe-world" aria-hidden="true"></i>
 					<?php esc_html_e( 'Take a Tour', 'wphb' ); ?>
-				</a>
+				</button>
 
-				<a onclick="WPHB_Admin.minification.switchView( 'advanced' )"  class="sui-button">
+				<button onclick="WPHB_Admin.minification.switchView( 'advanced' )" class="sui-button">
 					<?php esc_html_e( 'Got It', 'wphb' ); ?>
-				</a>
+				</button>
 			</div>
 
 			<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
-				<img class="sui-image"
-					src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?>"
-					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@2x.png' ); ?> 2x"
-					alt="<?php esc_attr_e( 'Hummingbird', 'wphb' ); ?>">
+				<img class="sui-image" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?>"
+					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@1x.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-minify-modal-warning@2x.png' ); ?> 2x">
 			<?php endif; ?>
 		</div>
 
@@ -72,11 +68,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-compression.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-compression@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-compression.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-compression.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-compression@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'Here are the available options for advanced mode. Compression removes the clutter from CSS and Javascript files. Smaller files, in turn, help your site load faster, since your server doesn’t have to waste time reading unnecessary characters & spaces.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -101,11 +97,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-combine.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-combine@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-combine.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-combine.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-combine@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'Hummingbird can combine smaller files together to reduce the number of requests made when a page is loaded. Less requests mean less waiting, and faster page speeds!', 'wphb' ); ?>
 				</p>
 			</div>
@@ -130,11 +126,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-move-footer.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-move-footer@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-move-footer.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-move-footer.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-move-footer@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'When it comes to rendering blocking issues and WordPress, the best practice is to load as many scripts as possible in the footer of your site, so slow-loading scripts won’t prevent vital parts of your site from loading quickly. You can choose whether to move the file to the footer or keep in original position.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -159,11 +155,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-inline.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-inline@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-inline.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-inline.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-inline@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'To add CSS styles to your website, you can use three different ways to insert the CSS. You can Use an “External Stylesheet”, an “Internal Stylesheet”, or in “Inline Style”. The inline style uses the HTML “style” attribute. This allows CSS properties on a “per tag” basis.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -188,11 +184,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-defer.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-defer@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-defer.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-defer.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-defer@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'For JavaScript (JS) files you will have the option to Defer it (force load it after the page had loaded). This means they will load only after everything else on your page has loaded, which allows you to load the most important files & content first.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -217,11 +213,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-dont-load.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-dont-load@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-dont-load.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-dont-load.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-dont-load@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'If you click this, it will prevent the file while loading page.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -246,11 +242,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-publish-advanced.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-publish-advanced@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-publish-advanced.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-publish-advanced.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-publish-advanced@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'After making changes, you need to click “Publish Changes” button or new settings to take affect.', 'wphb' ); ?>
 				</p>
 			</div>
@@ -275,11 +271,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</button>
 
 				<figure class="sui-box-banner" aria-hidden="true">
-					<img src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-bulk.png' ); ?>"
-						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-bulk@2x.png' ); ?> 2x">
+					<img alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-bulk.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-bulk.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/tour/tour-bulk@2x.png' ); ?> 2x">
 				</figure>
 
-				<p id="dialogDescription" class="sui-description">
+				<p class="sui-description">
 					<?php esc_html_e( 'If you know you have multiple files that need to have a single action applied to them, you can click the checkbox next to each file and then click on the “Bulk Update” button. A screen will then pop up that will let you choose which options to apply to all of the selected files. Note: it is not recommended to bulk action all the files, as it cause some things.', 'wphb' ); ?>
 					<br>
 					<?php esc_html_e( 'You can always re-take this tour with the button in the header after closing this modal.', 'wphb' ); ?>
@@ -287,13 +283,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 
 			<div class="sui-box-body sui-flatten sui-content-center">
-				<a onclick="WPHB_Admin.minification.switchView( 'advanced' )"  class="sui-button sui-button-blue" data-modal-close="">
+				<button onclick="WPHB_Admin.minification.switchView( 'advanced' )" class="sui-button sui-button-blue" data-modal-close="">
 					<?php esc_html_e( 'Got it, thanks', 'wphb' ); ?>
-				</a>
+				</button>
 			</div>
 
-			<img width="120" class="sui-image" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top.png' ); ?>"
-				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top@2x.png' ); ?> 2x" style="margin: 0 auto;">
+			<img width="120" class="sui-image" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top.png' ); ?>"
+				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-caching-top@2x.png' ); ?> 2x" style="margin: 0 auto;">
 		</div>
 	</div>
 </div>

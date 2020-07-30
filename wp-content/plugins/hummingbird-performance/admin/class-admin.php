@@ -94,7 +94,7 @@ class Admin {
 		add_action( 'admin_footer', array( $this, 'maybe_check_files' ) );
 
 		// Check DB to see if quick setup modal is needed and store in public var.
-		$this->show_quick_setup = $this->maybe_show_quick_setup();
+		add_action( 'admin_init', array( $this, 'maybe_show_quick_setup' ) );
 
 		// Make sure plugin name is correct for adding plugin action links.
 		$plugin_name = defined( 'WPHB_WPORG' ) && WPHB_WPORG ? 'hummingbird-performance' : 'wp-hummingbird';
@@ -316,12 +316,11 @@ class Admin {
 	public function maybe_show_quick_setup() {
 		// Only if in admin or user is logged in.
 		if ( ! is_admin() || ! is_user_logged_in() ) {
-			return false;
+			return;
 		}
 
 		// If setup has already ran - exit.
-		$quick_setup = get_option( 'wphb-quick-setup' );
-		return ! ( isset( $quick_setup['finished'] ) && true === $quick_setup['finished'] );
+		$this->show_quick_setup = get_option( 'wphb_run_onboarding' );
 	}
 
 	/**
@@ -358,7 +357,7 @@ class Admin {
 
 		if ( 'all' === $wphb_clear ) {
 			Settings::reset_to_defaults();
-			delete_option( 'wphb-quick-setup' );
+			update_option( 'wphb_run_onboarding', true );
 			delete_option( 'wphb-new-user-tour' );
 
 			// Clean all cron.
@@ -376,7 +375,7 @@ class Admin {
 							switch_to_blog( $blog['blog_id'] );
 
 							Settings::reset_to_defaults();
-							delete_option( 'wphb-quick-setup' );
+							update_option( 'wphb_run_onboarding', true );
 							delete_option( 'wphb-new-user-tour' );
 
 							// Clean all cron.

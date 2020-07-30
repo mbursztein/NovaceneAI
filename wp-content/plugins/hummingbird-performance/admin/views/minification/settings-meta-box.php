@@ -162,7 +162,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				printf(
 					/* translators: %s: upsell modal href link */
-					__( "With our pro version of Hummingbird you can super-compress your files and then host them on our blazing fast CDN. You'll get Hummingbird Pro plus 100+ WPMU DEV plugins & 24/7 WP support.  <a href='%s' target='_blank'>Try Pro for FREE today!</a>", 'wphb' ),
+					__( "With our pro version of Hummingbird you can super-compress your files and then host them on our blazing fast CDN. Get CDN as part of a WPMU DEV membership with 24/7 support and lots of handy site management tools.  <a href='%s' target='_blank'>Try Pro for FREE today!</a>", 'wphb' ),
 					\Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_assetoptimization_settings_upsell_link' )
 				);
 				?>
@@ -235,7 +235,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'disable', 'true' ), 'wphb-disable-minification' ) ); ?>" class="sui-button sui-button-ghost">
+		<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'disable', 'true' ), 'wphb-disable-minification' ) ); ?>" class="sui-button sui-button-ghost" onclick="WPHB_Admin.Tracking.disableFeature( 'Asset Optimization' )">
 			<?php esc_html_e( 'Deactivate', 'wphb' ); ?>
 		</a>
 		<span class="sui-description"><?php esc_html_e( 'Note: This will not remove any files, they will just go back to their original, unoptimized state.', 'wphb' ); ?></span>

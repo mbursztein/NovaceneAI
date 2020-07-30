@@ -30,11 +30,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * This is a compatibility check to support pre 2.5 versions upgrading to 2.5+.
+ * Because in 2.5 we've added traits, but the advanced-cache.php was flawed and did not allow for a proper upgrade.
+ *
+ * @since 2.5.0
+ * @todo Remove once the upgrade_2_5_0() is removed (approximately in version 2.9/3.0).
+ * @see Installer::upgrade_2_5_0()
+ */
+if ( ! trait_exists( '\Hummingbird\Core\Traits\WPConfig' ) && isset( $plugin_path ) ) {
+	$trait = $plugin_path . 'core/traits/trait-wpconfig.php';
+	if ( file_exists( $trait ) ) {
+		include_once $plugin_path . 'core/traits/trait-wpconfig.php';
+	}
+}
+
+/**
  * Class Page_Cache
  *
  * @since 1.7.0
  */
 class Page_Cache extends Module {
+
+	use \Hummingbird\Core\Traits\WPConfig;
 
 	/**
 	 * Last error.
@@ -128,7 +145,7 @@ class Page_Cache extends Module {
 	private function activate() {
 		if ( $this->check_wp_settings( true ) ) {
 			$this->init_filesystem();
-			$this->write_wp_config();
+			$this->wpconfig_add( 'WP_CACHE', true );
 		}
 	}
 
@@ -239,7 +256,7 @@ class Page_Cache extends Module {
 			return;
 		}
 
-		// If there's an error (except not found WP_CACHE contant) - return.
+		// If there's an error (except not found WP_CACHE constant) - return.
 		if ( is_wp_error( $this->error ) && 'no-wp-cache-constant' !== $this->error->get_error_code() ) {
 			return;
 		}
@@ -459,10 +476,8 @@ class Page_Cache extends Module {
 			);
 		}
 
-		$config_file = ABSPATH . 'wp-config.php';
-
 		// Could not find the file.
-		if ( ! file_exists( $config_file ) ) {
+		if ( ! file_exists( $this->wp_config_file ) ) {
 			$this->error = new WP_Error(
 				'no-wp-config-file',
 				__( "Hummingbird could not locate the wp-config.php file for WordPress. Please make sure the following line is added to the file: <br><code>define('WP_CACHE', true);</code>", 'wphb' )
@@ -472,7 +487,7 @@ class Page_Cache extends Module {
 		}
 
 		// wp-config.php is not writable.
-		if ( ! is_writable( $config_file ) || ! is_writable( dirname( $config_file ) ) ) {
+		if ( ! is_writable( $this->wp_config_file ) || ! is_writable( dirname( $this->wp_config_file ) ) ) {
 			$this->error = new WP_Error(
 				'wp-config-not-writable',
 				__( "Hummingbird could not write to the wp-config.php file. Please add the following line to the file manually: <br><code>define('WP_CACHE', true);</code>", 'wphb' )
@@ -827,7 +842,6 @@ class Page_Cache extends Module {
 	 * add_index()
 	 * save_settings()
 	 * disable()
-	 * write_wp_config()
 	 ***************************/
 
 	/**
@@ -960,73 +974,6 @@ class Page_Cache extends Module {
 
 		// Reset cached pages count to 0.
 		Settings::update_setting( 'pages_cached', 0, 'page_cache' );
-	}
-
-	/**
-	 * Try to add define('WP_CACHE', true); to wp-config.php file.
-	 *
-	 * @since   1.7.0
-	 * @acess   private
-	 * @used-by Page_Cache::activate()
-	 * @param   bool $uninstall  Remove WP_CACHE from wp-config.php file.
-	 * @return  bool
-	 */
-	private function write_wp_config( $uninstall = false ) {
-		$config_file = ABSPATH . 'wp-config.php';
-
-		if ( ! file_exists( $config_file ) ) {
-			self::log_msg( 'Failed to locate wp-config.php file.' );
-			return false;
-		}
-
-		$fp = fopen( $config_file, 'r+' );
-		if ( ! $fp ) {
-			self::log_msg( 'Failed to open wp-config.php for writing.' );
-			return false;
-		}
-
-		// Attempt to get a lock. If the filesystem supports locking, this will block until the lock is acquired.
-		flock( $fp, LOCK_EX );
-
-		$lines = array();
-		while ( ! feof( $fp ) ) {
-			$lines[] = rtrim( fgets( $fp ), "\r\n" );
-		}
-
-		// Generate the new file data.
-		$new_file   = array();
-		$found_code = false;
-		foreach ( $lines as $line ) {
-			if ( preg_match( "/define\(\s*\'WP_CACHE\'/i", $line ) ) {
-				$found_code = true;
-				if ( ! $uninstall ) {
-					self::log_msg( "Added define('WP_CACHE', true) to wp-config.php file." );
-					$new_file[] = "define('WP_CACHE', true); // Added by WP Hummingbird";
-				} else {
-					self::log_msg( "Removed define('WP_CACHE', true) from wp-config.php file." );
-				}
-			} elseif ( ! $found_code && ! $uninstall && preg_match( "/\/\* That\'s all, stop editing!.*/i", $line ) ) {
-				self::log_msg( "Added define('WP_CACHE', true) to wp-config.php file." );
-				$new_file[] = "define('WP_CACHE', true); // Added by WP Hummingbird";
-				$new_file[] = $line;
-			} else {
-				$new_file[] = $line;
-			}
-		}
-
-		$new_file_data = implode( "\n", $new_file );
-
-		// Write to the start of the file, and truncate it to that length.
-		fseek( $fp, 0 );
-		$bytes = fwrite( $fp, $new_file_data );
-		if ( $bytes ) {
-			ftruncate( $fp, ftell( $fp ) );
-		}
-		fflush( $fp );
-		flock( $fp, LOCK_UN );
-		fclose( $fp );
-
-		return (bool) $bytes;
 	}
 
 	/**
@@ -1358,6 +1305,8 @@ class Page_Cache extends Module {
 				$preload = new Preload();
 				$preload->preload_home_page();
 			}
+
+			do_action( 'wphb_cache_directory_cleared' );
 
 			return $status;
 		}
@@ -1851,7 +1800,7 @@ class Page_Cache extends Module {
 		if ( $value ) {
 			$this->activate();
 		} else {
-			$this->write_wp_config( true );
+			$this->wpconfig_remove( 'WP_CACHE' );
 			$this->cleanup();
 		}
 	}
@@ -1910,44 +1859,4 @@ class Page_Cache extends Module {
 		return $current;
 	}
 
-}
-
-/**
- * Helper function to check if blog is multisite.
- *
- * @since 1.6.0
- * @return bool
- */
-function wphb_cache_is_multisite() {
-	if ( function_exists( 'is_multisite' ) ) {
-		return is_multisite();
-	}
-
-	if ( defined( 'WP_ALLOW_MULTISITE' ) && true === WP_ALLOW_MULTISITE ) {
-		return true;
-	}
-
-	if ( defined( 'SUBDOMAIN_INSTALL' ) || defined( 'VHOST' ) || defined( 'SUNRISE' ) ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Helper function to check if multisite is subdomain install.
- *
- * @since 1.6.0
- * @return bool
- */
-function wphb_cache_is_subdomain_install() {
-	if ( function_exists( 'is_subdomain_install' ) ) {
-		return is_subdomain_install();
-	}
-
-	if ( defined( 'SUBDOMAIN_INSTALL' ) && true === SUBDOMAIN_INSTALL ) {
-		return true;
-	}
-
-	return ( defined( 'VHOST' ) && VHOST === 'yes' );
 }

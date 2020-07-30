@@ -13,6 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="sui-actions-right">
-	<span class="spinner"></span>
-	<input type="submit" class="sui-button sui-button-blue" name="submit" value="<?php esc_attr_e( 'Save changes', 'wphb' ); ?>">
+	<button type="submit" class="sui-button sui-button-blue" aria-live="polite">
+		<!-- Default State Content -->
+		<span class="sui-button-text-default"><?php esc_html_e( 'Save changes', 'wphb' ); ?></span>
+
+		<!-- Loading State Content -->
+		<span class="sui-button-text-onload">
+			<i class="sui-icon-loader sui-loading" aria-hidden="true"></i>
+			<?php esc_html_e( 'Saving changes', 'wphb' ); ?>
+		</span>
+	</button>
 </div>

@@ -21,7 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div class="sui-summary-image-space"></div>
+
+<div class="sui-summary-image-space" aria-hidden="true"></div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">
 		<?php if ( $pc_active ) : ?>
@@ -37,22 +38,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 
 		<span class="sui-summary-detail">
-			<?php if ( ! $pc_active || ! $preload_active ) : ?>
-				<?php esc_html_e( 'Inactive', 'wphb' ); ?>
-				<span class="sui-tooltip sui-tooltip-constrained" data-tooltip="<?php esc_html_e( 'This feature allows you to preload your page cache before users visit pages. You can enable this in the settings below.', 'wphb' ); ?>">
-					<i class="sui-icon-info" aria-hidden="true"></i>
-				</span>
-			<?php elseif ( $preload_running ) : ?>
-				<?php esc_html_e( 'Preloading in progress...', 'wphb' ); ?>
-				<span class="sui-tooltip sui-tooltip-constrained" data-tooltip="<?php esc_html_e( 'Refresh the page to see the updated count.', 'wphb' ); ?>">
-					<i class="sui-icon-loader sui-loading" aria-hidden="true" style="top:0;"></i>
-				</span>
-			<?php else : ?>
-				<?php esc_html_e( 'Active', 'wphb' ); ?>
-				<span class="sui-tooltip sui-tooltip-constrained" data-tooltip="<?php esc_html_e( 'Cache preloading is active. You can adjust your preload settings below.', 'wphb' ); ?>">
-					<i class="sui-icon-info" aria-hidden="true"></i>
-				</span>
-			<?php endif; ?>
+			<?php
+			$preload_status  = __( 'Active', 'wphb' );
+			$preload_icon    = 'sui-icon-info';
+			$preload_tooltip = __( 'Cache preloading is active. You can adjust your preload settings below.', 'wphb' );
+
+			if ( ! $pc_active || ! $preload_active ) {
+				$preload_status  = __( 'Inactive', 'wphb' );
+				$preload_tooltip = __( 'This feature allows you to preload your page cache before users visit pages. You can enable this in the settings below.', 'wphb' );
+			} elseif ( $preload_running ) {
+				$preload_status  = __( 'Preloading in progress...', 'wphb' );
+				$preload_icon    = 'sui-icon-loader sui-loading';
+				$preload_tooltip = __( 'Refresh the page to see the updated count.', 'wphb' );
+			}
+
+			echo esc_html( $preload_status );
+			?>
+			<span class="sui-tooltip sui-tooltip-constrained" data-tooltip="<?php echo esc_attr( $preload_tooltip ); ?>">
+				<i class="<?php echo esc_attr( $preload_icon ); ?>>" aria-hidden="true" style="<?php echo $preload_running ? 'top:0' : ''; ?>"></i>
+			</span>
 		</span>
 		<span class="sui-summary-sub">
 			<?php
@@ -75,9 +79,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="sui-summary-segment">
 	<ul class="sui-list">
 		<li>
-			<span class="sui-list-label">
-				<?php esc_html_e( 'Browser Caching', 'wphb' ); ?>
-			</span>
+			<span class="sui-list-label"><?php esc_html_e( 'Browser Caching', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
 				<?php if ( 0 < $issues ) : ?>
 					<span class="sui-tag sui-tag-warning"><?php echo absint( $issues ); ?></span>
@@ -99,7 +101,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'RSS Caching', 'wphb' ); ?></span>
 			<span class="sui-list-detail">
-				<div class="wphb-dash-numbers"><?php echo absint( $rss ) / 60; ?> minutes</div>
+				<?php
+				printf(
+					/* translators: %d - number of minutes */
+					esc_html__( '%d minutes', 'wphb' ),
+					absint( $rss ) / 60
+				);
+				?>
 			</span>
 		</li>
 	</ul>
