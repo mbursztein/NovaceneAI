@@ -1,3 +1,72 @@
+##### [Version 3.2.15](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.14...v3.2.15) (2020-07-23)
+
+* remove no redundant module
+
+##### [Version 3.2.14](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.13...v3.2.14) (2020-06-10)
+
+> Things are getting better every day. 🚀
+
+##### [Version 3.2.13](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.12...v3.2.13) (2020-06-10)
+
+Adds plan logic and expiration
+
+##### [Version 3.2.12](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.11...v3.2.12) (2020-06-10)
+
+Adds key filter
+
+##### [Version 3.2.11](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.10...v3.2.11) (2020-06-04)
+
+* remove non-printable chars
+
+##### [Version 3.2.10](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.9...v3.2.10) (2020-05-28)
+
+* Remove extra files on export
+
+##### [Version 3.2.9](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.8...v3.2.9) (2020-05-18)
+
+adds new endpoints
+
+##### [Version 3.2.8](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.7...v3.2.8) (2020-03-24)
+
+* change license handler method access
+
+##### [Version 3.2.7](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.6...v3.2.7) (2020-03-24)
+
+* fix callback for license processing hook
+
+##### [Version 3.2.6](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.5...v3.2.6) (2020-03-23)
+
+* Fix notice on license deactivation
+
+##### [Version 3.2.5](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.4...v3.2.5) (2020-03-23)
+
+* always load notification manager last
+
+##### [Version 3.2.4](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.3...v3.2.4) (2020-03-21)
+
+* Cast version response to array for icons
+
+##### [Version 3.2.3](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.2...v3.2.3) (2020-03-21)
+
+* use product slug instead of the one from api
+
+##### [Version 3.2.2](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.1...v3.2.2) (2020-03-13)
+
+* improve notice dismiss mechanism
+
+##### [Version 3.2.1](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.0...v3.2.1) (2020-03-05)
+
+Fix rollback call for private products
+
+#### [Version 3.2.0](https://github.com/Codeinwp/themeisle-sdk/compare/v3.1.9...v3.2.0) (2020-03-04)
+
+* adds license activation/deactivation handlers for wp cli
+* adds compatibility with the newest license API
+
+##### [Version 3.1.9](https://github.com/Codeinwp/themeisle-sdk/compare/v3.1.8...v3.1.9) (2020-02-24)
+
+* Add integration with GitHub actions
+
 ## [3.1.8](https://github.com/Codeinwp/themeisle-sdk/compare/v3.1.7...v3.1.8) (2019-11-18)
 
 

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1b885c6ccbe496cb34126c362ce4e3af
+class ComposerStaticInite0568ebe50a0f591a51b6f7a13afd2d6
 {
     public static $files = array (
         '4940672e65e7c6c88ed7150711580427' => __DIR__ . '/..' . '/codeinwp/gutenberg-animation/load.php',

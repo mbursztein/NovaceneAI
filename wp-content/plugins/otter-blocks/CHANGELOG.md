@@ -1,3 +1,43 @@
+##### [Version 1.5.6](https://github.com/Codeinwp/otter-blocks/compare/v1.5.5...v1.5.6) (2020-08-03)
+
+- Button Group Improvements
+- Fixed Caption field missing from Slider Block
+- Image management in Slider & Gallery Block
+- Fix issue with CSS inline loading twice
+- Fix Posts Block offset bug
+- Remove default font size from Posts Block
+- Improve Animation Picker
+
+##### [Version 1.5.5](https://github.com/Codeinwp/otter-blocks/compare/v1.5.4...v1.5.5) (2020-06-22)
+
+- Dropped support for WordPress 5.4
+- Store images locally when importing templates
+- The improved template import mechanism
+- Fix CSS file is not enqueued for posts outside the main loop
+- Drop support for WordPress 5.3
+- Add backward compatibility to Template Library import
+- Fix category filter in Posts Section
+- Add new Block Templates
+
+##### [Version 1.5.4](https://github.com/Codeinwp/otter-blocks/compare/v1.5.3...v1.5.4) (2020-05-26)
+
+- Use WP File System in Template Import
+- Fix CSS Regeneration
+- Add TinyMCE in Map Marker
+- Use ServerSideLoader in Author & Sharing Blocks
+- Fix Posts Block for Gutenberg 8.0
+- Display template name in Template Library
+- Add AMP Support to Slider Block
+- Remove Section Outline
+- Add AMP Support to Google Maps Block
+- Fix Horizontal/Vertical Alignment
+- Add Template Preview in Template Library
+- Fix issue with Color resetting in Button Group & Section
+- Fix Font Awesome not loading on Index Pages
+- Add two new templates
+- Fix SVG issue in Slider & Section Block
+- Add Menu Icons Module
+
 ##### [Version 1.5.3](https://github.com/Codeinwp/otter-blocks/compare/v1.5.2...v1.5.3) (2020-04-10)
 
 - Remove Icons from Range Controls

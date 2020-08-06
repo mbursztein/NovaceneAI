@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'tubalmartin\\CssMin\\' => array($vendorDir . '/tubalmartin/cssmin/src'),
+    'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
 );
