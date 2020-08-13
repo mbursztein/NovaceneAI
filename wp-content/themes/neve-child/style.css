@@ -56,8 +56,35 @@
 	padding: 7em 1em 0 1em;
 }
 
+.nc-hero {
+	padding-top: 150px;
+    padding-right: 0;
+    padding-bottom: 150px;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    justify-content: center;
+    min-height: auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-width: 0;
+    border-style: solid;
+    border-color: #000;
+    border-radius: 0;
+    text-align: center;
+    color: #fff;
+}
 
+.hero-services {
+	background-image: url(/wp-content/uploads/2020/08/iStock-1054713348-dark.jpg);
+	background-position: top;
 
+}
+
+.hero-profserv {
+	background-image: url(/wp-content/uploads/2020/02/iStock-1128252197-web.jpg);
+}
 
 
 
