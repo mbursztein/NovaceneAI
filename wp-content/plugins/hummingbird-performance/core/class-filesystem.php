@@ -218,6 +218,77 @@ class Filesystem {
 	}
 
 	/**
+	 * Resolves minify module's asset path or url, taking into account user-defined path
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param bool|string $user_defined_path  Optional. The path to resolve. Default to user-defined path in Minify Settings.
+	 * @param string      $mode               Optional. Specify 'path' or 'url'. Default: 'path'.
+	 *
+	 * @return string
+	 */
+	public function resolve_minify_asset_path( $user_defined_path = false, $mode = 'path' ) {
+		$upload  = wp_upload_dir();
+		$basedir = 'path' === $mode ? $upload['basedir'] : $upload['baseurl'];
+
+		if ( false === $user_defined_path ) {
+			$user_defined_path = Settings::get_setting( 'file_path', 'minify' );
+		}
+
+		// Check if user defined a custom path.
+		if ( ! isset( $user_defined_path ) || empty( $user_defined_path ) ) {
+			return $basedir . '/hummingbird-assets';
+		}
+
+		if ( strpos( $user_defined_path, '/' ) === 0 ) { // root relative path.
+			return str_replace( '//', '/', ABSPATH . $user_defined_path );
+		}
+
+		return trailingslashit( $basedir ) . str_replace( './', '/', $user_defined_path );
+	}
+
+	/**
+	 * Resolves directory info for critical assets like critical.css
+	 * Default path can be overridden by using global constants in wp-config.php.
+	 *
+	 * @since 2.6.0
+	 * @return array
+	 */
+	public static function critical_assets_dir() {
+		static $info;
+		if ( isset( $info ) ) {
+			return $info;
+		}
+
+		if ( defined( 'WPHB_CRITICAL_ASSETS_PATH' ) && ! empty( WPHB_CRITICAL_ASSETS_PATH ) ) {
+			$main_path = ABSPATH . trim( WPHB_CRITICAL_ASSETS_PATH, '\/ ' ) . '/';
+			if ( is_multisite() ) {
+				$blog_id     = get_current_blog_id();
+				$assets_path = $main_path . 'sites/' . $blog_id . '/';
+			} else {
+				$assets_path = $main_path;
+			}
+		} else {
+			$upload      = wp_upload_dir();
+			$assets_path = $upload['basedir'] . '/wphb-critical-assets/';
+		}
+
+		$rel_path = str_replace( ABSPATH, '', $assets_path );
+		if ( is_multisite() ) {
+			$assets_url = get_site_url( get_main_site_id(), $rel_path );
+		} else {
+			$assets_url = site_url( $rel_path );
+		}
+
+		$info = array(
+			'path' => $assets_path,
+			'url'  => trailingslashit( $assets_url ),
+		);
+		return $info;
+	}
+
+
+	/**
 	 * Delete everything in selected folder.
 	 *
 	 * @since  1.6.0
@@ -242,29 +313,7 @@ class Filesystem {
 		if ( ! $ao_module ) {
 			$path = $this->basedir . $dir;
 		} else {
-			$upload            = wp_upload_dir();
-			$user_defined_path = Settings::get_setting( 'file_path', 'minify' );
-			$basedir           = $upload['basedir'];
-
-			// Check if user defined a custom path.
-			if ( ! isset( $user_defined_path ) || empty( $user_defined_path ) ) {
-				$path = $basedir . '/hummingbird-assets';
-			} else {
-				if ( '/' === $user_defined_path[0] ) { // root relative path.
-					$custom_dir = ABSPATH . $user_defined_path;
-					$path       = str_replace( '//', '/', $custom_dir );
-				} else {
-					$user_defined_path = str_replace( './', '/', $user_defined_path );
-
-					// Prepend / to relative paths.
-					$prepend = '';
-					if ( '/' !== $user_defined_path[0] ) {
-						$prepend = '/';
-					}
-
-					$path = $upload['basedir'] . $prepend . $user_defined_path;
-				}
-			}
+			$path = trailingslashit( $this->resolve_minify_asset_path() );
 		}
 
 		// If directory not found - exit.

@@ -14,16 +14,25 @@ class Post_Grid_1{
                 'type' => 'string',
                 'default' => '',
             ],
+
+            //--------------------------
+            //      Layout
+            //--------------------------
+            'layout' => [
+                'type' => 'string',
+                'default' => 'layout1',
+            ],
+
             //--------------------------
             //      Query Setting
             //--------------------------
-            // 'queryQuick' => [
-            //     'type' => 'string',
-            //     'default' =>'',
-            // ],
+            'queryQuick' => [
+                'type' => 'string',
+                'default' =>'',
+            ],
             'queryNumber' => [
                 'type' => 'string',
-                'default' =>5,
+                'default' =>4,
             ],
             'queryType' => [
                 'type' => 'string',
@@ -47,7 +56,7 @@ class Post_Grid_1{
                 'default' => '[]',
                 'style' => [
                     (object)[
-                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'tag']]
+                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'post_tag']]
                     ],
                 ],
             ],
@@ -372,7 +381,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn'
+                        'selector'=>'{{ULTP}} .ultp-block-wrapper .ultp-heading-wrap .ultp-heading-btn'
                     ],
                 ],
             ],
@@ -384,7 +393,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
                     ],
                 ],
             ],
@@ -396,7 +405,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
                     ],
                 ],
             ],
@@ -797,6 +806,32 @@ class Post_Grid_1{
                 'type' => 'string',
                 'default' => 'aboveTitle',
             ],
+            'customCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
+            'seperatorLink' => [
+                'type' => 'string',
+                'default' => admin_url( 'edit-tags.php?taxonomy=category' ),
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
+            'onlyCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
             'catLineWidth' => [
                 'type' => 'object',
                 'default' => (object)['lg'=>'20'],
@@ -855,7 +890,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-category-grid a'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-category-grid a'
                     ],
                 ],
             ],
@@ -866,6 +901,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { color:{{catColor}}; }'
                     ],
@@ -878,6 +914,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -890,6 +927,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -902,6 +940,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { border-radius:{{catRadius}}; }'
                     ],
@@ -914,6 +953,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover { color:{{catHoverColor}}; }'
                     ],
@@ -926,6 +966,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -938,6 +979,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -962,6 +1004,7 @@ class Post_Grid_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { padding:{{catPadding}}; }'
                     ],
@@ -995,7 +1038,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'metaShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-block-meta span, {{ULTP}} .ultp-block-meta span a'
+                        'selector'=>'{{ULTP}} .ultp-block-meta span, {{ULTP}} .ultp-block-item .ultp-block-meta span a'
                     ],
                 ],
             ],
@@ -1186,16 +1229,16 @@ class Post_Grid_1{
 
             'contentWrapInnerPadding' => [
                 'type' => 'object',
-                'default' => (object)['lg' =>(object)['top' => '','bottom' => '', 'left'=>'','right'=>'', 'unit' =>'px']],
+                'default' => (object)['lg' =>(object)['unit' =>'px']],
                 'style' => [
                     (object)[
-                        'selector'=>'{{ULTP}} .ultp-block-content { padding: {{contentWrapInnerPadding}}; }'
+                        'selector'=>'{{ULTP}} .ultp-block-content, {{ULTP}}.wp-block-ultimate-post-post-grid-1 .ultp-layout2 .ultp-block-content, {{ULTP}}.wp-block-ultimate-post-post-grid-1 .ultp-layout3 .ultp-block-content { padding: {{contentWrapInnerPadding}}; }'
                     ],
                 ],
             ],
             'contentWrapPadding' => [
                 'type' => 'object',
-                'default' => (object)['lg' =>(object)['top' => '','bottom' => '', 'left'=>'','right'=>'', 'unit' =>'px']],
+                'default' => (object)['lg' =>(object)['unit' =>'px']],
                 'style' => [
                     (object)[
                         'selector'=>'{{ULTP}} .ultp-block-content-wrap { padding: {{contentWrapPadding}}; }'
@@ -1436,7 +1479,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'readMore','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-block-readmore a'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-block-readmore a'
                     ],
                 ],
             ],
@@ -1610,7 +1653,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'filterShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-filter-wrap ul li a'
+                        'selector'=>'{{ULTP}} .ultp-filter-navigation .ultp-filter-wrap ul li a'
                     ],
                 ],
             ],
@@ -1851,7 +1894,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-loadmore-action'
+                        'selector'=>'{{ULTP}} .ultp-pagination-wrap .ultp-pagination li a, {{ULTP}} .ultp-loadmore .ultp-loadmore-action'
                     ],
                 ],
 
@@ -1864,7 +1907,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'paginationType','condition'=>'==','value'=>'navigation'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-next-prev-wrap ul li a { font-size:{{pagiArrowSize}}px; }'
+                        'selector'=>'{{ULTP}} .ultp-next-prev-wrap ul li a svg { width:{{pagiArrowSize}}px; }'
                     ],
                 ],
 
@@ -1877,7 +1920,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore-action { color:{{pagiColor}}; } .ultp-next-prev-wrap ul li a svg { fill:{{pagiColor}}; } .ultp-pagination li a svg { fill:{{pagiColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-pagination-wrap .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore .ultp-loadmore-action { color:{{pagiColor}}; } {{ULTP}} .ultp-next-prev-wrap ul li a svg { fill:{{pagiColor}}; } {{ULTP}} .ultp-pagination li a svg, {{ULTP}} .ultp-loadmore .ultp-loadmore-action svg { fill:{{pagiColor}}; }'
                     ],
                 ],
             ],
@@ -1889,7 +1932,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore-action'
+                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore .ultp-loadmore-action'
                     ],
                 ],
             ],
@@ -1937,7 +1980,7 @@ class Post_Grid_1{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li.pagination-active a, {{ULTP}} .ultp-next-prev-wrap ul li a:hover, {{ULTP}} .ultp-loadmore-action:hover { color:{{pagiHoverColor}}; } {{ULTP}} .ultp-pagination li a:hover svg { fill:{{pagiHoverColor}}; } {{ULTP}} .ultp-next-prev-wrap ul li a:hover svg { fill:{{pagiHoverColor}}; } @media (min-width: 768px) { {{ULTP}} .ultp-pagination li a:hover { color:{{pagiHoverColor}};}}'
+                        'selector'=>'{{ULTP}} .ultp-pagination li.pagination-active a, {{ULTP}} .ultp-next-prev-wrap ul li a:hover, {{ULTP}} .ultp-loadmore-action:hover { color:{{pagiHoverColor}}; } {{ULTP}} .ultp-pagination li a:hover svg { fill:{{pagiHoverColor}}; } {{ULTP}} .ultp-next-prev-wrap ul li a:hover svg, {{ULTP}} .ultp-loadmore .ultp-loadmore-action:hover svg { fill:{{pagiHoverColor}}; } @media (min-width: 768px) { {{ULTP}} .ultp-pagination li a:hover { color:{{pagiHoverColor}};}}'
                     ],
                 ],
             ],
@@ -2029,6 +2072,15 @@ class Post_Grid_1{
             //--------------------------
             //  Wrapper Style
             //--------------------------
+            'loadingColor' => [
+                'type' => 'string',
+                'default' => '#000',
+                'style' => [
+                    (object)[
+                        'selector'=>'{{ULTP}} .ultp-loading .ultp-loading-blocks div { --loading-block-color: {{loadingColor}}; }'
+                    ],
+                ],
+            ],
             'wrapBg' => [
                 'type' => 'object',
                 'default' => (object)['openColor' => 0, 'type' => 'color', 'color' => '#f5f5f5'],
@@ -2208,24 +2260,28 @@ class Post_Grid_1{
                             $wraper_before .= '</div>';
                         $wraper_before .= '</div>';
                     }
-                    $wraper_before .= '<div class="ultp-block-items-wrap ultp-block-row ultp-block-column-'.json_decode(json_encode($attr['columns']), True)['lg'].'">';
+                    $wraper_before .= '<div class="ultp-block-items-wrap ultp-block-row ultp-block-column-'.json_decode(json_encode($attr['columns']), True)['lg'].' ultp-'.$attr['layout'].'">';
                         $idx = $noAjax ? 1 : 0;
                         while ( $recent_posts->have_posts() ): $recent_posts->the_post();
                             
                             include ULTP_PATH.'blocks/template/data.php';
 
                             include ULTP_PATH.'blocks/template/category.php';
-                            
-                            $post_loop .= '<div class="ultp-block-item">';
+                            if( has_post_thumbnail() && $attr['showImage']) {
+                                $divStyle = 'background-image:url('.get_the_post_thumbnail_url($post_id, $attr['imgCrop']).')';
+                            }
+                            // print_r($divStyle);
+                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item">';
                                 $post_loop .= '<div class="ultp-block-content-wrap">';
-                                    if( has_post_thumbnail() && $attr['showImage'] ){
+                                    if( has_post_thumbnail() && $attr['showImage'] && ( $attr['layout'] != 'layout2') ) {
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                            $post_loop .= '<a href="'.$titlelink.'"><img alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, ($attr['imgCrop'] ? $attr['imgCrop'] : 'full') ).'" /></a>';
+                                            $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             if( ($attr['catPosition'] != 'aboveTitle') && $attr['catShow'] ) {
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
                                             }
                                         $post_loop .= '</div>';
                                     }
+                                    if( $attr['layout'] === 'layout2' ) { $post_loop .= '<div class="ultp-block-content-image" style='.$divStyle.'></div>';}
                                     $post_loop .= '<div class="ultp-block-content">';
                                         
                                         // Category

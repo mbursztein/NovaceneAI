@@ -2,9 +2,9 @@
 Contributors: wpxpo
 Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
-Tested up to: 5.4.1
+Tested up to: 5.5.1
 Requires PHP: 5.4
-Stable tag: 1.2.5
+Stable tag: 2.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,46 +12,41 @@ Gutenberg post blocks is a Gutenberg blocks plugin for latest post blocks, post 
 
 == Description ==
 
-Gutenberg Post Blocks is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds. 
+[Gutenberg Post Blocks](https://www.wpxpo.com/gutenberg-post-blocks/) is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds. 
 
-[🔥 Plugin Details](https://wpxpo.com/) || [💥 Free Starter Pack](https://demo.wpxpo.com/layouts/) || [😱 Download Free Theme](https://wordpress.org/themes/coblog/) || [💿 Video Tutorials](https://www.youtube.com/watch?v=JZxIflYKOuM&list=PLPidnGLSR4qcAwVwIjMo1OVaqXqjUp_s4)
+[🔥 Plugin Details](https://www.wpxpo.com/gutenberg-post-blocks/) || [💥 Starter Packs](https://ultp.wpxpo.com/starter-packs/) || [😱 Upgrade Pro](https://www.wpxpo.com/gutenberg-post-blocks/pricing/) || [💿 Video Tutorials](https://www.youtube.com/watch?v=JZxIflYKOuM&list=PLPidnGLSR4qcAwVwIjMo1OVaqXqjUp_s4)
 
 [youtube https://www.youtube.com/watch?v=JZxIflYKOuM]
 
-<strong>Live Editable Gutenberg Blocks</strong>
+### 🔥 Live Editable Gutenberg Blocks
 Each and every setting are visually editable in Gutenberg Post Blocks. You can change your blocks design of the post with ultimate design settings. An enormous amount of google font has been added for your section design. You don't have enough design skills? No problem, preset sections blocks and layouts blocks are ready for your needs. 
 
-<strong>Slider Blocks</strong>
-Dynamic slider using posts is now easier to make using Gutenberg post blocks. Slider will be run with your control, your desire design. Post Grid blocks come with ultimate control over the modern design. 
-
-Using Gutenberg Post Blocks query builder you can create a complex query for your post grid. Anyone can create complex queries for every block without writing a single line of code.  
-
-
-
-= What you can be made using this plugin? =
-
-* News Blog
+### What you can be made using this plugin?
+* News
+* Magazine
 * Personal Blog
 * Blog Post Grid
 * Blog Post Listing
 * Post Slider
 * Post Carosel
+* Custom Post Grid, Custom Post Type Grid, Grid Display, Category Filter, Post Filter, Post Layout, Taxonomy, Taxonomy Filter and much more.
 
-
-= Gutenberg Post Blocks Key Feature: =
+### Gutenberg Post Blocks Key Feature
 
 These Gutenberg post blocks come with a lot of key features. 
 
 * Category and Tag Filter in Blocks
+* Get Category Specific Color Options [PRO]
 * 9 beautifully Crafted Gutenberg Post Blocks
 * 1 Gutenberg Post Slider Blocks
-* 10+ Premade Sections
-* 2+ Premade Layouts 
+* 40+ Premade Sections
+* 5+ Premade Layouts 
 * Blog Listing with ultimate controls
 * Post Grid with ultimate controls
 * Post Slider with Animation
 * Google Font Support in Blocks
 * Advanced Post Query Builder in Blocks
+* Advanced Quick Query Options [PRO]
 * SVG custom icon in Blocks
 * Load More with AJAX Powered Blocks
 * Navigation with AJAX Powered Blocks
@@ -62,18 +57,46 @@ These Gutenberg post blocks come with a lot of key features.
 * Custom CSS Option in Every Blocks
 * Section Title with a lot of preset design 
 
-<strong>Gutenberg Block List:</strong>
+
+### 🏆 Post Slider Blocks
+Dynamic slider using posts is now easier to make using Gutenberg post blocks. Slider will be run with your control, your desire design. Post Grid blocks come with ultimate control over the modern design. 
+
+### 🏆 Premade Design Library
+Build your News, Magazine, and Blog website within a few minutes using our premade Starter packs and Blocks design.
+
+[youtube https://www.youtube.com/watch?v=S0kU_FSa2wc]
+
+### 🏆 Advanced Query Builder
+Using Gutenberg Post Blocks query builder you can create a complex query for your post grid. Anyone can create complex queries for every block without writing a single line of code. 
+
+[youtube https://www.youtube.com/watch?v=lvRO359JuPw]
+
+### 🏆 AJAX Pagination
+Pagination, Load More and Next Previous are common elements for the blocks. Gutenberg Post Blocks grid comes with the AJAX powered pagination.
+
+[youtube https://www.youtube.com/watch?v=gqaXZ9nQEV8]
+
+### 🏆 AJAX Filter
+Category filter is the best element to show many contents in a small place. By clicking category filter users can easily read their interesting content without reloading any page.
+
+### Gutenberg Block List:
 <ul>
-    <li><a href="https://demo.wpxpo.com/post-list-1/" target="_blank">Post List #1 Blocks</a>: Display your blog page listing with top big image design in <strong>Gutenberg Blocks</strong>.</li>
-    <li><a href="https://demo.wpxpo.com/post-list-2/" target="_blank">Post List #2 Blocks</a>: Display dynamic posts with first post bold design in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/post-list-3/" target="_blank">Post List #3 Blocks</a>: Display your blog page listing with side image design in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/post-grid-1/" target="_blank">Post Grid #1 Blocks</a>: Display grid posts with a top big image in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/post-grid-2/" target="_blank">Post Grid #2 Blocks</a>: Display grid post with gradient overlay style in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/post-grid-3/" target="_blank">Post Grid #3 Blocks</a>: Display gradient grid post with top bold design in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/post-grid-4/" target="_blank">Post Grid #4 Blocks</a>: Display gradient grid post with left bold design in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/post-slide-1/" target="_blank">Post Slider #1 Blocks</a>: Display dynamic slider from your blog post in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/heading/" target="_blank">Heading Blocks</a>: Display heading of a specific section with lot of premade design in Gutenberg Blocks.</li>
-    <li><a href="https://demo.wpxpo.com/image/" target="_blank">Image Blocks</a>: Display Image with lot of style, button and overlay in Gutenberg Post Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-1/" target="_blank">Post Grid #1 Blocks</a>: Display post grid with a top big image in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-2/" target="_blank">Post Grid #2 Blocks</a>: Display post grid  with gradient overlay style in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-3/" target="_blank">Post Grid #3 Blocks</a>: Display gradient post grid with top bold design in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-4/" target="_blank">Post Grid #4 Blocks</a>: Display gradient post grid with left bold design in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-5/" target="_blank">Post Grid #5 Blocks</a>: Display post grid with left big posts tiles overlay style.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-6/" target="_blank">Post Grid #6 Blocks</a>: Display gradient grid post with tiles Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-grid-7/" target="_blank">Post Grid #7 Blocks</a>: Display gradient grid post with vertical overlay in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-list-1/" target="_blank">Post List #1 Blocks</a>: Display your blog page post listing with top big image design in <strong>Gutenberg Blocks</strong>.</li>
+    <li><a href="https://ultp.wpxpo.com/post-list-2/" target="_blank">Post List #2 Blocks</a>: Display dynamic posts with first post bold design in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-list-3/" target="_blank">Post List #3 Blocks</a>: Display your blog post listing with side image design in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-list-4/" target="_blank">Post List #4 Blocks</a>: Listing your post with top big image and bottom small image.</li>
+    <li><a href="https://ultp.wpxpo.com/post-module-1/" target="_blank">Post Module #1 Blocks</a>: Display left big post with right small post in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/post-module-2/" target="_blank">Post Module #2 Blocks</a>: Display left big overlay post with right small post.</li>
+    <li><a href="https://ultp.wpxpo.com/post-slide-1/" target="_blank">Post Slider #1 Blocks</a>: Display dynamic slider from your blog post in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/heading/" target="_blank">Heading Blocks</a>: Display heading of a specific section with lot of premade design in Gutenberg Blocks.</li>
+    <li><a href="https://ultp.wpxpo.com/image/" target="_blank">Image Blocks</a>: Display Image with lot of style, button and overlay in Gutenberg Post Blocks.</li>
 </ul>
 
 = Author =
@@ -140,6 +163,57 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 6. Post Slider
 
 == Changelog ==
+
+= 2.0.2 - 30 September 2020 =
+* New: Meta Style 2 Added
+* New: Magazine Starter Packs Added
+* New: Preloader Color Added
+* New: Gutenberg Editor Container Width Added
+* New: Gutenberg Post Blocks Compatible With astra Theme
+* New: Gutenberg Post Blocks Compatible With neve Theme
+* New: Gutenberg Post Blocks Compatible With blocksy Theme
+* New: Gutenberg Post Blocks Compatible With sydney Theme
+* New: Gutenberg Post Blocks Compatible With twentytwenty Theme
+* Update: Premade Design Library Improved
+* Update: Compatible With Gutenberg Plugin Version 9.0
+* Fix: Heading Button Color Issue
+* Fix: Post Tags Filter Issue
+* Fix: WordPress Lazy Load Issue
+* Fix: Install Plugin Error Issue
+* Fix: Pagination Offset Issue
+* Fix: Order By Include Issue
+
+
+= 2.0.1 - 23 September 2020 =
+* New: One ID / Class to identify the loop Added
+* New: Post List 2 Blocks Spacing Added
+* Fix: Heading Blocks Issue
+* Fix: Post List 2 Blocks Image Height Issue
+* Fix: Reading Time Issue
+* Fix: display All Post Issue
+* Fix: Sticky Post Issue
+
+= 2.0.0 - 22 September 2020 =
+* New: Post List #4 Blocks Added
+* New: Post Grid #5 Blocks Added
+* New: Post Grid #6 Blocks Added
+* New: Post Grid #7 Blocks Added
+* New: Post Module #1 Blocks Added
+* New: Post Module #2 Blocks Added
+* New: Block library Readymade Block Design Added
+* New: New Readymade Design Added
+* New: New Starter Kit Design Added
+* New: Overview, Pro Features, Contact Us, License and Upgrade Page Added
+* New: Cache enable for blocks library
+* New: Image Lazy Load Added
+* Update: Settings Panel Improved
+* Update: Directory Content Improved
+* Fix: Slider Image Size Issue
+* Fix: All known Issue Fixed
+
+= 1.2.6 - 16 August 2020 =
+* Fix: Image Clickable Issue Fixed
+
 = 1.2.5 - 02 August 2020 =
 * Fix: Post List 2 Responsive Issue Fixed
 
@@ -178,7 +252,7 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 * Fix: Change name "Ultimate-post" to "Gutenberg Post Blocks"
 * Fix: Pagination Not Working for some Criteria
 * Fix: CSS links HTTPS mixed content issue fixed
-* Fix: Filter Not working for the specific condition
+* Fix: Post Filter Not working for the specific condition
 * Update: Add span and p in the title tag lists
 * Update: Option Panel Text has been Updated
 
@@ -189,21 +263,21 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 * Update: Performance Improved
 
 = 1.1.6 - 15 April 2020 =
-* New: Filter All Text Change Option
+* New: Post Filter All Text Change Option
 * New: Query Order by Meta Value Added
 * New: Layout Click is now not Query Reset
 * New: Show Full Excerpt Added in Every Blocks
 * Fix: Post List #1 Bug Fix and it is Now Live
-* Fix: Filter is now not Showing Draft Posts
-* Fix: Filter Design Improved
+* Fix: Post Filter is now not Showing Draft Posts
+* Fix: Post Filter Design Improved
 * Fix: Blank Image Problem Solved
 
 = 1.1.5 - 03 April 2020 =
 * Update: Compatible With WordPress 5.4
-* Fix: Filter issue Fixed
+* Fix: Post Filter issue Fixed
 
 = 1.1.4 - 26 Mar 2020 =
-* Fix: Sub Category Filter issue Fixed
+* Fix: Sub Category Post Filter issue Fixed
 * Fix: Post Grid #3 CSS issue Fixed
 
 = 1.1.3 - 14 Mar 2020 =
@@ -227,7 +301,7 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 * Fix: Pagination Issue Fixed
 * Fix: Next Previous Issue Fixed
 * Fix: Load More Issue Fixed
-* Fix: Filter Issue Fixed
+* Fix: Post Filter Issue Fixed
 * Fix: Pagination Style for Mobile CSS Issue Fixed
 
 = 1.1.0 - 31 Jan 2020 =

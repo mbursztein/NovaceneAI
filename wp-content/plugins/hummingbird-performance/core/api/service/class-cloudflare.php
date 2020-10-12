@@ -85,9 +85,16 @@ class Cloudflare extends Service {
 		return $this->request->get( "zones/{$zone}/settings/browser_cache_ttl" );
 	}
 
+	/**
+	 * Purge cache.
+	 *
+	 * @param string $zone  Zone ID.
+	 *
+	 * @return array|mixed|object|\WP_Error
+	 */
 	public function purge_cache( $zone ) {
 		return $this->request->delete(
-			"/zones/{$zone}/purge_cache",
+			"zones/{$zone}/purge_cache",
 			wp_json_encode(
 				array(
 					'purge_everything' => true,

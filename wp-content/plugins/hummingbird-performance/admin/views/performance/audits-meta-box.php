@@ -46,9 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p><?php echo esc_html( $description ); ?></p>
 
 	<?php if ( empty( $last_test ) ) : ?>
-		<div class="sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'Nice! All tests passed.', 'wphb' ); ?></p>
-		</div>
+		<?php $this->admin_notices->show_inline( esc_html__( 'Nice! All tests passed.', 'wphb' ) ); ?>
 	<?php endif; ?>
 </div>
 
@@ -82,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div>
 						<?php if ( 'disabled' !== $impact_score_class && $this->view_exists( "performance/audits/{$rule}" ) ) : ?>
 							<?php
-							if ( 'time-to-first-byte' === $rule && 1 !== $rule_result->score && isset( $rule_result->details->overallSavingsMs ) ) {
+							if ( 'server-response-time' === $rule && 1 !== $rule_result->score && isset( $rule_result->details->overallSavingsMs ) ) {
 								printf(
 									/* translators: %s - number of ms */
 									esc_html__( 'Potential savings of %s ms', 'wphb' ),

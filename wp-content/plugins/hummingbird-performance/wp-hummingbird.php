@@ -12,7 +12,7 @@
  * Plugin Name:       Hummingbird
  * Plugin URI:        https://premium.wpmudev.org/project/wp-hummingbird/
  * Description:       Hummingbird zips through your site finding new ways to make it load faster, from file compression and minification to browser caching – because when it comes to pagespeed, every millisecond counts.
- * Version:           2.5.1
+ * Version:           2.6.2
  * Author:            WPMU DEV
  * Author URI:        https://profiles.wordpress.org/wpmudev/
  * Network:           true
@@ -43,11 +43,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 namespace Hummingbird;
 
 if ( ! defined( 'WPHB_VERSION' ) ) {
-	define( 'WPHB_VERSION', '2.5.1' );
+	define( 'WPHB_VERSION', '2.6.2' );
 }
 
 if ( ! defined( 'WPHB_SUI_VERSION' ) ) {
-	define( 'WPHB_SUI_VERSION', 'sui-2-6-0' );
+	define( 'WPHB_SUI_VERSION', 'sui-2-9-6' );
 }
 
 if ( ! defined( 'WPHB_DIR_PATH' ) ) {
@@ -178,9 +178,8 @@ if ( ! class_exists( 'Hummingbird\\WP_Hummingbird' ) ) {
 		 *
 		 * @param bool $remove_data      Remove data.
 		 * @param bool $remove_settings  Remove settings.
-		 * @param bool $disable_cache    Disable page cache module.
 		 */
-		public static function flush_cache( $remove_data = true, $remove_settings = true, $disable_cache = true ) {
+		public static function flush_cache( $remove_data = true, $remove_settings = true ) {
 			$hummingbird = self::get_instance();
 
 			/**
@@ -193,17 +192,13 @@ if ( ! class_exists( 'Hummingbird\\WP_Hummingbird' ) ) {
 					continue;
 				}
 
-				if ( 'page_cache' === $module->get_slug() && $disable_cache ) {
+				if ( 'minify' === $module->get_slug() ) {
 					/**
 					 * Page caching module. Remove page cache files.
 					 *
-					 * @var Core\Modules\Page_Cache $module
+					 * @var Core\Modules\Minify $module
 					 */
-					$module->toggle_service( false );
-				}
-
-				if ( 'minify' === $module->get_slug() ) {
-					$module->clear_cache( false );
+					$module->clear_cache( $remove_settings );
 					continue;
 				}
 

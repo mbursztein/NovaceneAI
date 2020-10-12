@@ -4,6 +4,8 @@
  *
  * @package Hummingbird
  *
+ * @var \Hummingbird\Admin\Page $this
+ *
  * @var object $uptime_stats           Last stats report.
  */
 
@@ -14,13 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <p>
-	<?php
-	esc_html_e(
-		'Here’s a snapshot of when your site went down, which means visitors couldn’t
-	view your website.',
-		'wphb'
-	);
-	?>
+	<?php esc_html_e( 'Here’s a snapshot of when your site went down, which means visitors couldn’t view your website.', 'wphb' ); ?>
 </p>
 
 <input type="hidden" id="downtime-chart-json" value="<?php echo esc_attr( $downtime_chart_json ); ?>">
@@ -35,12 +31,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <?php
-$this->admin_notices->show(
+$this->admin_notices->show_inline_dismissible(
 	'uptime-info',
-	'Uptime monitor will report your site as down when it takes 30+ seconds to load your homepage. Your host may report your site as online, but as far as user experience goes, slow page speeds are bad practice. Consider upgrading your hosting if your site is regularly down.',
-	'grey sui-notice-sm sui-margin-top',
-	true,
-	false
+	esc_html__( 'Uptime monitor will report your site as down when it takes 30+ seconds to load your homepage. Your host may report your site as online, but as far as user experience goes, slow page speeds are bad practice. Consider upgrading your hosting if your site is regularly down.', 'wphb' ),
+	'sui-notice-grey sui-margin-top'
 );
 ?>
 
@@ -48,9 +42,7 @@ $this->admin_notices->show(
 
 <ul class="dev-list-stats dev-list-stats-standalone">
 	<?php if ( ! count( $uptime_stats->events ) ) : ?>
-		<div class="wphb-caching-success sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'No downtime has been reported during the reporting period.', 'wphb' ); ?></p>
-		</div>
+		<?php $this->admin_notices->show_inline( esc_html__( 'No downtime has been reported during the reporting period.', 'wphb' ), 'grey' ); ?>
 	<?php else : ?>
 		<?php foreach ( $uptime_stats->events as $event ) : ?>
 			<li class="dev-list-stats-item">

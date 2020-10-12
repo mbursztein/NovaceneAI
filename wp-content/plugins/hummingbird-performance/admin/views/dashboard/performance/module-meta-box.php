@@ -20,11 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php if ( ! $widgets['show_metrics'] && ! $widgets['show_audits'] && ! $widgets['show_historic'] ) : ?>
 	<div class="sui-box-body">
-		<div class="sui-notice">
-			<p>
-				<?php esc_html_e( 'You have not enabled any widgets. Please use the Customize widget link below to do so.', 'wphb' ); ?>
-			</p>
-		</div>
+		<?php $this->admin_notices->show_inline( esc_html__( 'You have not enabled any widgets. Please use the Customize widget link below to do so.', 'wphb' ), 'grey' ); ?>
 	</div>
 <?php endif; ?>
 
@@ -138,12 +134,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 
 		<?php if ( ! $report->field_data ) : ?>
-			<div class="sui-notice">
-				<p>
-					<?php esc_html_e( 'The Chrome User Experience Report does not have sufficient real-world speed data for this page.', 'wphb' ); ?>
-				</p>
-			</div>
-
+			<?php $this->admin_notices->show_inline( esc_html__( 'The Chrome User Experience Report does not have sufficient real-world speed data for this page.', 'wphb' ), 'grey' ); ?>
 			<span class="sui-description sui-margin-bottom">
 				<?php esc_html_e( 'Note: This report can take months to populate and is aimed at well established websites.', 'wphb' ); ?>
 			</span>

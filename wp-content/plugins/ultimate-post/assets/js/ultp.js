@@ -9,6 +9,12 @@
     });
 
 
+    setLazyImage();
+    function setLazyImage(){
+        $(".ultp-lazy[data-src]").each(function() {
+            $(this).attr('src', $(this).data('src')).addClass('ultp-lazy-done').removeClass('ultp-lazy'); 
+        });
+    }
     // *************************************
     // Previous Next
     // *************************************
@@ -63,6 +69,7 @@
             },
             complete:function(){
                 parents.closest('.ultp-block-wrapper').removeClass('ultp-loading-active');
+                setLazyImage();
             },
             error: function(xhr) {
                 console.log('Error occured.please try again' + xhr.statusText + xhr.responseText );
@@ -114,6 +121,7 @@
             },
             complete:function() {
                 parents.removeClass('ultp-loading-active');
+                setLazyImage();
             },
             error: function(xhr) {
                 console.log('Error occured.please try again' + xhr.statusText + xhr.responseText );
@@ -126,7 +134,7 @@
     // *************************************
     // Filter
     // *************************************
-    $('.ultp-filter-wrap li a').on('click', function(e){
+    $(document).on('click', '.ultp-filter-wrap li a', function(e){
         e.preventDefault();
 
         if($(this).closest('li').hasClass('filter-item')){
@@ -157,6 +165,7 @@
                 },
                 complete:function() {
                     wrap.removeClass('ultp-loading-active');
+                    setLazyImage();
                 },
                 error: function(xhr) {
                     console.log('Error occured.please try again' + xhr.statusText + xhr.responseText );
@@ -268,6 +277,7 @@
                 },
                 complete:function() {
                     wrap.removeClass('ultp-loading-active');
+                    setLazyImage();
                 },
                 error: function(xhr) {
                     console.log('Error occured.please try again' + xhr.statusText + xhr.responseText );

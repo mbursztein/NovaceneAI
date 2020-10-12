@@ -4,12 +4,14 @@
  *
  * @package Hummingbird
  *
- * @var bool   $query_stings    URL Query Strings enabled or disabled.
- * @var bool   $cart_fragments  WooCommerce cart fragments.
- * @var bool   $emoji           Remove Emojis file enabled or disabled.
- * @var string $prefetch        Prefetch dns urls.
- * @var bool   $woo_active      Is WooCommerce activated.
- * @var string $woo_link        Link to WooCommerce Settings - Products page.
+ * @var bool   $query_stings          URL Query Strings enabled or disabled.
+ * @var bool   $query_strings_global  Is URL Query Strings a global option.
+ * @var bool   $cart_fragments        WooCommerce cart fragments.
+ * @var bool   $emoji                 Remove Emojis file enabled or disabled.
+ * @var bool   $emoji_global          Is Emoji clearing a global option.
+ * @var string $prefetch              Prefetch dns urls.
+ * @var bool   $woo_active            Is WooCommerce activated.
+ * @var string $woo_link              Link to WooCommerce Settings - Products page.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,23 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php do_action( 'wphb_advanced_tools_notice' ); ?>
 
-<div class="sui-box-settings-row">
-	<div class="sui-box-settings-col-1">
-		<span class="sui-settings-label"><?php esc_html_e( 'URL Query Strings', 'wphb' ); ?></span>
-		<span class="sui-description">
-			<?php esc_html_e( 'Some proxy caching servers and even some CDNs cannot cache static assets with query strings, resulting in a large missed opportunity for increased speeds.', 'wphb' ); ?>
-		</span>
-	</div>
-	<div class="sui-box-settings-col-2">
-		<div class="sui-form-field">
-			<label for="query_strings" class="sui-toggle">
-				<input type="checkbox" name="query_strings" id="query_strings" aria-labelledby="query_strings-label" <?php checked( $query_stings ); ?> <?php disabled( apply_filters( 'wphb_query_strings_disabled', false ) ); ?>>
-				<span class="sui-toggle-slider" aria-hidden="true"></span>
-				<span id="query_strings-label" class="sui-toggle-label"><?php esc_html_e( 'Remove query strings from my assets', 'wphb' ); ?></span>
-			</label>
+<?php if ( ! apply_filters( 'wphb_query_strings_disabled', false ) ) : ?>
+	<div class="sui-box-settings-row">
+		<div class="sui-box-settings-col-1">
+			<span class="sui-settings-label"><?php esc_html_e( 'URL Query Strings', 'wphb' ); ?></span>
+			<span class="sui-description">
+				<?php esc_html_e( 'Some proxy caching servers and even some CDNs cannot cache static assets with query strings, resulting in a large missed opportunity for increased speeds.', 'wphb' ); ?>
+			</span>
+		</div>
+		<div class="sui-box-settings-col-2">
+			<div class="sui-form-field">
+				<label for="query_strings" class="sui-toggle">
+					<input type="checkbox" name="query_strings" id="query_strings" aria-labelledby="query-strings-label" <?php checked( $query_stings ); ?> <?php disabled( apply_filters( 'wphb_query_strings_disabled', false ) ); ?>>
+					<span class="sui-toggle-slider" aria-hidden="true"></span>
+					<span id="query-strings-label" class="sui-toggle-label"><?php esc_html_e( 'Remove query strings from my assets', 'wphb' ); ?></span>
+				</label>
+				<?php if ( is_multisite() && is_network_admin() ) : ?>
+					<div class="sui-border-frame sui-toggle-content">
+						<label for="query_strings_global" class="sui-checkbox sui-checkbox-sm">
+							<input type="checkbox" name="query_strings_global" id="query_strings_global" aria-labelledby="query-strings-global-label" <?php checked( $query_strings_global ); ?>>
+							<span aria-hidden="true"></span>
+							<span id="query-strings-global-label"><?php esc_html_e( 'Apply this setting globally', 'wphb' ); ?></span>
+						</label>
+						<span class="sui-description">
+							<?php esc_html_e( 'By default, subsites are able to overwrite this setting. Enabling this option will force the network settings on all subsites.', 'wphb' ); ?>
+						</span>
+					</div>
+				<?php elseif ( is_multisite() && apply_filters( 'wphb_query_strings_disabled', false ) ) : ?>
+					<div class="sui-toggle-content" style="margin-top: 10px">
+						<?php
+						$notice_text = esc_html__( 'This option is overwritten by global network settings.', 'wphb' );
+						$this->admin_notices->show_inline( $notice_text, 'grey' );
+						?>
+					</div>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
-</div>
+<?php endif; ?>
 
 <div class="sui-box-settings-row">
 	<div class="sui-box-settings-col-1">
@@ -83,50 +106,70 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</div>
 					</div>
 				</div>
-				<div class="sui-notice">
-					<p>
-						<?php
-						printf(
-							/* translators: %1$s - <a> link, %2$s - </a> closing tag */
-							esc_html__( 'After disabling cart fragments, be sure to enable the %1$sRedirect to the cart page after successful addition%2$s option in your Woocommerce Settings to redirect your customers to the main cart page instead of waiting for an item to be added to the cart.', 'wphb' ),
-							'<a href="' . esc_url( $woo_link ) . '" target="_blank">',
-							'</a>'
-						);
-						?>
-					</p>
-				</div>
+				<?php
+				$this->admin_notices->show_inline(
+					sprintf( /* translators: %1$s - <a> link, %2$s - </a> closing tag */
+						esc_html__( 'After disabling cart fragments, be sure to enable the %1$sRedirect to the cart page after successful addition%2$s option in your Woocommerce Settings to redirect your customers to the main cart page instead of waiting for an item to be added to the cart.', 'wphb' ),
+						'<a href="' . esc_url( $woo_link ) . '" target="_blank">',
+						'</a>'
+					),
+					'grey'
+				);
+				?>
 			</div>
 
 			<?php if ( ! $woo_active ) : ?>
 				<div class="sui-toggle-content" style="margin-top: 10px">
-					<div class="sui-notice">
-						<p>
-							<?php esc_html_e( 'This option requires WooCommerce to be installed and activated.', 'wphb' ); ?>
-						</p>
-					</div>
+					<?php
+					$this->admin_notices->show_inline(
+						esc_html__( 'This option requires WooCommerce to be installed and activated.', 'wphb' ),
+						'grey'
+					);
+					?>
 				</div>
 			<?php endif; ?>
 		</div>
 	</div>
 </div>
 
-<div class="sui-box-settings-row">
-	<div class="sui-box-settings-col-1">
-		<span class="sui-settings-label"><?php esc_html_e( 'Emojis', 'wphb' ); ?></span>
-		<span class="sui-description">
-			<?php esc_html_e( 'WordPress adds Javascript and CSS files to convert common symbols like “:)” to visual emojis. If you don’t need emojis this will remove two unnecessary assets.', 'wphb' ); ?>
-		</span>
-	</div>
-	<div class="sui-box-settings-col-2">
-		<div class="sui-form-field">
-			<label for="emojis" class="sui-toggle">
-				<input type="checkbox" name="emojis" id="emojis" aria-labelledby="emojis-label" <?php checked( $emoji ); ?> <?php disabled( apply_filters( 'wphb_emojis_disabled', false ) ); ?>>
-				<span class="sui-toggle-slider" aria-hidden="true"></span>
-				<span id="emojis-label" class="sui-toggle-label"><?php esc_html_e( 'Remove the default Emoji JS & CSS files', 'wphb' ); ?></span>
-			</label>
+<?php if ( ! apply_filters( 'wphb_emojis_disabled', false ) ) : ?>
+	<div class="sui-box-settings-row">
+		<div class="sui-box-settings-col-1">
+			<span class="sui-settings-label"><?php esc_html_e( 'Emojis', 'wphb' ); ?></span>
+			<span class="sui-description">
+				<?php esc_html_e( 'WordPress adds Javascript and CSS files to convert common symbols like “:)” to visual emojis. If you don’t need emojis this will remove two unnecessary assets.', 'wphb' ); ?>
+			</span>
+		</div>
+		<div class="sui-box-settings-col-2">
+			<div class="sui-form-field">
+				<label for="emojis" class="sui-toggle">
+					<input type="checkbox" name="emojis" id="emojis" aria-labelledby="emojis-label" <?php checked( $emoji ); ?> <?php disabled( apply_filters( 'wphb_emojis_disabled', false ) ); ?>>
+					<span class="sui-toggle-slider" aria-hidden="true"></span>
+					<span id="emojis-label" class="sui-toggle-label"><?php esc_html_e( 'Remove the default Emoji JS & CSS files', 'wphb' ); ?></span>
+				</label>
+				<?php if ( is_multisite() && is_network_admin() ) : ?>
+					<div class="sui-border-frame sui-toggle-content">
+						<label for="emojis_global" class="sui-checkbox sui-checkbox-sm">
+							<input type="checkbox" name="emojis_global" id="emojis_global" aria-labelledby="emojis-global-label" <?php checked( $emoji_global ); ?>>
+							<span aria-hidden="true"></span>
+							<span id="emojis-global-label"><?php esc_html_e( 'Apply this setting globally', 'wphb' ); ?></span>
+						</label>
+						<span class="sui-description">
+							<?php esc_html_e( 'By default, subsites are able to overwrite this setting. Enabling this option will force the network settings on all subsites.', 'wphb' ); ?>
+						</span>
+					</div>
+				<?php elseif ( is_multisite() && apply_filters( 'wphb_emojis_disabled', false ) ) : ?>
+					<div class="sui-toggle-content" style="margin-top: 10px">
+						<?php
+						$notice_text = esc_html__( 'This option is overwritten by global network settings.', 'wphb' );
+						$this->admin_notices->show_inline( $notice_text, 'grey' );
+						?>
+					</div>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
-</div>
+<?php endif; ?>
 
 <div class="sui-box-settings-row">
 	<div class="sui-box-settings-col-1">

@@ -14,17 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <p><?php esc_html_e( 'Gravatar Caching stores local copies of avatars used in comments and in your theme. You can control how often you want the cache purged depending on how your website is set up.', 'wphb' ); ?></p>
-<div class="sui-box-settings-row">
-	<?php if ( is_wp_error( $error ) ) : ?>
-		<div class="wphb-caching-error sui-notice sui-notice-error">
-			<p><?php echo esc_html( $error->get_error_message() ); ?></p>
-		</div>
-	<?php else : ?>
-		<div class="wphb-caching-success sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'Gravatar Caching is currently active.', 'wphb' ); ?></p>
-		</div>
-	<?php endif; ?>
-</div>
+<?php
+if ( is_wp_error( $error ) ) {
+	$this->admin_notices->show_inline( $error->get_error_message(), 'error' );
+} else {
+	$this->admin_notices->show_inline( esc_html__( 'Gravatar Caching is currently active.', 'wphb' ) );
+}
+?>
 
 <div class="sui-box-settings-row">
 	<div class="sui-box-settings-col-1">

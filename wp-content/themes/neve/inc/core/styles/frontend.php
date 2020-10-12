@@ -101,7 +101,43 @@ class Frontend extends Generator {
 		$this->setup_buttons();
 		$this->setup_typography();
 		$this->setup_blog_typography();
+		$this->setup_blog_colors();
 
+	}
+
+	/**
+	 * Add css for blog colors.
+	 */
+	public function setup_blog_colors() {
+		$this->_subscribers['.cover-post .inner, .cover-post .inner a:not(.button), .cover-post .inner a:not(.button):hover, .cover-post .inner a:not(.button):focus, .cover-post .inner li'] = [
+			Config::CSS_PROP_COLOR => [
+				Dynamic_Selector::META_KEY => 'neve_blog_covers_text_color',
+			],
+		];
+
+		$selector = get_theme_mod( 'neve_blog_archive_layout', 'grid' ) === 'covers' ? '.cover-post.nv-post-thumbnail-wrap' : '.nv-post-thumbnail-wrap img';
+
+		$this->_subscribers[ $selector ] = [
+			Config::CSS_PROP_BOX_SHADOW => [
+				Dynamic_Selector::META_KEY    => 'neve_post_thumbnail_box_shadow',
+				Dynamic_Selector::META_FILTER => function ( $css_prop, $value, $meta, $device ) {
+					if ( absint( $value ) === 0 ) {
+						return '';
+					}
+					$map = [
+						1 => '0 1px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.1)',
+						2 => '0 3px 6px -5px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)',
+						3 => '0 10px 20px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)',
+						4 => '0 14px 28px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.12)',
+						5 => '0 16px 38px -12px rgba(0,0,0,0.56), 0 4px 25px 0 rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.2)',
+					];
+					if ( ! array_key_exists( absint( $value ), $map ) ) {
+						return '';
+					}
+					return sprintf( '%s:%s;', $css_prop, $map[ $value ] );
+				},
+			],
+		];
 	}
 
 	/**
@@ -226,7 +262,7 @@ class Frontend extends Generator {
 	 */
 	public function setup_buttons() {
 		// Primary button config.
-		$this->_subscribers[]  = [
+		$this->_subscribers[] = [
 			Dynamic_Selector::KEY_SELECTOR => Config::CSS_SELECTOR_BTN_PRIMARY_NORMAL,
 			Dynamic_Selector::KEY_RULES    => [
 				Config::CSS_PROP_BACKGROUND_COLOR => Config::MODS_BUTTON_PRIMARY_STYLE . '.background',
@@ -239,6 +275,32 @@ class Frontend extends Generator {
 				Dynamic_Selector::CONTEXT_FRONTEND => true,
 			],
 		];
+
+		$this->_subscribers[] = [
+			Dynamic_Selector::KEY_SELECTOR => Config::CSS_SELECTOR_BTN_PRIMARY_NORMAL,
+			Dynamic_Selector::KEY_RULES    => [
+				Config::CSS_PROP_FONT_SIZE      => [
+					Dynamic_Selector::META_KEY           => Config::MODS_BUTTON_TYPEFACE . '.fontSize',
+					Dynamic_Selector::META_IS_RESPONSIVE => true,
+					Dynamic_Selector::META_SUFFIX        => 'em',
+				],
+				Config::CSS_PROP_LINE_HEIGHT    => [
+					Dynamic_Selector::META_KEY           => Config::MODS_BUTTON_TYPEFACE . '.lineHeight',
+					Dynamic_Selector::META_IS_RESPONSIVE => true,
+					Dynamic_Selector::META_SUFFIX        => '',
+				],
+				Config::CSS_PROP_LETTER_SPACING => [
+					Dynamic_Selector::META_KEY           => Config::MODS_BUTTON_TYPEFACE . '.letterSpacing',
+					Dynamic_Selector::META_IS_RESPONSIVE => true,
+				],
+				Config::CSS_PROP_FONT_WEIGHT    => [
+					Dynamic_Selector::META_KEY => Config::MODS_BUTTON_TYPEFACE . '.fontWeight',
+					'font'                     => 'mods_' . Config::MODS_FONT_GENERAL,
+				],
+				Config::CSS_PROP_TEXT_TRANSFORM => Config::MODS_BUTTON_TYPEFACE . '.textTransform',
+			],
+		];
+
 		$this->_subscribers[]  = [
 			Dynamic_Selector::KEY_SELECTOR => Config::CSS_SELECTOR_BTN_PRIMARY_HOVER,
 			Dynamic_Selector::KEY_RULES    => [
@@ -262,7 +324,32 @@ class Frontend extends Generator {
 				Dynamic_Selector::CONTEXT_FRONTEND => true,
 			],
 		];
-		$this->_subscribers[]  = [
+
+		$this->_subscribers[] = [
+			Dynamic_Selector::KEY_SELECTOR => Config::CSS_SELECTOR_BTN_SECONDARY_NORMAL,
+			Dynamic_Selector::KEY_RULES    => [
+				Config::CSS_PROP_FONT_SIZE      => [
+					Dynamic_Selector::META_KEY           => Config::MODS_SECONDARY_BUTTON_TYPEFACE . '.fontSize',
+					Dynamic_Selector::META_IS_RESPONSIVE => true,
+					Dynamic_Selector::META_SUFFIX        => 'em',
+				],
+				Config::CSS_PROP_LINE_HEIGHT    => [
+					Dynamic_Selector::META_KEY           => Config::MODS_SECONDARY_BUTTON_TYPEFACE . '.lineHeight',
+					Dynamic_Selector::META_IS_RESPONSIVE => true,
+					Dynamic_Selector::META_SUFFIX        => '',
+				],
+				Config::CSS_PROP_LETTER_SPACING => [
+					Dynamic_Selector::META_KEY           => Config::MODS_SECONDARY_BUTTON_TYPEFACE . '.letterSpacing',
+					Dynamic_Selector::META_IS_RESPONSIVE => true,
+				],
+				Config::CSS_PROP_FONT_WEIGHT    => [
+					Dynamic_Selector::META_KEY => Config::MODS_SECONDARY_BUTTON_TYPEFACE . '.fontWeight',
+					'font'                     => 'mods_' . Config::MODS_FONT_GENERAL,
+				],
+				Config::CSS_PROP_TEXT_TRANSFORM => Config::MODS_SECONDARY_BUTTON_TYPEFACE . '.textTransform',
+			],
+		];
+		$this->_subscribers[] = [
 			Dynamic_Selector::KEY_SELECTOR => Config::CSS_SELECTOR_BTN_SECONDARY_HOVER,
 			Dynamic_Selector::KEY_RULES    => [
 				Config::CSS_PROP_BACKGROUND_COLOR => Config::MODS_BUTTON_SECONDARY_STYLE . '.backgroundHover',

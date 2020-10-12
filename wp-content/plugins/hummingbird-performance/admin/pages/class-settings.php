@@ -25,9 +25,10 @@ class Settings extends Page {
 	 */
 	public function on_load() {
 		$this->tabs = array(
-			'general' => __( 'General', 'wphb' ),
-			'data'    => __( 'Data & Settings', 'wphb' ),
-			'main'    => __( 'Accessibility', 'wphb' ),
+			'general' 		=> __( 'General', 'wphb' ),
+			'import_export' => __( 'Import / Export', 'wphb' ),
+			'data'    		=> __( 'Data & Settings', 'wphb' ),
+			'main'    		=> __( 'Accessibility', 'wphb' ),
 		);
 	}
 
@@ -42,6 +43,17 @@ class Settings extends Page {
 			null,
 			array( $this, 'accessibility_metabox_footer' ),
 			'general'
+		);
+
+		$this->add_meta_box(
+			'import_export',
+			__( 'Import / Export', 'wphb' ),
+			function() {
+				$this->view( 'settings/import-export-meta-box' );
+			},
+			null,
+			null,
+			'import_export'
 		);
 
 		$this->add_meta_box(

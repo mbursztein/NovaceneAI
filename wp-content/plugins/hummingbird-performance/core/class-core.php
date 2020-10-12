@@ -76,6 +76,8 @@ class Core {
 	/**
 	 * Init integration modules.
 	 *
+	 * TODO: Load only when required.
+	 *
 	 * @since 2.1.0
 	 */
 	private function init_integrations() {
@@ -86,6 +88,7 @@ class Core {
 		new Integration\SiteGround();
 		new Integration\Opcache();
 		new Integration\Wpengine();
+		new Integration\WPMUDev();
 	}
 
 	/**

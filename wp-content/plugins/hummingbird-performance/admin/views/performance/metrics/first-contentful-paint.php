@@ -19,31 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><?php esc_html_e( "First Contentful Paint (FCP) is that period between clicking a link from another site (like a search engine) until the browser renders the first bit of content (text, an image, a canvas element or anything visual) from your website. This is an important milestone for visitors because it provides feedback that the page has started loading. If your FCP is perceived as 'slow' to new visitors, they may not wait long enough for the page to load and will bounce.", 'wphb' ); ?></p>
 
 <h4><?php esc_html_e( 'Status', 'wphb' ); ?></h4>
-<?php if ( isset( $audit->errorMessage ) && ! isset( $audit->score ) ) : ?>
-	<div class="sui-notice sui-notice-error">
-		<p>
-			<?php
-			printf(
-				/* translators: %s - error message */
-				esc_html__( 'Error: %s', 'wphb' ),
-				esc_html( $audit->errorMessage )
-			);
-			?>
-		</p>
-	</div>
-<?php else : ?>
-	<div class="sui-notice sui-notice-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $audit->score * 100 ) ); ?>">
-		<p>
-			<?php
-			printf(
-				/* translators: %s - number of seconds */
-				esc_html__( 'FCP time for your website is %s.', 'wphb' ),
-				esc_html( $audit->displayValue )
-			);
-			?>
-		</p>
-	</div>
-<?php endif; ?>
+<?php if ( isset( $audit->errorMessage ) && ! isset( $audit->score ) ) {
+	/* translators: %s - error message */
+	$message = sprintf( esc_html__( 'Error: %s', 'wphb' ), esc_html( $audit->errorMessage ) );
+	$this->admin_notices->show_inline( $message, 'error' );
+} else {
+	/* translators: %s - number of seconds */
+	$message = sprintf( esc_html__( 'FCP time for your website is %s.', 'wphb' ), esc_html( $audit->displayValue ) );
+	$class   = \Hummingbird\Core\Modules\Performance::get_impact_class( $audit->score * 100 );
+	$this->admin_notices->show_inline( $message, $class );
+}
+?>
 
 <h4><?php esc_html_e( 'Recommendations', 'wphb' ); ?></h4>
 <p><?php esc_html_e( 'To improve First Contentful Paint, speed up how quickly resources load by minimizing render blocking resources. Follow the Hummingbird tips below:', 'wphb' ); ?></p>

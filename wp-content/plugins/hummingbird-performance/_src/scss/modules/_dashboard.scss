@@ -55,6 +55,16 @@
     @include icon(before, 'graph-bar');
 }
 
+.wpmud .wrap-wphb .box-dashboard-welcome.sui-summary:not(.sui-rebranded):not(.sui-unbranded):not(.sui-summary-sm) {
+    @if variable-exists(summary-image) {
+        @include background-2x( "#{$image--path}/hb-graphic-dash-top", 'png', 192px, 182px, 30px 100% );
+    }
+
+    @include media(max-width, md) {
+        background-image: unset;
+    }
+}
+
 /* Dashboard background images */
 .wpmud .box-dashboard-welcome.sui-summary .sui-button-green {
     border-radius: 20px;
@@ -102,7 +112,10 @@
     .sui-box-footer { border-top: 0 !important; }
 
     .wphb-metrics-widget,
-    .wphb-historic-widget { padding-bottom: 0 !important; }
+    .wphb-historic-widget {
+        padding-bottom: 0 !important;
+        .sui-notice { margin: 20px 0; }
+    }
     .wphb-audits-widget { padding-bottom: 20px !important; }
 }
 
@@ -143,11 +156,6 @@
 
 .wpmud .box-dashboard-minification-module .wphb-pills {
     font-weight: bold;
-}
-
-/* Browser caching */
-.wpmud .box-dashboard-browser-caching-module .sui-box-body.sui-upsell-items .sui-box-settings-row.cf-dash-notice {
-    margin-top: 30px ;
 }
 
 /* Gzip compression */
@@ -275,5 +283,28 @@
             margin-left: 10px;
             & > i:before { color: #AAAAAA; }
         }
+    }
+}
+
+/**
+ * Upgrade modal.
+ *
+ * @since 2.6.0
+ */
+.wpmud #upgrade-summary-modal {
+    .wphb-upgrade-item {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 0;
+        display: list-item;
+        list-style-type: disc;
+        list-style-position: inside;
+    }
+
+    .wphb-upgrade-item-desc {
+        font-size: 13px;
+        line-height: 22px;
+        margin-top: 0;
+        color: #888;
     }
 }

@@ -12,7 +12,8 @@ require( './modules/admin-cloudflare.js' );
 require( './modules/admin-advanced.js' );
 require( './modules/admin-settings.js' );
 
-jQuery( document ).ready( function() {
+jQuery( document ).ready( function () {
 	window.WPHB_Admin.init();
+	window.WPHB_Admin.notices.init();
 	window.WPHB_Admin.Tracking.init();
 } );

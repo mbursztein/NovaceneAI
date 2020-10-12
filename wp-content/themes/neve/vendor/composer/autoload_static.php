@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfbe2463674d9ac552744850c4bcb036e
+class ComposerStaticInit4e2dbaa6cc44ac33247e4341068b3f80
 {
     public static $files = array (
         'c730ac5ba4946398dd12db7e8d42d1c8' => __DIR__ . '/..' . '/codeinwp/themeisle-sdk/load.php',
@@ -55,6 +55,7 @@ class ComposerStaticInitfbe2463674d9ac552744850c4bcb036e
         'HFG\\Core\\Components\\SecondNav' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/SecondNav.php',
         'HFG\\Core\\Css_Generator' => __DIR__ . '/../..' . '/header-footer-grid/Core/Css_Generator.php',
         'HFG\\Core\\Customizer' => __DIR__ . '/../..' . '/header-footer-grid/Core/Customizer.php',
+        'HFG\\Core\\Customizer\\Instructions_Control' => __DIR__ . '/../..' . '/header-footer-grid/Core/Customizer/Instructions_Control.php',
         'HFG\\Core\\Customizer\\Instructions_Section' => __DIR__ . '/../..' . '/header-footer-grid/Core/Customizer/Instructions_Section.php',
         'HFG\\Core\\Interfaces\\Builder' => __DIR__ . '/../..' . '/header-footer-grid/Core/Interfaces/Builder.php',
         'HFG\\Core\\Interfaces\\Component' => __DIR__ . '/../..' . '/header-footer-grid/Core/Interfaces/Component.php',
@@ -72,9 +73,9 @@ class ComposerStaticInitfbe2463674d9ac552744850c4bcb036e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfbe2463674d9ac552744850c4bcb036e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfbe2463674d9ac552744850c4bcb036e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfbe2463674d9ac552744850c4bcb036e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4e2dbaa6cc44ac33247e4341068b3f80::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4e2dbaa6cc44ac33247e4341068b3f80::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4e2dbaa6cc44ac33247e4341068b3f80::$classMap;
 
         }, null, ClassLoader::class);
     }

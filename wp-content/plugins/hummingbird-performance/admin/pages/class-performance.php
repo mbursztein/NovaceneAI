@@ -74,7 +74,7 @@ class Performance extends Page {
 	 */
 	public function render_header() {
 		if ( filter_input( INPUT_GET, 'report-dismissed' ) ) {
-			$this->admin_notices->show( 'updated', __( 'You have successfully ignored this performance test.', 'wphb' ), 'success' );
+			$this->admin_notices->show_floating( __( 'You have successfully ignored this performance test.', 'wphb' ) );
 		}
 
 		add_action( 'wphb_sui_header_sui_actions_right', array( $this, 'add_header_actions' ) );

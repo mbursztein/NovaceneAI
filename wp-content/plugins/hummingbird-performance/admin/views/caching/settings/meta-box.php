@@ -42,15 +42,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="sui-box-settings-col-2">
 		<div class="sui-form-field" role="radiogroup">
-			<label for="manual" class="sui-radio">
-				<input type="radio" name="detection" id="manual" value="manual" aria-labelledby="manual-label" <?php checked( $detection, 'manual' ); ?>>
-				<span aria-hidden="true"></span>
-				<span id="manual-label"><?php esc_html_e( 'Manual Notice', 'wphb' ); ?></span>
-			</label>
-			<span class="sui-description sui-radio-description">
-				<?php esc_html_e( 'Get a global notice inside your WordPress Admin area anytime your cache needs clearing.', 'wphb' ); ?>
-			</span>
-
 			<label for="automatic" class="sui-radio">
 				<input type="radio" name="detection" id="automatic" value="auto" aria-labelledby="automatic-label" <?php checked( $detection, 'auto' ); ?>>
 				<span aria-hidden="true"></span>
@@ -58,6 +49,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 			<span class="sui-description sui-radio-description">
 				<?php esc_html_e( 'Set Hummingbird to automatically clear your cache instead of prompting you to do it manually.', 'wphb' ); ?>
+			</span>
+
+			<label for="manual" class="sui-radio">
+				<input type="radio" name="detection" id="manual" value="manual" aria-labelledby="manual-label" <?php checked( $detection, 'manual' ); ?>>
+				<span aria-hidden="true"></span>
+				<span id="manual-label"><?php esc_html_e( 'Manual Notice', 'wphb' ); ?></span>
+			</label>
+			<span class="sui-description sui-radio-description">
+				<?php esc_html_e( 'Get a global notice inside your WordPress Admin area anytime your cache needs clearing.', 'wphb' ); ?>
 			</span>
 
 			<label for="none" class="sui-radio">

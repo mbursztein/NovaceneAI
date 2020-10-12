@@ -20,23 +20,32 @@ function Fetcher() {
 
 	/**
 	 * Request ajax with a promise.
+	 * Use FormData Object as data if you need to upload file
 	 *
 	 * @param {string} action
-	 * @param {Object} data
+	 * @param {Object} or {FormData Object} data
 	 * @param {string} method
 	 * @return {Promise<any>} Request results.
 	 */
 	function request( action, data = {}, method = 'GET' ) {
-		data.nonce = fetchNonce;
-		data.action = action;
-		const args = { data, method };
-		args.url = fetchUrl;
+		const args = {
+			url 	: fetchUrl,
+			method 	: method,
+			cache 	: false
+		};
+		if( data instanceof FormData ) {
+			data.append( 'nonce', fetchNonce );
+			data.append( 'action', action );
+			args.contentType = false;
+			args.processData = false;
+		} else {
+			data.nonce 	= fetchNonce;
+			data.action = action;
+		}
+		args.data = data;
 		const Promise = require( 'es6-promise' ).Promise;
 		return new Promise( ( resolve, reject ) => {
-			jQuery
-				.ajax( args )
-				.done( resolve )
-				.fail( reject );
+			jQuery.ajax( args ).done( resolve ).fail( reject );
 		} ).then( ( response ) => checkStatus( response ) );
 	}
 
@@ -230,11 +239,13 @@ function Fetcher() {
 			/**
 			 * Toggle minification advanced mode.
 			 *
-			 * @param {string} value
+			 * @param {string}  value
+			 * @param {boolean} clear
+			 * @param {boolean} hide
 			 */
-			toggleView: ( value ) => {
+			toggleView: ( value, clear, hide ) => {
 				const action = actionPrefix + 'minification_toggle_view';
-				return request( action, { value }, 'POST' );
+				return request( action, { value, clear, hide }, 'POST' );
 			},
 
 			/**
@@ -336,6 +347,21 @@ function Fetcher() {
 				const action = actionPrefix + 'minification_save_exclude_list';
 				return request( action, { data }, 'POST' );
 			},
+
+			/**
+			 * Save auto asset optimization settings.
+			 *
+			 * @since 2.6.0
+			 *
+			 * @param {Object} settings
+			 */
+			saveSettings: ( settings ) => {
+				return request(
+					actionPrefix + 'minification_save_settings',
+					{ settings },
+					'POST'
+				);
+			},
 		},
 
 		/**
@@ -404,6 +430,30 @@ function Fetcher() {
 					}
 				);
 			},
+
+			/**
+			 * Upload settings import file from HB admin settings.
+			 *
+			 * @param {FormData Object} form_data
+			 */
+			importSettings: ( form_data ) => {
+				const action = actionPrefix + 'admin_settings_import_settings';
+				return request( action, form_data, 'POST' ).then(
+					( response ) => {
+						return response;
+					}
+				);
+			},
+
+			/**
+			 * Export settings from HB admin settings.
+			 */
+			exprotSettings: () => {
+				const action = actionPrefix + 'admin_settings_export_settings';
+				const url = fetchUrl + '?action=' + action + '&nonce=' + fetchNonce;
+			 	window.location = url;
+			}
+
 		},
 
 		/**

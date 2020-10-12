@@ -46,3 +46,21 @@ button.notice-dismiss {
         visibility: visible;
     }
 }
+
+.wpmud .sui-notice .sui-notice-message {
+    ul li {
+        color: #333;
+        font-size: 13px;
+        line-height: 22px;
+    }
+}
+
+.wpmud .sui-wrap .sui-summary.sui-rebranded {
+    background-image: none !important;
+}
+
+/* Multiselect SUI placeholder width */
+.wpmud .sui-wrap select.sui-select+.select2-container .select2-selection--multiple .select2-selection__rendered .select2-search--inline {
+    min-width: 250px;
+    width: auto;
+}

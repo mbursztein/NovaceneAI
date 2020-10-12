@@ -231,14 +231,20 @@ abstract class Page {
 	 * @param string $hook  Hook from where the call is made.
 	 */
 	public function enqueue_scripts( $hook ) {
+		global $wp_version;
+
 		// Styles.
 		wp_enqueue_style( 'wphb-admin', WPHB_DIR_URL . 'admin/assets/css/wphb-app.min.css', array(), WPHB_VERSION );
+
+		if ( version_compare( $wp_version, '5.2', '<' ) ) {
+			wp_enqueue_script( 'clipboard', WPHB_DIR_URL . 'admin/assets/js/wphb-clipboard.min.js', array(), WPHB_VERSION, true );
+		}
 
 		// Scripts.
 		wp_enqueue_script(
 			'wphb-wpmudev-sui',
 			WPHB_DIR_URL . 'admin/assets/js/wphb-sui.min.js',
-			array( 'jquery' ),
+			array( 'jquery', 'clipboard' ),
 			WPHB_VERSION,
 			true
 		);
@@ -253,6 +259,17 @@ abstract class Page {
 		// Enqueue Color picker.
 		if ( sanitize_title( __( 'Hummingbird Pro', 'wphb' ) ) . '_page_wphb-advanced' === $hook || 'lazy' === $this->get_current_tab() ) {
 			wp_enqueue_script( 'wp-color-picker-alpha', WPHB_DIR_URL . 'admin/assets/dist/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), WPHB_VERSION, true );
+
+			$l10n = array(
+				'clear'            => __( 'Clear', 'wphb' ),
+				'clearAriaLabel'   => __( 'Clear color', 'wphb' ),
+				'defaultString'    => __( 'Default', 'wphb' ),
+				'defaultAriaLabel' => __( 'Select default color', 'wphb' ),
+				'pick'             => __( 'Select Color', 'wphb' ),
+				'defaultLabel'     => __( 'Color value', 'wphb' ),
+			);
+			wp_localize_script( 'wp-color-picker-alpha', 'wpColorPickerL10n', $l10n );
+
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 	}
@@ -264,8 +281,6 @@ abstract class Page {
 
 	/**
 	 * Add meta box.
-	 *
-	 * @deprecated 2.5.0  Use MetaBox trait instead.
 	 *
 	 * @param string   $id               Meta box ID.
 	 * @param string   $title            Meta box title.
@@ -359,9 +374,6 @@ abstract class Page {
 	 */
 	protected function render_header() {
 		?>
-		<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-ajax-update-notice">
-			<p><?php esc_html_e( 'Settings Updated', 'wphb' ); ?></p>
-		</div>
 		<div class="sui-header">
 			<h1 class="sui-header-title"><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<div class="sui-actions-right">
@@ -374,6 +386,11 @@ abstract class Page {
 				<?php endif; ?>
 			</div>
 		</div>
+
+		<div class="sui-floating-notices">
+			<div role="alert" id="wphb-ajax-update-notice" class="sui-notice" aria-live="assertive"></div>
+			<?php do_action( 'wphb_sui_floating_notices' ); ?>
+		</div>
 		<?php
 	}
 
@@ -384,29 +401,16 @@ abstract class Page {
 		$settings = Settings::get_settings( 'settings' );
 		?>
 		<div class="sui-wrap<?php echo $settings['accessible_colors'] ? ' sui-color-accessible ' : ' '; ?>wrap-wp-hummingbird wrap-wp-hummingbird-page <?php echo 'wrap-' . esc_attr( $this->slug ); ?>">
-			<div class="sui-notice-top sui-notice-success sui-hidden" id="wphb-ajax-update-notice">
-				<p><?php esc_html_e( 'Settings updated', 'wphb' ); ?></p>
-			</div>
 			<?php
 			if ( filter_input( INPUT_GET, 'updated', FILTER_SANITIZE_STRING ) ) {
-				$this->admin_notices->show( 'updated', apply_filters( 'wphb_update_notice_text', __( 'Your changes have been saved.', 'wphb' ) ), 'success' );
+				$this->admin_notices->show_floating( apply_filters( 'wphb_update_notice_text', __( 'Your changes have been saved.', 'wphb' ) ) );
 			}
 
 			$this->render_header();
 			$this->render_inner_content();
 			$this->render_footer();
-
-			if ( WP_Hummingbird::get_instance()->admin->show_quick_setup ) :
-				$this->modal( 'tracking' );
-				$this->modal( 'check-performance-onboard' );
-				?>
-				<script>
-					window.addEventListener("load", function(){
-						window.WPHB_Admin.getModule( 'dashboard' );
-						window.SUI.openModal( 'tracking-modal', 'wpbody-content', undefined, false );
-					});
-				</script>
-			<?php endif; ?>
+			$this->render_modals();
+			?>
 		</div><!-- end container -->
 		<?php
 	}
@@ -489,6 +493,40 @@ abstract class Page {
 					</a></li>
 			</ul>
 		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Render modals.
+	 *
+	 * @since 2.6.0
+	 */
+	protected function render_modals() {
+		$show = false;
+
+		if ( WP_Hummingbird::get_instance()->admin->show_quick_setup ) {
+			$show  = true;
+			$modal = 'tracking-modal';
+			$this->modal( 'tracking' );
+			$this->modal( 'check-performance-onboard' );
+		} elseif ( WP_Hummingbird::get_instance()->admin->show_upgrade_summary ) {
+			$show  = true;
+			$modal = 'upgrade-summary-modal';
+			$this->modal( 'upgrade-summary' );
+		}
+
+		if ( ! $show ) {
+			return;
+		}
+		?>
+		<script>
+			window.addEventListener("load", function(){
+				<?php if ( WP_Hummingbird::get_instance()->admin->show_quick_setup ) : ?>
+					window.WPHB_Admin.getModule( 'dashboard' );
+				<?php endif; ?>
+				window.SUI.openModal( '<?php echo esc_attr( $modal ); ?>', 'wpbody-content', undefined, false );
+			});
+		</script>
 		<?php
 	}
 

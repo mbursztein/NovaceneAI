@@ -563,9 +563,9 @@ class Image{
                         $img_arr = (array)$attr['imageUpload'];
                         if( !empty($img_arr) ){
                             if(  ($attr['linkType'] == 'link') && $attr['imgLink'] ){
-                                $wraper_before .= '<a href="'.$attr['imgLink'].'" target="'.$attr['linkTarget'].'"><img class="ultp-image" src="'.$img_arr['url'].'" alt="'.$attr['imgAlt'].'" /></a>';
+                                $wraper_before .= '<a href="'.$attr['imgLink'].'" target="'.$attr['linkTarget'].'">'.ultimate_post()->get_image_html($img_arr['url'], 'full', 'ultp-image', $attr['imgAlt']).'</a>';
                             } else {
-                            $wraper_before .= '<img class="ultp-image" src="'.$img_arr['url'].'" alt="'.$attr['imgAlt'].'" />';
+                                $wraper_before .= ultimate_post()->get_image_html($img_arr['url'], 'full', 'ultp-image', $attr['imgAlt']);
                             }
                         }
                         if( $attr['btnLink'] && ($attr['linkType'] == 'button') ){

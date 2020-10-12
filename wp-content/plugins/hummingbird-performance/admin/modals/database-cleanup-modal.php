@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<button class="sui-button sui-button-ghost" data-modal-close="">
 					<?php esc_html_e( 'Cancel', 'wphb' ); ?>
 				</button>
-				<button class="sui-button sui-button-ghost sui-button-red" onclick="WPHB_Admin.advanced.confirmDelete( jQuery(this).attr('data-type') )">
+				<button class="sui-button sui-button-ghost sui-button-red" onclick="WPHB_Admin.advanced.confirmDelete( jQuery(this).attr('data-type') )" type="button">
 					<i class="sui-icon-trash" aria-hidden="true"></i>
 					<?php esc_html_e( 'Delete entries', 'wphb' ); ?>
 				</button>

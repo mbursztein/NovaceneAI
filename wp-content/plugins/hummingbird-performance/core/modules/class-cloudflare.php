@@ -9,6 +9,7 @@ namespace Hummingbird\Core\Modules;
 
 use Hummingbird\Core\Module;
 use Hummingbird\Core\Settings;
+use Hummingbird\Core\Traits\Module as ModuleContract;
 use Hummingbird\Core\Utils;
 use WP_Error;
 
@@ -20,6 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Cloudflare
  */
 class Cloudflare extends Module {
+
+	use ModuleContract;
 
 	/**
 	 * Module slug name
@@ -34,11 +37,6 @@ class Cloudflare extends Module {
 	 * @var string
 	 */
 	protected $name = 'Cloudflare';
-
-	/**
-	 * Execute the module actions. Executed when module is active.
-	 */
-	public function run() {}
 
 	/**
 	 * Initializes Cloudflare module

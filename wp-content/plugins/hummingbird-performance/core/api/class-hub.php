@@ -606,7 +606,7 @@ class Hub {
 	 * @return void|WP_Error
 	 */
 	public function action_purge_all_cache( $params, $action ) {
-		WP_Hummingbird::flush_cache( false, false, false );
+		WP_Hummingbird::flush_cache( false, false );
 		wp_send_json_success();
 	}
 

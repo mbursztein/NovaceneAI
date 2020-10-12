@@ -19,31 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><?php esc_html_e( "First Meaningful Paint (FMP) identifies the time required for the primary content — the content you want your visitors to engage with first — to become visible. The sooner the primary content is visible, the sooner your visitors perceive your page as useful. Primary content differs from page to page. For example, on Twitter, the primary content is the first tweet, while on a news site it's likely the title and featured image.", 'wphb' ); ?></p>
 
 <h4><?php esc_html_e( 'Status', 'wphb' ); ?></h4>
-<?php if ( isset( $audit->errorMessage ) && ! isset( $audit->score ) ) : ?>
-	<div class="sui-notice sui-notice-error">
-		<p>
-			<?php
-			printf(
-				/* translators: %s - error message */
-				esc_html__( 'Error: %s', 'wphb' ),
-				esc_html( $audit->errorMessage )
-			);
-			?>
-		</p>
-	</div>
-<?php else : ?>
-	<div class="sui-notice sui-notice-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $audit->score * 100 ) ); ?>">
-		<p>
-			<?php
-			printf(
-				/* translators: %s - number of seconds */
-				esc_html__( 'FMP time for your website is %s.', 'wphb' ),
-				esc_html( $audit->displayValue )
-			);
-			?>
-		</p>
-	</div>
-<?php endif; ?>
+<?php if ( isset( $audit->errorMessage ) && ! isset( $audit->score ) ) {
+	/* translators: %s - error message */
+	$message = sprintf( esc_html__( 'Error: %s', 'wphb' ), esc_html( $audit->errorMessage ) );
+	$this->admin_notices->show_inline( $message, 'error' );
+} else {
+	/* translators: %s - number of seconds */
+	$message = sprintf( esc_html__( 'FMP time for your website is %s.', 'wphb' ), esc_html( $audit->displayValue ) );
+	$class   = \Hummingbird\Core\Modules\Performance::get_impact_class( $audit->score * 100 );
+	$this->admin_notices->show_inline( $message, $class );
+}
+?>
 
 <h4><?php esc_html_e( 'Recommendations', 'wphb' ); ?></h4>
 <p><?php esc_html_e( 'Identify the most critical UI elements on a page, and ensure the initial load contains just the code needed to render those elements. The following can help you improve the FCP:', 'wphb' ); ?></p>

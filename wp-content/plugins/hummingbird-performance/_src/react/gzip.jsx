@@ -119,7 +119,7 @@ GzipPage.propTypes = {
 	wphbData: PropTypes.object,
 };
 
-document.addEventListener( 'DOMContentLoaded', function() {
+document.addEventListener( 'DOMContentLoaded', function () {
 	const gzipPageDiv = document.getElementById( 'wrap-wphb-gzip' );
 	if ( gzipPageDiv ) {
 		ReactDOM.render(

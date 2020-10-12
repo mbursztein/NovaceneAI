@@ -8,32 +8,37 @@ add_action( 'rest_api_init', 'ultp_register_route' );
 function ultp_register_route() {
     register_rest_route( 'ultp', 'posts', array(
             'methods' => WP_REST_Server::READABLE,
-            'args' => array('post_type', 'taxonomy', 'include', 'exclude', 'order', 'orderby', 'count', 'size', 'tag', 'cat', 'meta_key', 'wpnonce'),
+            'args' => array('post_type', 'taxonomy', 'include', 'exclude', 'order', 'orderby', 'count', 'size', 'tag', 'cat', 'meta_key', 'queryQuick', 'wpnonce'),
             'callback' => 'ultp_route_post_data',
+            'permission_callback' => '__return_true'
         )
     );
     register_rest_route( 'ultp', 'taxonomy', array(
             'methods' => WP_REST_Server::READABLE,
             'args' => array('taxonomy', 'wpnonce'),
             'callback' => 'ultp_route_taxonomy_data',
+            'permission_callback' => '__return_true'
         )
     );
     register_rest_route( 'ultp', 'imagesize', array(
             'methods' => WP_REST_Server::READABLE,
             'args' => array('taxonomy', 'wpnonce'),
             'callback' => 'ultp_route_imagesize_data',
+            'permission_callback' => '__return_true'
         )
     );
     register_rest_route( 'ultp', 'posttype', array(
             'methods' => WP_REST_Server::READABLE,
             'args' => array('wpnonce'),
             'callback' => 'ultp_route_posttype_data',
+            'permission_callback' => '__return_true'
         )
     );
     register_rest_route( 'ultp', 'tax_info', array(
             'methods' => WP_REST_Server::READABLE,
             'args' => array('taxonomy', 'wpnonce'),
             'callback' => 'ultp_route_taxonomy_info_data',
+            'permission_callback' => '__return_true'
         )
     );
 }
@@ -85,7 +90,6 @@ function ultp_route_post_data($prams,$local=false) {
         }
     }
 
-    if(isset($prams['include'])){ $args['post__in'] = explode('__', esc_attr($prams['include'])); }
     if(isset($prams['exclude'])){ $args['post__not_in'] = explode('__', esc_attr($prams['exclude'])); }
     if(isset($prams['orderby'])){ $args['orderby'] = esc_attr($prams['orderby']); }
     if(isset($prams['order'])){ $args['order'] = esc_attr($prams['order']); }
@@ -95,7 +99,22 @@ function ultp_route_post_data($prams,$local=false) {
     if(isset($prams['orderby']) && isset($prams['meta_key'])){
         if($prams['orderby'] == 'meta_value_num') {
             $args['meta_key'] = $prams['meta_key'];
+            $args['meta_type'] = 'NUMERIC';
         }
+    }
+
+    if(isset($prams['queryQuick'])){
+        if($prams['queryQuick'] != ''){
+            if(function_exists('ultimate_post_pro')){
+                $args = ultimate_post_pro()->get_quick_query($prams, $args);
+            }
+        }
+    }
+
+    if(isset($prams['include'])){ 
+        $args['post__in'] = explode('__', esc_attr($prams['include'])); 
+        $args['ignore_sticky_posts'] = 1;
+        $args['orderby'] = 'post__in';
     }
     
     $data = [];
@@ -107,9 +126,11 @@ function ultp_route_post_data($prams,$local=false) {
             $var                = array();
             $post_id            = get_the_ID();
             $user_id            = get_the_author_meta('ID');
+            $content_data       = get_the_content();
+            $var['ID']          = $post_id;
             $var['title']       = get_the_title();
             $var['permalink']   = get_permalink();
-            $var['excerpt']     = strip_tags(get_the_content());
+            $var['excerpt']     = strip_tags($content_data);
             $var['excerpt_full']= strip_tags(get_the_excerpt());
             $var['time']        = get_the_date();
             $var['post_time']   = human_time_diff(get_the_time('U'),current_time('U'));
@@ -118,7 +139,7 @@ function ultp_route_post_data($prams,$local=false) {
             $var['author_link'] = get_author_posts_url($user_id);
             $var['avatar_url']  = get_avatar_url($user_id);
             $var['display_name']= get_the_author_meta('display_name');
-            $var['reading_time']= ceil(strlen(get_the_content())/1200).__(' min read', 'ultimate-post');
+            $var['reading_time']= ceil(strlen($content_data)/1200).__(' min read', 'ultimate-post');
             
             // image
             if( has_post_thumbnail() ){
@@ -146,7 +167,7 @@ function ultp_route_post_data($prams,$local=false) {
             if(!empty($cat)){
                 $v = array();
                 foreach ($cat as $val) {
-                    $v[] = array('slug' => $val->slug, 'name' => $val->name, 'url' => get_term_link($val->term_id));
+                    $v[] = array('slug' => $val->slug, 'name' => $val->name, 'url' => get_term_link($val->term_id), 'color' => get_term_meta($val->term_id, 'ultp_category_color', true));
                 }
                 $var['category'] = $v;
             }

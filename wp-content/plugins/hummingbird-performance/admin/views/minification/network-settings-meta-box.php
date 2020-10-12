@@ -30,15 +30,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="sui-box-settings-col-2">
 		<form id="ao-network-settings-form">
-			<label class="sui-toggle">
-				<input type="checkbox" name="network" id="wphb-network-ao" <?php checked( $enabled ); ?>>
-				<span class="sui-toggle-slider"></span>
-			</label>
-			<label for="toggle-with-label">
-				<?php esc_html_e( 'Enable Asset Optimization module for your subsites', 'wphb' ); ?>
-			</label>
+			<div class="sui-form-field">
+				<label for="wphb-network-ao" class="sui-toggle">
+					<input type="checkbox" name="network" id="wphb-network-ao" aria-labelledby="wphb-network-label" <?php checked( $enabled ); ?>>
+					<span class="sui-toggle-slider" aria-hidden="true"></span>
+					<span id="wphb-network-label" class="sui-toggle-label">
+						<?php esc_html_e( 'Enable Asset Optimization module for your subsites', 'wphb' ); ?>
+					</span>
+				</label>
+			</div>
 
-			<div class="sui-border-frame <?php echo $enabled ? '' : 'sui-hidden'; ?>">
+			<div class="sui-border-frame <?php echo $enabled ? '' : 'sui-hidden'; ?>" id="wphb-network-border-frame">
 				<div>
 					<span class="sui-settings-label"><?php esc_html_e( 'Minimum user role', 'wphb' ); ?></span>
 					<span class="sui-description">
@@ -102,9 +104,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="sui-border-frame wphb-logs-frame <?php echo ! $log_enabled ? 'sui-hidden' : ''; ?>">
-						<div class="sui-notice sui-notice-info">
-							<p><?php esc_html_e( "Debug logging is active. Logs are stored for 30 days. You can download each subsite's log file via their Asset Optimization / Settings tabs.", 'wphb' ); ?></p>
-						</div>
+						<?php
+						$this->admin_notices->show_inline(
+							esc_html__( "Debug logging is active. Logs are stored for 30 days. You can download each subsite's log file via their Asset Optimization / Settings tabs.", 'wphb' ),
+							'info'
+						);
+						?>
 					</div>
 				</div>
 
@@ -114,18 +119,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 							src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-upsell-minify.png' ); ?>"
 							srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hummingbird-upsell-minify@2x.png' ); ?> 2x"
 							alt="<?php esc_attr_e( 'WP Smush free installed', 'wphb' ); ?>">
-						<div class="sui-upsell-notice">
-							<p>
-								<?php
-								printf(
-									/* translators: %1$s: upsell modal href link, %2$s: closing a tag */
-									esc_html__( 'With our pro version of Hummingbird you can super-compress your files and then host them on our blazing fast CDN. Get CDN as part of a WPMU DEV membership with 24/7 support and lots of handy site management tools. %1$sTry Pro for FREE today!%2$s', 'wphb' ),
-									'<a href="' . esc_html( \Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_test_multisite_cdn_upsell_link' ) ) . '" target="_blank">',
-									'</a>'
-								);
-								?>
-							</p>
-						</div>
+						<?php
+						$this->admin_notices->show_inline(
+							sprintf( /* translators: %1$s: upsell modal href link, %2$s: closing a tag */
+								esc_html__( 'With our pro version of Hummingbird you can super-compress your files and then host them on our blazing fast CDN. Get CDN as part of a WPMU DEV membership with 24/7 support and lots of handy site management tools. %1$sTry Pro for FREE today!%2$s', 'wphb' ),
+								'<a href="' . esc_html( \Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_test_multisite_cdn_upsell_link' ) ) . '" target="_blank">',
+								'</a>'
+							),
+							'sui-upsell-notice'
+						);
+						?>
 					</div>
 				<?php endif; ?>
 			</div><!-- end sui-border-frame -->

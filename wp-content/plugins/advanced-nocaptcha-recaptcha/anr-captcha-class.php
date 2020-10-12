@@ -84,9 +84,13 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 			}
 
 			if ( function_exists( 'wpcf7_add_form_tag' ) ) {
-				$cf7_option = get_option( 'wpcf7' );
-				if ( ! is_array( $cf7_option ) || empty( $cf7_option['recaptcha'] ) ) {
-					remove_filter( 'wpcf7_form_hidden_fields', 'wpcf7_recaptcha_add_hidden_fields', 100, 1 );
+				if( class_exists( 'WPCF7' ) && WPCF7::get_option( 'recaptcha' ) && apply_filters( 'anr_remove_cf7_recaptcha', false ) ) {
+					//remove recaptcha keys from CF7 which will disable CF7 recaptcha
+					WPCF7::update_option( 'recaptcha', null );
+				}
+				if( is_user_logged_in() && anr_get_option( 'loggedin_hide' ) ) {
+					//enable verify nonce otherwie is_user_logged_in() return false when validate recaptcha
+					add_filter( 'wpcf7_verify_nonce', '__return_true' );
 				}
 				wpcf7_add_form_tag( 'anr_nocaptcha', array( $this, 'wpcf7_form_field' ), array( 'name-attr' => true ) );
 				add_filter( 'wpcf7_validate_anr_nocaptcha', array( $this, 'wpcf7_verify' ), 10, 2 );
@@ -110,7 +114,11 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 			if ( false === $mgs ) {
 				$mgs = anr_get_option( 'error_message', '' );
 			}
-			return '<strong>' . __( 'ERROR', 'advanced-nocaptcha-recaptcha' ) . '</strong>: ' . $mgs;
+			if ( ! $mgs ) {
+				$mgs = __( 'Please solve Captcha correctly', 'advanced-nocaptcha-recaptcha' );
+			}
+			$message = '<strong>' . __( 'ERROR', 'advanced-nocaptcha-recaptcha' ) . '</strong>: ' . $mgs;
+			return apply_filters( 'anr_error_message', $message, $mgs );
 		}
 
 		function total_captcha() {
@@ -131,11 +139,11 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 			$field .= '</div></div>';
 
 			if ( 1 == $no_js && 'v2_checkbox' === $version ) {
-				$field .= '<noscript>
+				$field .= sprintf( '<noscript>
 						  <div>
 							<div style="width: 302px; height: 422px; position: relative;">
 							  <div style="width: 302px; height: 422px; position: absolute;">
-								<iframe src="https://www.google.com/recaptcha/api/fallback?k=' . $site_key . '"
+								<iframe src="https://www.%s/recaptcha/api/fallback?k=' . $site_key . '"
 										frameborder="0" scrolling="no"
 										style="width: 302px; height:422px; border-style: none;">
 								</iframe>
@@ -150,7 +158,7 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 												  margin: 10px 25px; padding: 0px; resize: none;" ></textarea>
 							</div>
 						  </div>
-						</noscript>';
+						</noscript>', anr_recaptcha_domain() );
 			}
 
 			return $field;
@@ -219,7 +227,7 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 			if ( $language ) {
 				$lang = '&hl=' . $language;
 			}
-			$google_url = apply_filters( 'anr_v2_checkbox_script_api_src', 'https://www.google.com/recaptcha/api.js?onload=anr_onloadCallback&render=explicit' . $lang, $lang );
+			$google_url = apply_filters( 'anr_v2_checkbox_script_api_src', sprintf( 'https://www.%s/recaptcha/api.js?onload=anr_onloadCallback&render=explicit' . $lang, anr_recaptcha_domain() ), $lang );
 			?>
 			<script src="<?php echo esc_url( $google_url ); ?>"
 				async defer>
@@ -281,7 +289,7 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 			if ( $language ) {
 				$lang = '&hl=' . $language;
 			}
-			$google_url = apply_filters( 'anr_v2_invisible_script_api_src', 'https://www.google.com/recaptcha/api.js?onload=anr_onloadCallback&render=explicit' . $lang, $lang );
+			$google_url = apply_filters( 'anr_v2_invisible_script_api_src', sprintf( 'https://www.%s/recaptcha/api.js?onload=anr_onloadCallback&render=explicit' . $lang, anr_recaptcha_domain() ), $lang );
 			?>
 			<script src="<?php echo esc_url( $google_url ); ?>"
 				async defer>
@@ -301,7 +309,7 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 				$lang = '&hl=' . $language;
 			}
 
-			$google_url = apply_filters( 'anr_v3_script_api_src', 'https://www.google.com/recaptcha/api.js?render=' . $site_key . $lang, $site_key, $lang );
+			$google_url = apply_filters( 'anr_v3_script_api_src', sprintf( 'https://www.%s/recaptcha/api.js?render=' . $site_key . $lang, anr_recaptcha_domain() ), $site_key, $lang );
 			?>
 			<script src="<?php echo esc_url( $google_url ); ?>"></script>
 			<script type="text/javascript">
@@ -464,7 +472,7 @@ if ( ! class_exists( 'anr_captcha_class' ) ) {
 				return $last_verify;
 			}
 
-			$url = apply_filters( 'anr_google_verify_url', 'https://www.google.com/recaptcha/api/siteverify' );
+			$url = apply_filters( 'anr_google_verify_url', sprintf( 'https://www.%s/recaptcha/api/siteverify', anr_recaptcha_domain() ) );
 
 			// make a POST request to the Google reCAPTCHA Server
 			$request = wp_remote_post(

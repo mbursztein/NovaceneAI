@@ -9,6 +9,7 @@ namespace Hummingbird\Core\Modules;
 
 use Hummingbird\Core\Module;
 use Hummingbird\Core\Settings;
+use Hummingbird\Core\Traits\Module as ModuleContract;
 use Hummingbird\Core\Utils;
 use WP_Error;
 
@@ -21,6 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Performance extends Module {
 
+	use ModuleContract;
+
 	/**
 	 * Initializes the module. Always executed even if the module is deactivated.
 	 *
@@ -29,11 +32,6 @@ class Performance extends Module {
 	public function init() {
 		add_action( 'wphb_init_performance_scan', array( $this, 'on_init_performance_scan' ) );
 	}
-
-	/**
-	 * Execute the module actions. It must be defined in subclasses.
-	 */
-	public function run() {}
 
 	/**
 	 * Implement abstract parent method for clearing cache.

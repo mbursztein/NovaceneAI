@@ -6,7 +6,7 @@
  */
 import Fetcher from '../utils/fetcher';
 
-( function( $ ) {
+( function ( $ ) {
 	'use strict';
 
 	WPHB_Admin.advanced = {
@@ -22,7 +22,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 			$( '#wphb-db-delete-all, .wphb-db-row-delete' ).on(
 				'click',
-				function( e ) {
+				function ( e ) {
 					e.preventDefault();
 					self.showModal(
 						e.target.dataset.entries,
@@ -36,7 +36,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 			$(
 				'form[id="advanced-db-settings"], form[id="advanced-general-settings"], form[id="advanced-lazy-settings"]'
-			).on( 'submit', function( e ) {
+			).on( 'submit', function ( e ) {
 				e.preventDefault();
 
 				const button = $( this ).find( '.sui-button-blue' );
@@ -46,6 +46,7 @@ import Fetcher from '../utils/fetcher';
 					.saveSettings( $( this ).serialize(), e.target.id )
 					.then( ( response ) => {
 						button.removeClass( 'sui-button-onload-text' );
+
 						if (
 							'undefined' !== typeof response &&
 							response.success
@@ -56,17 +57,11 @@ import Fetcher from '../utils/fetcher';
 									'wphb_pro_advanced_db_schedule'
 								);
 							}
-							WPHB_Admin.notices.show(
-								'wphb-ajax-update-notice',
-								true,
-								'success'
-							);
+							WPHB_Admin.notices.show();
 						} else {
 							WPHB_Admin.notices.show(
-								'wphb-ajax-update-notice',
-								true,
-								'error',
-								wphb.strings.errorSettingsUpdate
+								wphb.strings.errorSettingsUpdate,
+								'error'
 							);
 						}
 					} );
@@ -75,7 +70,7 @@ import Fetcher from '../utils/fetcher';
 			/**
 			 * Show/hide schedule for database cleanup.
 			 */
-			$( 'input[id="scheduled_cleanup"]' ).on( 'change', function() {
+			$( 'input[id="scheduled_cleanup"]' ).on( 'change', function () {
 				$( '.schedule-box' ).toggle();
 			} );
 
@@ -93,7 +88,7 @@ import Fetcher from '../utils/fetcher';
 			/**
 			 * Show/hide system information tables on dropdown change.
 			 */
-			systemInfoDropdown.change( function( e ) {
+			systemInfoDropdown.change( function ( e ) {
 				e.preventDefault();
 				$( '.wphb-sys-info-table' ).addClass( 'sui-hidden' );
 				$( '#wphb-system-info-' + $( this ).val() ).removeClass(
@@ -107,7 +102,7 @@ import Fetcher from '../utils/fetcher';
 			 *
 			 * @since 1.9.0
 			 */
-			$( '#wphb-adv-paste-value' ).on( 'click', function( e ) {
+			$( '#wphb-adv-paste-value' ).on( 'click', function ( e ) {
 				e.preventDefault();
 				const urlStrings = $( 'textarea[name="url_strings"]' );
 				if ( '' === urlStrings.val() ) {
@@ -128,7 +123,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 			const fragmentsToggle = document.getElementById( 'cart_fragments' );
 			if ( fragmentsToggle ) {
-				fragmentsToggle.addEventListener( 'change', function( e ) {
+				fragmentsToggle.addEventListener( 'change', function ( e ) {
 					e.preventDefault();
 					$( '#cart_fragments_desc' ).toggle();
 				} );
@@ -141,7 +136,7 @@ import Fetcher from '../utils/fetcher';
 			const marginLeft = document.getElementById( 'button_margin_l' );
 			const marginRight = document.getElementById( 'button_margin_r' );
 			for ( let i = 0; i < alignOptions.length; i++ ) {
-				alignOptions[ i ].addEventListener( 'change', function() {
+				alignOptions[ i ].addEventListener( 'change', function () {
 					if (
 						'center' === alignOptions[ i ].value &&
 						alignOptions[ i ].checked
@@ -161,11 +156,12 @@ import Fetcher from '../utils/fetcher';
 			 * Show/Hide Lazy comments load options
 			 *
 			 */
-			$( 'input[id="lazy_load"]' ).on( 'change', function() {
+			$( 'input[id="lazy_load"]' ).on( 'change', function () {
 				$(
 					'#wphb-lazy-load-comments-wrap, #sui-upsell-gravtar-caching'
 				).toggle();
 			} );
+
 			/**
 			 * Initialize color picker on lazy load
 			 */
@@ -230,12 +226,6 @@ import Fetcher from '../utils/fetcher';
 			Fetcher.advanced
 				.deleteSelectedData( type )
 				.then( ( response ) => {
-					WPHB_Admin.notices.show(
-						'wphb-ajax-update-notice',
-						false,
-						'success',
-						response.message
-					);
 					spinner.addClass( 'sui-hidden' );
 					button.removeClass( 'sui-hidden' );
 
@@ -264,17 +254,15 @@ import Fetcher from '../utils/fetcher';
 								.attr( 'data-entries', response.left[ prop ] );
 						}
 					}
+
+					WPHB_Admin.notices.show( response.message );
 				} )
 				.catch( ( error ) => {
-					WPHB_Admin.notices.show(
-						'wphb-ajax-update-notice',
-						false,
-						'error',
-						error
-					);
+					WPHB_Admin.notices.show( error, 'error' );
 					spinner.addClass( 'sui-hidden' );
 				} );
 		},
+
 		createPickers() {
 			const $suiPickerInputs = $( '.sui-colorpicker-input' );
 
@@ -290,7 +278,7 @@ import Fetcher from '../utils/fetcher';
 			} );
 
 			if ( $suiPickerInputs.hasClass( 'wp-color-picker' ) ) {
-				$suiPickerInputs.each( function() {
+				$suiPickerInputs.each( function () {
 					const $suiPickerInput = $( this ),
 						$suiPicker = $suiPickerInput.closest(
 							'.sui-colorpicker-wrap'
@@ -306,7 +294,7 @@ import Fetcher from '../utils/fetcher';
 						),
 						$wpPickerButton = $wpPicker.find( '.wp-color-result' );
 					// Listen to color change
-					$suiPickerInput.bind( 'change', function() {
+					$suiPickerInput.bind( 'change', function () {
 						// Change color preview
 						$suiPickerColor.find( 'span' ).css( {
 							'background-color': $wpPickerButton.css(
@@ -323,7 +311,7 @@ import Fetcher from '../utils/fetcher';
 					// Open iris picker
 					$suiPicker
 						.find( '.sui-button, span[role=button]' )
-						.on( 'click', function( e ) {
+						.on( 'click', function ( e ) {
 							$wpPickerButton.click();
 
 							e.preventDefault();
@@ -333,7 +321,7 @@ import Fetcher from '../utils/fetcher';
 					// Clear color value
 					$suiPickerValue
 						.find( 'button' )
-						.on( 'click', function( e ) {
+						.on( 'click', function ( e ) {
 							$wpPicker.find( '.wp-picker-clear' ).click();
 							$suiPickerValue.find( 'input' ).val( '' );
 							$suiPickerInput.val( '' ).trigger( 'change' );

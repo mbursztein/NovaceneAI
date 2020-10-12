@@ -105,7 +105,8 @@ class Uptime extends Page {
 			null,
 			'summary',
 			array(
-				'box_content_class' => 'sui-box sui-summary',
+				'box_class'         => 'sui-box sui-summary',
+				'box_content_class' => false,
 			)
 		);
 
@@ -417,11 +418,9 @@ class Uptime extends Page {
 		$stats = $this->current_report;
 
 		if ( is_wp_error( $stats ) ) {
-			$error      = $stats->get_error_message();
-			$error_type = 'error';
+			$error = $stats->get_error_message();
 		} elseif ( isset( $_GET['error'] ) ) { // Input var ok.
-			$error      = urldecode( $_GET['message'] ); // Input var ok.
-			$error_type = 'error';
+			$error = urldecode( $_GET['message'] ); // Input var ok.
 		} else {
 			// This is used for testing to create the state where no data exists when uptime is first activated.
 			if ( defined( 'WPHB_UPTIME_REFRESH' ) ) {
@@ -445,10 +444,6 @@ class Uptime extends Page {
 			'support_url'         => Utils::get_link( 'support' ),
 			'downtime_chart_json' => $downtime_chart_json,
 		);
-
-		if ( ! empty( $error_type ) ) {
-			$args['error_type'] = $error_type;
-		}
 
 		$this->view( 'uptime/meta-box', $args );
 	}

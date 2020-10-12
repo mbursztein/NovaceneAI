@@ -28,6 +28,7 @@ return array(
     'HFG\\Core\\Components\\SecondNav' => $baseDir . '/header-footer-grid/Core/Components/SecondNav.php',
     'HFG\\Core\\Css_Generator' => $baseDir . '/header-footer-grid/Core/Css_Generator.php',
     'HFG\\Core\\Customizer' => $baseDir . '/header-footer-grid/Core/Customizer.php',
+    'HFG\\Core\\Customizer\\Instructions_Control' => $baseDir . '/header-footer-grid/Core/Customizer/Instructions_Control.php',
     'HFG\\Core\\Customizer\\Instructions_Section' => $baseDir . '/header-footer-grid/Core/Customizer/Instructions_Section.php',
     'HFG\\Core\\Interfaces\\Builder' => $baseDir . '/header-footer-grid/Core/Interfaces/Builder.php',
     'HFG\\Core\\Interfaces\\Component' => $baseDir . '/header-footer-grid/Core/Interfaces/Component.php',

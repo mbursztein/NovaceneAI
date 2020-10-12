@@ -8,6 +8,7 @@
 namespace Hummingbird\Core\Modules;
 
 use Hummingbird\Core\Module;
+use Hummingbird\Core\Traits\Module as ModuleContract;
 use Hummingbird\Core\Utils;
 use WP_Error;
 
@@ -20,17 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Uptime extends Module {
 
+	use ModuleContract;
+
 	/**
 	 * Initialize module.
 	 */
 	public function init() {
 		add_filter( 'wp_hummingbird_is_active_module_uptime', array( $this, 'module_status' ) );
 	}
-
-	/**
-	 * Execute module actions.
-	 */
-	public function run() {}
 
 	/**
 	 * Implement abstract parent method for clearing cache.

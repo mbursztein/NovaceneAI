@@ -32,11 +32,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <?php if ( ! $field_data ) : ?>
-	<div class="sui-notice">
-		<p>
-			<?php esc_html_e( 'The Chrome User Experience Report does not have sufficient real-world speed data for this page. Note: This report can take months to populate and is aimed at well established websites.', 'wphb' ); ?>
-		</p>
-	</div>
+	<?php
+	$this->admin_notices->show_inline(
+		esc_html__( 'The Chrome User Experience Report does not have sufficient real-world speed data for this page. Note: This report can take months to populate and is aimed at well established websites.', 'wphb' ),
+		'grey'
+	);
+	?>
 <?php else : ?>
 
 <div class="sui-row">

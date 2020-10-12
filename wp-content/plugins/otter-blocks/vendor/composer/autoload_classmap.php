@@ -35,6 +35,7 @@ return array(
     'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Button_CSS' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-button-css.php',
     'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Button_Group_CSS' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-button-group-css.php',
     'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Font_Awesome_Icons_CSS' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-font-awesome-icons-css.php',
+    'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Progress_Bar_CSS' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-progress-bar-css.php',
     'ThemeIsle\\GutenbergBlocks\\CSS\\CSS_Handler' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php',
     'ThemeIsle\\GutenbergBlocks\\Main' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/class-main.php',
     'ThemeIsle\\GutenbergBlocks\\Plugins\\Options_Settings' => $vendorDir . '/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php',

@@ -17,13 +17,9 @@ class ANR_Settings {
 		add_filter( 'plugin_action_links_' . plugin_basename( ANR_PLUGIN_FILE ), array( $this, 'add_settings_link' ) );
 		add_action('admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
-		if ( is_multisite() ) {
-			$same_settings = apply_filters( 'anr_same_settings_for_all_sites', false );
-		} else {
-			$same_settings = false;
-		}
-		if ( $same_settings ) {
-			add_action( 'network_admin_menu', array( $this, 'menu_page' ) );
+		if ( anr_same_settings_for_all_sites() ) {
+			add_action( 'network_admin_menu', array( $this, 'network_menu_page' ) );
+			add_filter( 'network_admin_plugin_action_links_' . plugin_basename( ANR_PLUGIN_FILE ), array( $this, 'add_settings_link' ) );
 		} else {
 			add_action( 'admin_menu', array( $this, 'menu_page' ) );
 		}
@@ -118,7 +114,7 @@ class ANR_Settings {
 					'bp_register'       => __( 'BuddyPress register', 'advanced-nocaptcha-recaptcha' ),
 					'wc_checkout'    => __( 'WooCommerce Checkout', 'advanced-nocaptcha-recaptcha' ),
 				),
-				'desc'       => sprintf( __( 'For other forms see <a href="%s">Instruction</a>', 'advanced-nocaptcha-recaptcha' ), esc_url( admin_url( 'admin.php?page=anr-instruction' ) ) ),
+				'desc'       => sprintf( __( 'For "Contact Form 7" you need to follow <a target="_blank" href="%1$s">this instruction</a>. For other forms see <a href="%2$s">this instruction</a>', 'advanced-nocaptcha-recaptcha' ), esc_url( 'https://www.shamimsplugins.com/docs/advanced-nocaptcha-recaptcha/getting-started-advanced-nocaptcha-recaptcha/implement-in-contact-form-7/' ), esc_url( network_admin_url( 'admin.php?page=anr-instruction' ) ) ),
 			),
 			'error_message'      => array(
 				'label'      => __( 'Error Message', 'advanced-nocaptcha-recaptcha' ),
@@ -251,6 +247,19 @@ class ANR_Settings {
 				'type'       => 'textarea',
 				'class'      => 'regular',
 				'desc'       => __( 'One per line', 'advanced-nocaptcha-recaptcha' ),
+			),
+			'recaptcha_domain'      => array(
+				'label'      => __( 'Recaptcha Domain', 'advanced-nocaptcha-recaptcha' ),
+				'section_id' => 'other',
+				'type'       => 'select',
+				'class'      => 'regular',
+				'std'        => anr_recaptcha_domain(),
+				'options'    => array(
+					'google.com'   => 'google.com',
+					'google.net'   => 'google.net',
+					'recaptcha.net' => 'recaptcha.net',
+				),
+				'desc'        => __( 'If any one is blocked in your country select other one.', 'advanced-nocaptcha-recaptcha' ),
 			),
 			'loggedin_hide'      => array(
 				'label'      => __( 'Logged in Hide', 'advanced-nocaptcha-recaptcha' ),
@@ -404,14 +413,63 @@ class ANR_Settings {
 		foreach ( $value as $option_slug => $option_value ) {
 			if ( isset( $fields[ $option_slug ] ) && ! empty( $fields[ $option_slug ]['sanitize_callback'] ) ) {
 				$value[ $option_slug ] = call_user_func( $fields[ $option_slug ]['sanitize_callback'], $option_value );
+			} elseif ( isset( $fields[ $option_slug ] ) ) {
+				$value[ $option_slug ] = $this->posted_value_sanitize( $option_value, $fields[ $option_slug ] );
 			}
 		}
 		return $value;
 	}
 
+	function posted_value_sanitize( $value, $field ) {
+		$sanitized = $value;
+			switch ( $field['type'] ) {
+				case 'text':
+				case 'hidden':
+				$sanitized = sanitize_text_field( trim( $value ) );
+				break;
+			case 'url':
+				$sanitized = esc_url( $value );
+				break;
+			case 'number':
+				$sanitized = absint( $value );
+				break;
+			case 'textarea':
+			case 'wp_editor':
+			case 'teeny':
+				$sanitized = wp_kses_post( $value );
+				break;
+			case 'checkbox':
+				$sanitized = absint( $value );
+				break;
+			case 'multicheck':
+				$sanitized = is_array( $value ) ? array_filter( $value ) : array();
+				foreach( $sanitized as $key => $p_value ) {
+					if ( ! array_key_exists( $p_value, $field['options'] ) ) {
+						unset( $sanitized[ $key ] );
+					}
+				}
+				break;
+			case 'select':
+				if ( ! array_key_exists( $value, $field['options'] ) ) {
+					$sanitized = isset($field['std'])? $field['std'] : '';
+				}
+				break;
+			default:
+				$sanitized = apply_filters( 'anr_settings_field_sanitize_filter_' . $field['type'], $value, $field );
+				break;
+		}
+		return apply_filters( 'anr_settings_field_sanitize_filter', $sanitized, $field, $value );
+	}
+
 	function menu_page() {
 		add_options_page( __( 'Advanced noCaptcha & invisible captcha Settings', 'advanced-nocaptcha-recaptcha' ), __( 'Advanced noCaptcha & invisible captcha', 'advanced-nocaptcha-recaptcha' ), 'manage_options', 'anr-admin-settings', array( $this, 'admin_settings' ) );
 		add_submenu_page( 'anr-non-exist-menu', 'Advanced noCaptcha reCaptcha - ' . __( 'Instruction', 'advanced-nocaptcha-recaptcha' ), __( 'Instruction', 'advanced-nocaptcha-recaptcha' ), 'manage_options', 'anr-instruction', array( $this, 'instruction_page' ) );
+
+	}
+
+	function network_menu_page() {
+		add_submenu_page( 'settings.php', __( 'Advanced noCaptcha & invisible captcha Settings', 'advanced-nocaptcha-recaptcha' ), __( 'Advanced noCaptcha & invisible captcha', 'advanced-nocaptcha-recaptcha' ), 'manage_network_options', 'anr-admin-settings', array( $this, 'admin_settings' ) );
+		add_submenu_page( 'anr-non-exist-menu', 'Advanced noCaptcha reCaptcha - ' . __( 'Instruction', 'advanced-nocaptcha-recaptcha' ), __( 'Instruction', 'advanced-nocaptcha-recaptcha' ), 'manage_network_options', 'anr-instruction', array( $this, 'instruction_page' ) );
 
 	}
 	
@@ -425,7 +483,7 @@ class ANR_Settings {
 			}
 			anr_update_option( $value );
 			
-			wp_safe_redirect( admin_url( 'options-general.php?page=anr-admin-settings&updated=true' ) );
+			wp_safe_redirect( add_query_arg( 'updated', true ) );
 			exit;
 		}
 	}
@@ -440,7 +498,7 @@ class ANR_Settings {
 					<div id="post-body-content">
 						<div id="tab_container">
 							<?php settings_errors( 'anr_admin_options' ); ?>
-							<form method="post" action="<?php echo esc_attr( admin_url( 'options-general.php?page=anr-admin-settings' ) ); ?>">
+							<form method="post" action="">
 								<?php
 								settings_fields( 'anr_admin_options' );
 								do_settings_sections( 'anr_admin_options' );
@@ -486,7 +544,7 @@ class ANR_Settings {
 						<div style="text-align: center; margin: auto">
 						<a style="text-decoration:none;" href="%1$s">To support development of "Advanced noCaptcha & invisible Captcha" plugin please purchase
 						<div style="font-size:24px;color:red;margin:10px;">PRO</div>
-						version only for USD 10</a>
+						version</a>
 						<p><a class="button button-secondary" href="%1$s">View Details</a></p>
 					</div>
 				</div>
@@ -535,7 +593,8 @@ class ANR_Settings {
 
 	function add_settings_link( $links ) {
 		// add settings link in plugins page
-		$settings_link = '<a href="' . admin_url( 'options-general.php?page=anr-admin-settings' ) . '">' . __( 'Settings', 'advanced-nocaptcha-recaptcha' ) . '</a>';
+		$url = anr_same_settings_for_all_sites() ? network_admin_url( 'settings.php?page=anr-admin-settings' ) : admin_url( 'options-general.php?page=anr-admin-settings' );
+		$settings_link = '<a href="' . $url . '">' . __( 'Settings', 'advanced-nocaptcha-recaptcha' ) . '</a>';
 		array_unshift( $links, $settings_link );
 		return $links;
 	}

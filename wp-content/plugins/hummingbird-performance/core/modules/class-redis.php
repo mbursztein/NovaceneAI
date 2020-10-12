@@ -10,6 +10,8 @@ namespace Hummingbird\Core\Modules;
 
 use Hummingbird\Core\Module;
 use Hummingbird\Core\Settings;
+use Hummingbird\Core\Traits\Module as ModuleContract;
+use Hummingbird\Core\Traits\WPConfig;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,7 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Redis extends Module {
 
-	use \Hummingbird\Core\Traits\WPConfig;
+	use ModuleContract;
+	use WPConfig;
 
 	/**
 	 * Initializes the module. Always executed even if the module is deactivated.
@@ -34,13 +37,6 @@ class Redis extends Module {
 			add_action( 'wphb_deactivate', array( $this, 'disable' ) );
 		}
 	}
-
-	/**
-	 * Execute the module actions. Executed when module is active.
-	 *
-	 * @since 2.5.0
-	 */
-	public function run() {}
 
 	/**
 	 * Clear the module cache.
@@ -71,10 +67,12 @@ class Redis extends Module {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param bool $value
+	 * @param bool $value  Value.
+	 *
+	 * @return array
 	 */
 	public function set_enabled_option( $value ) {
-		$options 			= $this->get_options();
+		$options            = $this->get_options();
 		$options['enabled'] = $value;
 		$this->update_options( $options );
 		return $options;
@@ -101,7 +99,7 @@ class Redis extends Module {
 
 		$this->toggle_object_cache( true );
 
-		//Clear redis cache
+		// Clear redis cache.
 		$this->test_redis_connection( $host, $port, $password, true );
 	}
 
@@ -174,9 +172,10 @@ class Redis extends Module {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $host      Redis host.
-	 * @param int    $port      Redis port.
-	 * @param string $password  Password.
+	 * @param string $host         Redis host.
+	 * @param int    $port         Redis port.
+	 * @param string $password     Password.
+	 * @param bool   $clear_cache  Clear cache.
 	 *
 	 * @return array
 	 */
@@ -250,11 +249,10 @@ class Redis extends Module {
 			$redis->ping();
 
 			$redis_connected = true;
-			
-			if( $clear_cache ) {
+
+			if ( $clear_cache ) {
 				$redis->flushdb();
 			}
-
 		} catch ( \Exception $exception ) {
 			$redis_connected = false;
 
@@ -293,9 +291,6 @@ class Redis extends Module {
 					$notice = __( 'Redis is not connected.', 'wphb' );
 				}
 				break;
-			case 'redis-auth-2':
-				$notice = __( 'Settings updated successfully.', 'wphb' );
-				break;				
 			case 'redis-disconnect':
 				if ( ! $vars['redis_connected'] ) {
 					$notice = __( 'Redis was disconnected successfully.', 'wphb' );
@@ -308,6 +303,7 @@ class Redis extends Module {
 					$notice = __( 'Object caching is disabled successfully.', 'wphb' );
 				}
 				break;
+			case 'redis-auth-2':
 			default:
 				$notice = __( 'Settings updated successfully.', 'wphb' );
 				break;
@@ -339,7 +335,7 @@ class Redis extends Module {
 			if ( ! $redis_connected ) {
 				$connection_error = ! empty( $wp_object_cache->redis_error ) ? $wp_object_cache->redis_error : '';
 			}
-			$redis_connected = $redis_connected && defined( 'WPHB_REDIS_HOST' ) ? $redis_connected : false;
+			$redis_connected = $redis_connected && defined( 'WPHB_REDIS_HOST' );
 		}
 
 		if ( method_exists( $this, 'can_continue' ) ) {
@@ -353,18 +349,12 @@ class Redis extends Module {
 
 		$object_cache = file_exists( WP_CONTENT_DIR . '/object-cache.php' );
 
-		// Flag to disable redis cache if hosted on DEV.
-		$disable_redis = false;
-		if ( isset( $_SERVER['WPMUDEV_HOSTED'] ) && $_SERVER['WPMUDEV_HOSTED'] ) {
-			$disable_redis = true;
-		}
-
 		$vars = array(
 			'options'               => $options,
 			'redis_connected'       => $redis_connected,
 			'redis_enabled'         => $options['enabled'],
 			'is_redis_object_cache' => $object_cache,
-			'disable_redis'         => $disable_redis,
+			'disable_redis'         => isset( $_SERVER['WPMUDEV_HOSTED'] ) && $_SERVER['WPMUDEV_HOSTED'],
 			'connection_error'      => $connection_error,
 		);
 

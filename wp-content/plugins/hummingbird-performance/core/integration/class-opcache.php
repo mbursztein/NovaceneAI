@@ -26,6 +26,18 @@ class Opcache {
 	 * @since 2.1.0
 	 */
 	public function __construct() {
+		add_action( 'admin_init', array( $this, 'init' ) );
+	}
+
+	/**
+	 * Initialize module.
+	 *
+	 * We need to init the module via admin_init, because we need to make sure all Hummingbird modules have
+	 * been properly loaded prior to checking the status.
+	 *
+	 * @since 2.6.0
+	 */
+	public function init() {
 		// Page caching is not enabled.
 		if ( ! apply_filters( 'wp_hummingbird_is_active_module_page_cache', false ) ) {
 			return;

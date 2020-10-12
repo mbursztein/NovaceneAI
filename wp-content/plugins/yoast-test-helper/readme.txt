@@ -2,8 +2,8 @@
 Contributors: yoast, joostdevalk, omarreiss, jipmoors, herregroen
 Tags: Yoast, Yoast SEO, development
 Requires at least: 5.4
-Tested up to: 5.4
-Stable tag: 1.8
+Tested up to: 5.5
+Stable tag: 1.9
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,13 @@ If you find bugs or would like to contribute, see our [GitHub repo](https://gith
 1. Screenshot of the Yoast test helper admin page.
 
 == Changelog ==
+
+= 1.9 =
+
+Bugfixes:
+
+* Fixes a bug where the link columns could not be emptied due to an incorrect table name.
+* Fixes a bug where links could be attached to the wrong indexables when resetting the indexable tables and migrations.
 
 = 1.8 =
 

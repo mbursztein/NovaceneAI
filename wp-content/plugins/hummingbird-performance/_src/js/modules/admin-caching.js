@@ -7,7 +7,7 @@
  */
 import Fetcher from '../utils/fetcher';
 
-( function( $ ) {
+( function ( $ ) {
 	'use strict';
 	WPHB_Admin.caching = {
 		module: 'caching',
@@ -37,7 +37,7 @@ import Fetcher from '../utils/fetcher';
 			}
 
 			if ( hash && $( hash ).length ) {
-				setTimeout( function() {
+				setTimeout( function () {
 					$( 'html, body' ).animate(
 						{ scrollTop: $( hash ).offset().top },
 						'slow'
@@ -76,7 +76,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 			const intervalToggle = document.getElementById( 'clear_interval' );
 			if ( intervalToggle ) {
-				intervalToggle.addEventListener( 'change', function( e ) {
+				intervalToggle.addEventListener( 'change', function ( e ) {
 					e.preventDefault();
 					$( '#page_cache_clear_interval' ).toggle();
 				} );
@@ -91,7 +91,7 @@ import Fetcher from '../utils/fetcher';
 				'wphb-cancel-cache-preload'
 			);
 			if ( cancelPreload ) {
-				cancelPreload.addEventListener( 'click', function( e ) {
+				cancelPreload.addEventListener( 'click', function ( e ) {
 					e.preventDefault();
 					Fetcher.common.call( 'wphb_preload_cancel' );
 					window.location.reload();
@@ -105,7 +105,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 			const preloadToggle = document.getElementById( 'preload' );
 			if ( preloadToggle ) {
-				preloadToggle.addEventListener( 'change', function( e ) {
+				preloadToggle.addEventListener( 'change', function ( e ) {
 					e.preventDefault();
 					$( '#page_cache_preload_type' ).toggle();
 				} );
@@ -116,7 +116,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 
 			// Init server instructions tabs.
-			$( '.wphb-server-instructions' ).each( function() {
+			$( '.wphb-server-instructions' ).each( function () {
 				self.serverInstructions[ $( this ).data( 'server' ) ] = $(
 					this
 				);
@@ -132,7 +132,7 @@ import Fetcher from '../utils/fetcher';
 			);
 
 			// Server type changed.
-			self.serverSelector.change( function() {
+			self.serverSelector.change( function () {
 				const value = $( this ).val();
 				self.hideCurrentInstructions();
 				self.showServerInstructions( value );
@@ -143,14 +143,14 @@ import Fetcher from '../utils/fetcher';
 
 			// Expiry time change between all types and individual type.
 			const expiryInput = $( "div[data-name='expiry-set-type']" );
-			expiryInput.on( 'click', function() {
+			expiryInput.on( 'click', function () {
 				const type = $( this ).data( 'value' );
 				self.selectedExpiryType = type;
 				self.reloadSnippets( self.getExpiryTimes( type ) );
 			} );
 
 			// Expiry value changed.
-			expiryForm.on( 'change', 'select[name^="set-expiry"]', function() {
+			expiryForm.on( 'change', 'select[name^="set-expiry"]', function () {
 				self.reloadSnippets(
 					self.getExpiryTimes( self.selectedExpiryType )
 				);
@@ -171,18 +171,13 @@ import Fetcher from '../utils/fetcher';
 							response.success
 						) {
 							WPHB_Admin.notices.show(
-								'wphb-ajax-update-notice',
-								true,
-								'success',
 								self.strings.successRecheckStatus
 							);
 							self.reloadExpiryTags( response.expiry_values );
 						} else {
 							WPHB_Admin.notices.show(
-								'wphb-ajax-update-notice',
-								true,
-								'error',
-								self.strings.errorRecheckStatus
+								self.strings.errorRecheckStatus,
+								'error'
 							);
 						}
 					} );
@@ -204,7 +199,7 @@ import Fetcher from '../utils/fetcher';
 				);
 
 				// Set timeout to allow new expiry values to be saved.
-				setTimeout( function() {
+				setTimeout( function () {
 					Fetcher.common
 						.call( 'wphb_caching_update_htaccess' )
 						.then( ( response ) => {
@@ -217,17 +212,12 @@ import Fetcher from '../utils/fetcher';
 								response.success
 							) {
 								WPHB_Admin.notices.show(
-									'wphb-ajax-update-notice',
-									true,
-									'success',
 									wphb.strings.htaccessUpdated
 								);
 							} else {
 								WPHB_Admin.notices.show(
-									'wphb-ajax-update-notice',
-									true,
-									'error',
-									self.strings.htaccessUpdatedFailed
+									self.strings.htaccessUpdatedFailed,
+									'error'
 								);
 							}
 						} );
@@ -235,7 +225,7 @@ import Fetcher from '../utils/fetcher';
 			} );
 
 			// View code clicked (when rules already in .htaccess and expiry values are updated).
-			$( '#view-snippet-code' ).on( 'click', function( e ) {
+			$( '#view-snippet-code' ).on( 'click', function ( e ) {
 				e.preventDefault();
 				const serverInstructions = $(
 					'#wphb-server-instructions-' +
@@ -255,7 +245,7 @@ import Fetcher from '../utils/fetcher';
 			} );
 
 			// Activate button clicked.
-			$( '.activate-button' ).on( 'click', function( e ) {
+			$( '.activate-button' ).on( 'click', function ( e ) {
 				e.preventDefault();
 				$( this ).addClass( 'sui-button-onload' );
 				// Update expiration times.
@@ -264,7 +254,7 @@ import Fetcher from '../utils/fetcher';
 				);
 				const redirect = $( this ).attr( 'href' );
 				// Set timeout to allow new expiry values to be saved.
-				setTimeout( function() {
+				setTimeout( function () {
 					window.location = redirect;
 				}, 1000 );
 			} );
@@ -274,14 +264,14 @@ import Fetcher from '../utils/fetcher';
 			 */
 
 			// Connect Cloudflare link clicked.
-			$( '.connect-cloudflare-link' ).on( 'click', function( e ) {
+			$( '.connect-cloudflare-link' ).on( 'click', function ( e ) {
 				e.preventDefault();
 				window.location.hash = 'connect-cloudflare';
 				self.setCloudflare();
 			} );
 
 			// "# of your cache types don’t meet the recommended expiry period" notice clicked.
-			$( '#configure-link' ).on( 'click', function( e ) {
+			$( '#configure-link' ).on( 'click', function ( e ) {
 				e.preventDefault();
 				$( 'html, body' ).animate(
 					{
@@ -290,16 +280,6 @@ import Fetcher from '../utils/fetcher';
 					},
 					'slow'
 				);
-			} );
-
-			// Cloudflare blue notice dismiss link
-			$( '#dismiss-cf-notice' ).on( 'click', function( e ) {
-				e.preventDefault();
-				Fetcher.common.call( 'wphb_cf_notice_dismiss' );
-				$( '.cf-dash-notice' )
-					.slideUp()
-					.parent()
-					.addClass( 'no-background-image' );
 			} );
 
 			/**
@@ -360,7 +340,7 @@ import Fetcher from '../utils/fetcher';
 									'redis-connect-notice-on-modal'
 								);
 								notice.innerHTML = response.message;
-								notice.parentNode.classList.remove(
+								notice.parentNode.parentNode.parentNode.classList.remove(
 									'sui-hidden'
 								);
 								notice.parentNode.parentNode.classList.add(
@@ -392,10 +372,8 @@ import Fetcher from '../utils/fetcher';
 									'&updated=redis-object-cache';
 							} else {
 								WPHB_Admin.notices.show(
-									'wphb-ajax-update-notice',
-									true,
-									'error',
-									wphb.strings.errorSettingsUpdate
+									wphb.strings.errorSettingsUpdate,
+									'error'
 								);
 							}
 						} );
@@ -415,9 +393,6 @@ import Fetcher from '../utils/fetcher';
 								'sui-button-onload-text'
 							);
 							WPHB_Admin.notices.show(
-								'wphb-ajax-update-notice',
-								true,
-								'success',
 								wphbCachingStrings.successRedisPurge
 							);
 						} );
@@ -491,18 +466,12 @@ import Fetcher from '../utils/fetcher';
 						if ( 'page_cache' === module ) {
 							window.location.search += '&updated=true';
 						} else {
-							WPHB_Admin.notices.show(
-								'wphb-ajax-update-notice',
-								true,
-								'success'
-							);
+							WPHB_Admin.notices.show();
 						}
 					} else {
 						WPHB_Admin.notices.show(
-							'wphb-ajax-update-notice',
-							true,
-							'error',
-							wphb.strings.errorSettingsUpdate
+							wphb.strings.errorSettingsUpdate,
+							'error'
 						);
 					}
 				} );
@@ -527,25 +496,17 @@ import Fetcher from '../utils/fetcher';
 							'0'
 						);
 						WPHB_Admin.notices.show(
-							'wphb-ajax-update-notice',
-							true,
-							'success',
 							wphbCachingStrings.successPageCachePurge
 						);
 					} else if ( 'gravatar' === module ) {
 						WPHB_Admin.notices.show(
-							'wphb-ajax-update-notice',
-							true,
-							'success',
 							wphbCachingStrings.successGravatarPurge
 						);
 					}
 				} else {
 					WPHB_Admin.notices.show(
-						'wphb-ajax-update-notice',
-						true,
-						'error',
-						wphbCachingStrings.errorCachePurge
+						wphbCachingStrings.errorCachePurge,
+						'error'
 					);
 				}
 
@@ -574,7 +535,7 @@ import Fetcher from '../utils/fetcher';
 			this.showServerInstructions( 'cloudflare' );
 			this.selectedServer = 'cloudflare';
 
-			setTimeout( function() {
+			setTimeout( function () {
 				$( 'html, body' ).animate(
 					{ scrollTop: $( '#cloudflare-steps' ).offset().top },
 					'slow'
@@ -595,6 +556,10 @@ import Fetcher from '../utils/fetcher';
 				this.serverInstructions[ this.selectedServer ].addClass(
 					'sui-hidden'
 				);
+
+				document.getElementById(
+					'wphb-expiry-change-notice'
+				).style.display = 'none';
 			}
 		},
 

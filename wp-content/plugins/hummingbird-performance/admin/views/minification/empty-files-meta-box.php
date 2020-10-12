@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		printf(
 			/* translators: %s: username */
-			esc_html__( "Hummingbird's Asset Optimization engine can combine and minify the files your website outputs when a user visits your website. The less requests your visitors have to make to your server, the better. Let's check to see what we can optimise, %s!", 'wphb' ),
+			esc_html__( "Hummingbird's Asset Optimization engine can combine and minify the files your website outputs when a user visits your website. The fewer requests your visitors have to make to your server, the better. Let's check to see what we can optimise, %s!", 'wphb' ),
 			esc_attr( Utils::get_current_user_name() )
 		);
 		?>

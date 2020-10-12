@@ -66,9 +66,10 @@
 			margin-top: -5px;
 		}
 
+		/* SUI overwrite */
 		.sui-notice {
-			margin-top: 10px;
-			p { margin: 0; }
+			p { margin: 0 0 10px; }
+			p:last-child { margin: 0; }
 		}
 
 		.sui-code-snippet {

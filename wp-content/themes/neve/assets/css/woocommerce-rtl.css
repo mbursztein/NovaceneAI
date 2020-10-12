@@ -973,12 +973,15 @@ section.exclusive .tns-visually-hidden {
   white-space: normal;
 }
 
+.woocommerce #respond input#submit.loading, .woocommerce a.button.loading, .woocommerce button.button.loading, .woocommerce input.button.loading {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 4px;
+  padding-left: inherit;
+}
+
 .woocommerce #respond input#submit.loading::after, .woocommerce a.button.loading::after, .woocommerce button.button.loading::after, .woocommerce input.button.loading::after {
-  display: block;
   position: initial;
-  float: left;
-  margin-right: 5px;
-  margin-top: 1px;
 }
 
 .nv-sidebar-wrap.shop-sidebar {
@@ -1081,6 +1084,11 @@ section.exclusive .tns-visually-hidden {
 
 .widget_product_search button[type="submit"] {
   width: 100%;
+}
+
+.cart-icon-wrapper {
+  display: flex;
+  align-items: flex-end;
 }
 
 .menu-item-nav-cart:last-child .nv-nav-cart {

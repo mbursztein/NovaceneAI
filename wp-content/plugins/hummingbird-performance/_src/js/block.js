@@ -40,7 +40,7 @@ const MyPluginPostStatusInfo = () => (
 			type="submit"
 			value={ wphb.strings.button }
 			onClick={ handleClearCache }
-			className="components-button is-button is-default is-large editor-post-trash"
+			className="components-button is-button is-default is-secondary is-large editor-post-trash"
 		/>
 	</PluginPostStatusInfo>
 );

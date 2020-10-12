@@ -2,10 +2,11 @@
 defined('ABSPATH') || exit;
 
 if ($attr['metaShow']) {
+    $avatar         = get_avatar_url($user_id);
     $meta = $idx == 0 ? $attr['metaList'] : ( isset($attr['metaListSmall']) ? $attr['metaListSmall'] : $attr['metaList'] );
     $meta = json_decode($meta);
-    $authorImgOnly = in_array('metaAuthor', $meta) ? '<span class="ultp-block-author"><img class="ultp-meta-author-img" src="'.$avatar.'" alt="'.__("By","ultimate-post").'" /></span>' : '';
-    $authorImg     = in_array('metaAuthor', $meta) ? '<span class="ultp-block-author"><img class="ultp-meta-author-img" src="'.$avatar.'" alt="'.__("By","ultimate-post").'" />'.__("By","ultimate-post").'<a target="_blank" href="'.$author_link.'">'.$display_name .'</a></span>' : '';
+    $authorImgOnly = in_array('metaAuthor', $meta) ? '<span class="ultp-block-author"><img loading="lazy" class="ultp-meta-author-img" src="'.$avatar.'" alt="'.__("By","ultimate-post").'" /></span>' : '';
+    $authorImg     = in_array('metaAuthor', $meta) ? '<span class="ultp-block-author"><img loading="lazy" class="ultp-meta-author-img" src="'.$avatar.'" alt="'.__("By","ultimate-post").'" />'.__("By","ultimate-post").'<a target="_blank" href="'.$author_link.'">'.$display_name .'</a></span>' : '';
     $authorIcon    = in_array('metaAuthor', $meta) ? '<span class="ultp-block-author">'.ultimate_post()->svg_icon('user').'<a target="_blank" href="'.$author_link.'">'.$display_name.'</a></span>' : '';
     $authorBy      = in_array('metaAuthor', $meta) ? '<span class="ultp-block-author">'.__("By","ultimate-post").'<a target="_blank" href="'.$author_link.'">'.$display_name.'</a></span>' : '';
     $date          = in_array('metaDate', $meta) ? '<span class="ultp-block-date">'.$time.'</span>' : '';
@@ -22,6 +23,7 @@ if ($attr['metaShow']) {
     $post_loop .= '<div class="ultp-block-meta ultp-block-meta-'.$attr['metaSeparator'].' ultp-block-meta-'.$attr['metaStyle'].'">';
         if ($attr['metaStyle'] == 'noIcon') { $post_loop .= $authorBy.$date.$comments.$views.$reading.$postTime; }
         if ($attr['metaStyle'] == 'icon') { $post_loop .= $authorIcon.$dateIcon.$commentsIcon.$viewIcon.$postTimeIcon.$readingIcon; }
+        if ($attr['metaStyle'] == 'style2') { $post_loop .= $authorBy.$dateIcon.$commentsIcon.$viewIcon.$postTimeIcon.$readingIcon; }
         if ($attr['metaStyle'] == 'style3') { $post_loop .= $authorImg.$dateIcon.$commentsIcon.$viewIcon.$postTimeIcon.$readingIcon; }
         if ($attr['metaStyle'] == 'style4') { $post_loop .= $authorIcon.$dateIcon.$commentsIcon.$viewIcon.$postTimeIcon.$readingIcon; }
         if ($attr['metaStyle'] == 'style5') { $post_loop .= '<div class="ultp-meta-media">'.$authorImgOnly.'</div> <div class="ultp-meta-body">'.$authorBy.$dateIcon.$commentsIcon.$viewIcon.$postTimeIcon.$readingIcon.'</div>'; }

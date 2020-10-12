@@ -19,31 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><?php esc_html_e( 'Speed Index is an index measured in milliseconds which represents the average time it takes for the above the fold content to become visible. The index also takes into account the progressive loading of your content, which means the sooner the content starts to render, the better your speed index. Note that this metric is highly dependant on the device and screen size being used to view the site.', 'wphb' ); ?></p>
 
 <h4><?php esc_html_e( 'Status', 'wphb' ); ?></h4>
-<?php if ( isset( $audit->errorMessage ) && ! isset( $audit->score ) ) : ?>
-	<div class="sui-notice sui-notice-error">
-		<p>
-			<?php
-			printf(
-				/* translators: %s - error message */
-				esc_html__( 'Error: %s', 'wphb' ),
-				esc_html( $audit->errorMessage )
-			);
-			?>
-		</p>
-	</div>
-<?php else : ?>
-	<div class="sui-notice sui-notice-<?php echo esc_attr( \Hummingbird\Core\Modules\Performance::get_impact_class( $audit->score * 100 ) ); ?>">
-		<p>
-			<?php
-			printf(
-				/* translators: %s - number of seconds */
-				esc_html__( 'Speed Index for your website is %s.', 'wphb' ),
-				esc_html( $audit->displayValue )
-			);
-			?>
-		</p>
-	</div>
-<?php endif; ?>
+<?php if ( isset( $audit->errorMessage ) && ! isset( $audit->score ) ) {
+	/* translators: %s - error message */
+	$message = sprintf( esc_html__( 'Error: %s', 'wphb' ), esc_html( $audit->errorMessage ) );
+	$this->admin_notices->show_inline( $message, 'error' );
+} else {
+	/* translators: %s - number of seconds */
+	$message = sprintf( esc_html__( 'Speed Index for your website is %s.', 'wphb' ), esc_html( $audit->displayValue ) );
+	$class   = \Hummingbird\Core\Modules\Performance::get_impact_class( $audit->score * 100 );
+	$this->admin_notices->show_inline( $message, $class );
+}
+?>
 
 <h4><?php esc_html_e( 'Recommendations', 'wphb' ); ?></h4>
 <p><?php esc_html_e( 'Following are recommendations which can help lower your speed index:', 'wphb' ); ?></p>

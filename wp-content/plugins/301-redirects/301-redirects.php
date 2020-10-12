@@ -3,11 +3,11 @@
   Plugin Name: 301 Redirects
   Plugin URI: https://wp301redirects.com/
   Description: Easily create & manage redirections.
-  Version: 0.4
+  Version: 0.5
   Author: WebFactoryLtd
   Author URI: https://www.webfactoryltd.com/
 
-  Copyright 2015 - 2019  WebFactory Ltd  (email: wp301@webfactoryltd.com)
+  Copyright 2015 - 2020  WebFactory Ltd  (email: wp301@webfactoryltd.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as
@@ -29,8 +29,10 @@ if (!defined('ABSPATH')) {
   die;
 }
 
-
 require_once 'controllers.php';
+
+require_once 'wp301/wp301.php';
+new wf_wp301(__FILE__, 'settings_page_301-redirects');
 
 
 function load_301_redirect_assets($adminpage)
@@ -126,8 +128,8 @@ function redirects_301_options()
         <tr>
           <td class="col-md-3">Name</td>
           <td class="col-md-3">Section</td>
-          <td class="col-md-3">Old Link</td>
-          <td class="col-md-3">New Link</td>
+          <td class="col-md-3">Old URL</td>
+          <td class="col-md-3">New URL</td>
         </tr>
         <?php
         $custom_redirects = $redirects->getAll();
@@ -138,14 +140,14 @@ function redirects_301_options()
             $fields = $redirects->getFields($custom_id);
             ?>
             <tr id="customRow<?php echo $custom_id; ?>">
-              <td><input type="text" class="form-control" placeholder="Title" name="title[]" value="<?php echo $fields['title']; ?>" /></td>
+              <td><input type="text" class="form-control" placeholder="Redirect name (for internal use)" name="title[]" value="<?php echo $fields['title']; ?>" /></td>
               <td><input type="text" class="form-control" placeholder="Section" name="section[]" value="<?php echo $fields['section']; ?>" /></td>
               <td>
-                <input placeholder="Old Link" name="old_link[]" class="form-control short-field" value="<?php echo $fields['old_link']; ?>" />
+                <input placeholder="Old URL" name="old_link[]" class="form-control short-field" value="<?php echo $fields['old_link']; ?>" />
                 <a title="Test redirect rule" class="link-icon" target="_blank" href="<?php echo $fields['old_link']; ?>"><span class="dashicons dashicons-external"></span></a>
               </td>
               <td>
-                <input type="text" class="form-control new-link short-field" placeholder="New Link" name="new_link[]" value="<?php echo $fields['new_link']; ?>" />
+                <input type="text" class="form-control new-link short-field" placeholder="New URL" name="new_link[]" value="<?php echo $fields['new_link']; ?>" />
                 <a title="Remove redirect rule" class="remove-custom" href="#" data-id="<?php echo $custom_id; ?>"><span class="dashicons dashicons-trash"></span></a>
               </td>
             </tr>
@@ -173,11 +175,11 @@ function redirects_301_options()
         e.preventDefault();
 
         var newRow = '<tr id="row' + rowId + '">' +
-          '<td><input type="text" class="form-control" placeholder="Title" name="title[]" /></td>' +
+          '<td><input type="text" class="form-control" placeholder="Redirect name (for internal use)" name="title[]" /></td>' +
           '<td><input type="text" class="form-control" placeholder="Section" name="section[]" /></td>' +
-          '<td><input name="old_link[]" class="pull-left form-control" placeholder="Old Link" /></td>' +
+          '<td><input name="old_link[]" class="pull-left form-control" placeholder="Old URL" /></td>' +
           '<td>' +
-          '<input type="text" class="form-control new-link short-field" placeholder="New Link" name="new_link[]" /> <a title="Remove redirect rule" class="remove-row" href="#" data-id="' + rowId + '"><span class="dashicons dashicons-trash"></span></a></td>' +
+          '<input type="text" class="form-control new-link short-field" placeholder="New URL" name="new_link[]" /> <a title="Remove redirect rule" class="remove-row" href="#" data-id="' + rowId + '"><span class="dashicons dashicons-trash"></span></a></td>' +
           '</td>' +
           '</tr>';
 

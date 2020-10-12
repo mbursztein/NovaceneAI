@@ -13,6 +13,7 @@ namespace Hummingbird\Core\Modules;
 
 use Hummingbird\Core\Module;
 use Hummingbird\Core\Settings;
+use Hummingbird\Core\Traits\Module as ModuleContract;
 use stdClass;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,6 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Advanced extends Module {
 
+	use ModuleContract;
+
 	/**
 	 * Initializes the module. Always executed even if the module is deactivated.
 	 *
@@ -31,6 +34,18 @@ class Advanced extends Module {
 	 */
 	public function init() {
 		$options = $this->get_options();
+
+		// See if we need to fetch the network value for query strings option.
+		if ( ( $options['query_strings_global'] || $options['emoji_global'] ) && is_multisite() ) {
+			$network_options = get_blog_option( get_main_site_id(), 'wphb_settings' );
+
+			if ( $options['query_strings_global'] && isset( $network_options['advanced'] ) && isset( $network_options['advanced']['query_string'] ) ) {
+				$options['query_string'] = $network_options['advanced']['query_string'];
+			}
+			if ( $options['emoji_global'] && isset( $network_options['advanced'] ) && isset( $network_options['advanced']['emoji'] ) ) {
+				$options['emoji'] = $network_options['advanced']['emoji'];
+			}
+		}
 
 		// Remove emoji.
 		if ( $options['emoji'] ) {
@@ -77,20 +92,6 @@ class Advanced extends Module {
 		if ( isset( $options['lazy_load'] ) && $options['lazy_load']['enabled'] ) {
 			add_filter( 'comments_template', array( $this, 'filter_comments_template' ), 100 );
 		}
-	}
-
-	/**
-	 * Execute the module actions. It must be defined in subclasses.
-	 */
-	public function run() {}
-
-	/**
-	 * Clear the module cache.
-	 *
-	 * @return mixed
-	 */
-	public function clear_cache() {
-		return true;
 	}
 
 	/**
@@ -416,25 +417,6 @@ class Advanced extends Module {
 	 ***************************/
 
 	/**
-	 * Init HB cleanup task.
-	 *
-	 * @since 1.8.1
-	 *
-	 * @internal
-	 *
-	 * @param bool $new_scan  Start a new scan.
-	 */
-	public static function init_hb_cleanup( $new_scan = true ) {
-		// Clean all cron.
-		wp_clear_scheduled_hook( 'wphb_hummingbird_cleanup' );
-
-		// Schedule new scan.
-		if ( $new_scan ) {
-			wp_schedule_single_event( time(), 'wphb_hummingbird_cleanup' );
-		}
-	}
-
-	/**
 	 * Cleanup cron task.
 	 *
 	 * @since 1.8.1
@@ -712,7 +694,7 @@ class Advanced extends Module {
 	 *
 	 * @return string
 	 */
-	public static function format_constant( $constant ) {
+	private static function format_constant( $constant ) {
 		if ( ! defined( $constant ) ) {
 			return '<em>' . __( 'undefined', 'wphb' ) . '</em>';
 		}

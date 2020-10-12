@@ -140,8 +140,8 @@ class Utils {
 		);
 		wp_localize_script( 'wphb-admin', 'wphbCachingStrings', $i10n );
 
-		$performance = self::get_module( 'performance' );
-		$last_report = $performance::get_last_report();
+		$performance   = self::get_module( 'performance' );
+		$last_report   = $performance::get_last_report();
 		$mobile_score  = '-';
 		$desktop_score = '-';
 		if ( is_object( $last_report ) && isset( $last_report->data ) ) {
@@ -193,6 +193,7 @@ class Utils {
 				'htaccessUpdatedFailed' => __( 'There was an error updating the .htaccess file', 'wphb' ),
 				'errorSettingsUpdate'   => __( 'Error updating settings', 'wphb' ),
 				'successUpdate'         => __( 'Settings updated', 'wphb' ),
+				'successReset'          => __( 'Settings restored to defaults', 'wphb' ),
 				'deleteAll'             => __( 'Delete All', 'wphb' ),
 				'db_delete'             => __( 'Are you sure you wish to delete', 'wphb' ),
 				'db_entries'            => __( 'database entries', 'wphb' ),
@@ -201,6 +202,7 @@ class Utils {
 				'confirmRecipient'      => __( 'Your changes have been saved successfully. Any new recipients will receive an email shortly to confirm their subscription to these emails.', 'wphb' ),
 				'awaitingConfirmation'  => __( 'Awaiting confirmation', 'wphb' ),
 				'resendEmail'           => __( 'Resend email', 'wphb' ),
+				'dismissLabel'          => __( 'Dismiss', 'wphb' ),
 			),
 		);
 
@@ -221,6 +223,7 @@ class Utils {
 							'currentScanStep' => $minify_module->scanner->get_current_scan_step(),
 							'totalSteps'      => $minify_module->scanner->get_scan_steps(),
 							'showCDNModal'    => ! is_multisite(),
+							'showSwitchModal' => (bool) get_option( 'wphb-minification-show-config_modal' ),
 						),
 					),
 					'strings'      => array(
@@ -228,6 +231,18 @@ class Utils {
 						'queuedTooltip' => __( 'This file is queued for compression. It will get optimized when someone visits a page that requires it.', 'wphb' ),
 						'excludeFile'   => __( "Don't load file", 'wphb' ),
 						'includeFile'   => __( 'Re-include', 'wphb' ),
+						'speedySaved'   => sprintf(
+							/* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+							esc_html__( 'Speedy optimization is now active. Plugins and theme files are being queued for processing and will gradually be optimized as your visitors request them. For more information on how automatic optimization works, you can check %1$sHow Does It Work%2$s section.', 'wphb' ),
+							"<a href='#' id='wphb-basic-hdiw-link' data-modal-open='automatic-ao-hdiw-modal-content'>",
+							'</a>'
+						),
+						'basicSaved'    => sprintf(
+							/* translators: %1$s - opening <a> tag, %2$s - closing </a> tag */
+							esc_html__( 'Basic optimization is now active. Plugins and theme files are now being queued for processing and will gradually be optimized as they are requested by your visitors. For more information on how automatic optimization works, you can check %1$sHow Does It Work%2$s section.', 'wphb' ),
+							"<a href='#' id='wphb-basic-hdiw-link' data-modal-open='automatic-ao-hdiw-modal-content'>",
+							'</a>'
+						),
 					),
 					'links'        => array(
 						'minification' => self::get_admin_menu_url( 'minification' ),
@@ -331,13 +346,22 @@ class Utils {
 	public static function calculate_sum( $arr ) {
 		$sum = 0;
 
+		// Get separators from locale. Some Windows servers will return blank values.
+		$locale        = localeconv();
+		$thousands_sep = $locale['thousands_sep'] ?: ',';
+		$decimal_point = $locale['decimal_point'] ?: '.';
+
 		foreach ( $arr as $item => $value ) {
 			if ( is_null( $value ) ) {
 				continue;
 			}
 
 			// Remove spaces.
-			$sum += (float) str_replace( '&nbsp;', '', $value );
+			$sum += (float) str_replace(
+				array( '&nbsp;', $thousands_sep, $decimal_point ),
+				array( '', '', '.' ),
+				$value
+			);
 		}
 
 		return $sum;
@@ -632,7 +656,7 @@ class Utils {
 				break;
 			case 'support':
 				if ( self::is_member() ) {
-					$link = "{$domain}/forums/forum/support#question{$utm_tags}";
+					$link = "{$domain}/hub/support/#get-support";
 				} else {
 					$link = "{$wp_org}/support/plugin/hummingbird-performance";
 				}
@@ -654,7 +678,7 @@ class Utils {
 				$link = "{$domain}/project/wp-smush-pro/{$utm_tags}";
 				break;
 			case 'hosting':
-				$link = "{$domain}/hub/hosting/{$utm_tags}";
+				$link = "{$domain}/hosting/{$utm_tags}";
 				break;
 			case 'wpmudev':
 				$link = "{$domain}/{$utm_tags}";
@@ -693,10 +717,16 @@ class Utils {
 				$anchor = '#gzip-compression';
 				break;
 			case 'wphb-minification':
-				$anchor = '#minification';
+				$anchor = '#asset-optimization';
+				break;
+			case 'wphb-advanced':
+				$anchor = '#advanced-tools';
 				break;
 			case 'wphb-uptime':
 				$anchor = '#uptime-monitoring-pro';
+				break;
+			case 'wphb-settings':
+				$anchor = '#settings';
 				break;
 			default:
 				$anchor = '';
@@ -936,6 +966,35 @@ class Utils {
 		}
 
 		return ( count( $collection['scripts'] ) + count( $collection['styles'] ) );
+	}
+
+	/**
+	 * Returns a list of incompatible plugins if any
+	 *
+	 * @return array
+	 */
+	public static function get_incompat_plugin_list() {
+		$plugins         = array();
+		$caching_plugins = array(
+			'autoptimize/autoptimize.php'                                   => 'Autoptimize',
+			'litespeed-cache/litespeed-cache.php'                           => 'LiteSpeed Cache',
+			'speed-booster-pack/speed-booster-pack.php'                     => 'Speed Booster Pack',
+			'swift-performance-lite/performance.php'                        => 'Swift Performance Lite',
+			'w3-total-cache/w3-total-cache.php'                             => 'W3 Total Cache',
+			'wp-fastest-cache/wpFastestCache.php'                           => 'WP Fastest Cache',
+			'wp-optimize/wp-optimize.php'                                   => 'WP-Optimize',
+			'wp-performance-score-booster/wp-performance-score-booster.php' => 'WP Performance Score Booster',
+			'wp-performance/wp-performance.php'                             => 'WP Performance',
+			'wp-super-cache/wp-cache.php'                                   => 'WP Super Cache',
+		);
+
+		foreach ( $caching_plugins as $plugin => $plugin_name ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$plugins[ $plugin ] = $plugin_name;
+			}
+		}
+
+		return $plugins;
 	}
 
 }

@@ -316,9 +316,9 @@ class Caching extends Page {
 	 */
 	public function render_header() {
 		if ( filter_input( INPUT_GET, 'enabled' ) ) {
-			$this->admin_notices->show( 'updated', __( 'Browser cache enabled. Your .htaccess file has been updated', 'wphb' ), 'success' );
+			$this->admin_notices->show_floating( __( 'Browser cache enabled. Your .htaccess file has been updated', 'wphb' ) );
 		} elseif ( filter_input( INPUT_GET, 'disabled' ) ) {
-			$this->admin_notices->show( 'updated', __( 'Browser cache disabled. Your .htaccess file has been updated', 'wphb' ), 'success' );
+			$this->admin_notices->show_floating( __( 'Browser cache disabled. Your .htaccess file has been updated', 'wphb' ) );
 		}
 
 		parent::render_header();
@@ -528,8 +528,8 @@ class Caching extends Page {
 				'settings'           => $settings,
 				'clear_interval'     => Utils::format_interval_hours( $settings['clear_interval']['interval'] ),
 				'options'            => $options,
-				'admins_can_disable' => ( 'blog-admins' === $options['enabled'] ) ? true : false,
-				'blog_is_frontpage'  => ( 'posts' === get_option( 'show_on_front' ) && ! is_multisite() ) ? true : false,
+				'admins_can_disable' => 'blog-admins' === $options['enabled'],
+				'blog_is_frontpage'  => 'posts' === get_option( 'show_on_front' ) && ! is_multisite(),
 				'opcache_enabled'    => $opcache->is_enabled(),
 				'pages'              => Page_Cache::get_page_types(),
 				'can_compress'       => ! isset( $gzip['HTML'] ) || ! $gzip['HTML'],

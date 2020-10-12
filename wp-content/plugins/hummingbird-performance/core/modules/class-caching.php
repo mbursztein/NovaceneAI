@@ -161,21 +161,6 @@ class Caching extends Module_Server {
 	}
 
 	/**
-	 * Apache module loader
-	 *
-	 * @return bool
-	 */
-	public static function apache_modules_loaded() {
-		$apache_modules = array();
-		if ( function_exists( 'php_sapi_name' ) ) {
-			$apache_modules = apache_get_modules();
-		}
-
-		return in_array( 'mod_expires', $apache_modules, true );
-
-	}
-
-	/**
 	 * Get code for Nginx
 	 *
 	 * @param array $expiry_times Type expiry times (javascript, css...). Used with AJAX call caching_reload_snippet.

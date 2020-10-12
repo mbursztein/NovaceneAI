@@ -44,6 +44,13 @@ class Admin {
 	public $show_quick_setup;
 
 	/**
+	 * Whether to Show upgrade summary modal.
+	 *
+	 * @var bool
+	 */
+	public $show_upgrade_summary;
+
+	/**
 	 * List of admin pages.
 	 *
 	 * @since 2.4.0
@@ -94,7 +101,7 @@ class Admin {
 		add_action( 'admin_footer', array( $this, 'maybe_check_files' ) );
 
 		// Check DB to see if quick setup modal is needed and store in public var.
-		add_action( 'admin_init', array( $this, 'maybe_show_quick_setup' ) );
+		add_action( 'admin_init', array( $this, 'maybe_show_modals' ) );
 
 		// Make sure plugin name is correct for adding plugin action links.
 		$plugin_name = defined( 'WPHB_WPORG' ) && WPHB_WPORG ? 'hummingbird-performance' : 'wp-hummingbird';
@@ -120,14 +127,14 @@ class Admin {
 		// Upgrade link.
 		if ( ! Utils::is_member() ) {
 			if ( defined( 'WPHB_WPORG' ) && WPHB_WPORG ) {
-				$actions['upgrade'] = '<a href="' . Utils::get_link( 'plugin', 'hummingbird_pluginlist_upgrade' ) . '" aria-label="' . esc_attr( __( 'Upgrade to Hummingbird Pro', 'wphb' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Upgrade', 'wphb' ) . '</a>';
+				$actions['wphb-plugins-upgrade'] = '<a href="' . Utils::get_link( 'plugin', 'hummingbird_pluginlist_upgrade' ) . '" aria-label="' . esc_attr( __( 'Upgrade to Hummingbird Pro', 'wphb' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Upgrade', 'wphb' ) . '</a>';
 			} else {
-				$actions['upgrade'] = '<a href="' . Utils::get_link( 'plugin', 'hummingbird_pluginlist_renew' ) . '" aria-label="' . esc_attr( __( 'Renew Membership', 'wphb' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Renew Membership', 'wphb' ) . '</a>';
+				$actions['wphb-plugins-upgrade'] = '<a href="' . Utils::get_link( 'plugin', 'hummingbird_pluginlist_renew' ) . '" aria-label="' . esc_attr( __( 'Renew Membership', 'wphb' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Renew Membership', 'wphb' ) . '</a>';
 			}
 		}
 
 		// Documentation link.
-		$actions['docs'] = '<a href="' . Utils::get_link( 'docs', 'hummingbird_pluginlist_docs' ) . '" aria-label="' . esc_attr( __( 'View Hummingbird Documentation', 'wphb' ) ) . '" target="_blank">' . esc_html__( 'Docs', 'wphb' ) . '</a>';
+		$actions['wphb-plugins-docs'] = '<a href="' . Utils::get_link( 'docs', 'hummingbird_pluginlist_docs' ) . '" aria-label="' . esc_attr( __( 'View Hummingbird Documentation', 'wphb' ) ) . '" target="_blank">' . esc_html__( 'Docs', 'wphb' ) . '</a>';
 
 		// Settings link.
 		if ( current_user_can( Utils::get_admin_capability() ) ) {
@@ -136,7 +143,7 @@ class Admin {
 			} else {
 				$url = Utils::get_admin_menu_url();
 			}
-			$actions['dashboard'] = '<a href="' . $url . '" aria-label="' . esc_attr( __( 'Go to Hummingbird Dashboard', 'wphb' ) ) . '">' . esc_html__( 'Settings', 'wphb' ) . '</a>';
+			$actions['wphb-plugins-dashboard'] = '<a href="' . $url . '" aria-label="' . esc_attr( __( 'Go to Hummingbird Dashboard', 'wphb' ) ) . '">' . esc_html__( 'Settings', 'wphb' ) . '</a>';
 		}
 
 		return array_reverse( $actions );
@@ -173,6 +180,12 @@ class Admin {
 		}
 
 		$links[] = '<a href="https://premium.wpmudev.org/roadmap/" target="_blank" title="' . esc_attr__( 'Roadmap', 'wphb' ) . '">' . esc_html__( 'Roadmap', 'wphb' ) . '</a>';
+
+		$links[] = '<a class="wphb-stars" href="https://wordpress.org/support/plugin/hummingbird-performance/reviews/#new-post" target="_blank" rel="noopener noreferrer" title="' . esc_attr__( 'Rate our plugin', 'wphb' ) . '">
+					<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+					</a>';
+
+		echo '<style>.wphb-stars span,.wphb-stars span:hover{color:#ffb900}.wphb-stars span:hover~span{color:#888}</style>';
 
 		return $links;
 	}
@@ -313,11 +326,14 @@ class Admin {
 	 *
 	 * @since 1.5.0
 	 */
-	public function maybe_show_quick_setup() {
+	public function maybe_show_modals() {
 		// Only if in admin or user is logged in.
 		if ( ! is_admin() || ! is_user_logged_in() ) {
 			return;
 		}
+
+		// Check DB to see if upgrade modal is needed and store in public var.
+		$this->show_upgrade_summary = get_site_option( 'wphb_show_upgrade_summary' );
 
 		// If setup has already ran - exit.
 		$this->show_quick_setup = get_option( 'wphb_run_onboarding' );
@@ -354,11 +370,12 @@ class Admin {
 		}
 
 		WP_Hummingbird::flush_cache();
+		Utils::get_module( 'page_cache' )->toggle_service( false );
 
 		if ( 'all' === $wphb_clear ) {
 			Settings::reset_to_defaults();
 			update_option( 'wphb_run_onboarding', true );
-			delete_option( 'wphb-new-user-tour' );
+			update_option( 'wphb-minification-show-config_modal', true );
 
 			// Clean all cron.
 			wp_clear_scheduled_hook( 'wphb_performance_report' );
@@ -376,7 +393,7 @@ class Admin {
 
 							Settings::reset_to_defaults();
 							update_option( 'wphb_run_onboarding', true );
-							delete_option( 'wphb-new-user-tour' );
+							update_option( 'wphb-minification-show-config_modal', true );
 
 							// Clean all cron.
 							wp_clear_scheduled_hook( 'wphb_minify_clear_files' );

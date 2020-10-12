@@ -81,40 +81,45 @@ class Settings {
 	public static function get_default_settings() {
 		$defaults = array(
 			'minify'      => array(
-				'enabled'     => false,
-				'use_cdn'     => true,
-				'log'         => false,
-				'file_path'   => '',
+				'enabled'      => false,
+				'use_cdn'      => true,
+				'log'          => false,
+				'file_path'    => '',
 				// Only for multisites. Toggles minification in a subsite
 				// By default is true as if 'minify'-'enabled' is set to false, this option has no meaning.
-				'minify_blog' => true,
-				'view'        => 'basic', // Accepts: 'basic' or 'advanced'.
+				'minify_blog'  => true,
+				'view'         => 'basic', // Accepts: 'basic' or 'advanced'.
+				'type'         => 'speedy', // Accepts: 'speedy' or 'basic'.
+				'do_assets'    => array( // Assets to optimize.
+					'styles'  => true,
+					'scripts' => true,
+				),
 				// Only for multisite.
-				'block'       => array(
+				'block'        => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
-				'minify'      => array(
+				'dont_minify'  => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
-				'combine'     => array(
+				'dont_combine' => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
-				'position'    => array(
+				'position'     => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
-				'defer'       => array(
+				'defer'        => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
-				'inline'      => array(
+				'inline'       => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
-				'nocdn'       => array(
+				'nocdn'        => array(
 					'scripts' => array(),
 					'styles'  => array(),
 				),
@@ -137,7 +142,7 @@ class Settings {
 				// By default is true as if 'page_cache'-'enabled' is set to false, this option has no meaning.
 				'cache_blog'   => true,
 				'control'      => false,
-				'detection'    => 'manual', // Accepts: manual, auto and none.
+				'detection'    => 'auto', // Accepts: manual, auto and none.
 				'pages_cached' => 0,
 				'integrations' => array(
 					'varnish' => false,
@@ -187,12 +192,14 @@ class Settings {
 				),
 			),
 			'advanced'    => array(
-				'query_string'   => false,
-				'emoji'          => false,
-				'prefetch'       => array(),
-				'db_cleanups'    => false,
-				'cart_fragments' => false,
-				'lazy_load'      => array(
+				'query_string'         => false,
+				'query_strings_global' => false, // If true, will force query_string on all subsites.
+				'emoji'                => false,
+				'emoji_global'         => false, // If true, will force emoji on all subsites.
+				'prefetch'             => array(),
+				'db_cleanups'          => false,
+				'cart_fragments'       => false,
+				'lazy_load'            => array(
 					'enabled'   => false,
 					'method'    => 'click',
 					'button'    => array(
@@ -255,7 +262,7 @@ class Settings {
 		}
 
 		$options = array(
-			'minify'      => array( 'minify_blog', 'view', 'block', 'minify', 'combine', 'position', 'defer', 'inline' ),
+			'minify'      => array( 'minify_blog', 'view', 'type', 'do_assets', 'block', 'dont_minify', 'dont_combine', 'position', 'defer', 'inline', 'nocdn' ),
 			'page_cache'  => array( 'cache_blog' ),
 			'performance' => array( 'dismissed', 'widget' ),
 			'advanced'    => array( 'query_string', 'emoji', 'prefetch', 'cart_fragments' ),
@@ -305,7 +312,7 @@ class Settings {
 	 */
 	public static function reset_to_defaults() {
 		Utils::get_module( 'redis' )->disable();
-		
+
 		$defaults = self::get_default_settings();
 
 		if ( ! is_multisite() ) {

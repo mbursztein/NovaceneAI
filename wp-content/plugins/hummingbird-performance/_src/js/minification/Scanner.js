@@ -63,7 +63,7 @@ const MinificationScanner = ( totalSteps, currentStep ) => {
 	 *
 	 * @param {number} remainingSteps
 	 */
-	const step = function( remainingSteps ) {
+	const step = function ( remainingSteps ) {
 		if ( remainingSteps >= 0 ) {
 			currentStep = totalSteps - remainingSteps;
 			Fetcher.minification.checkStep( currentStep ).then( () => {

@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
         $('.checkbox-radio-1').prop('checked', false);
         if ( checked ) {
             $(this).prop('checked',true);
-        } 
+        }
     });
 
     // field - after sent script
@@ -61,6 +61,10 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         sign = window.location.href.indexOf("?") > -1 ? '&' : '?';
         location.href = window.location.href + sign + 'wpcf7_redirect_dismiss_banner=1';
-    });
-    
+	});
+
+	// Add selected attribute to pages dropdown if none selected
+	if ( $('#wpcf7-redirect-page-id').val() == 0 ) {
+		$('#wpcf7-redirect-page-id option:first').attr('selected', 'selected')
+	}
 });

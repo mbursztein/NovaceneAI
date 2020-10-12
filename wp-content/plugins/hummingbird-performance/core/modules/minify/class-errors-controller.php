@@ -186,17 +186,12 @@ class Errors_Controller {
 			);
 
 			if ( ! empty( $actions ) && is_array( $actions ) ) {
-
-				$key = in_array( $handle, $options['minify'][ $type ], true );
-				if ( in_array( 'minify', $actions, true ) && false !== $key ) {
-					unset( $options['minify'][ $type ][ $key ] );
-					$options['minify'][ $type ] = array_values( $options['minify'][ $type ] );
+				if ( in_array( 'minify', $actions, true ) && ! in_array( $handle, $options['dont_minify'][ $type ], true ) ) {
+					$options['dont_minify'][ $type ][] = $handle;
 				}
 
-				$key = in_array( $handle, $options['combine'][ $type ], true );
-				if ( in_array( 'combine', $actions, true ) && false !== $key ) {
-					unset( $options['combine'][ $type ][ $key ] );
-					$options['combine'][ $type ] = array_values( $options['combine'][ $type ] );
+				if ( in_array( 'combine', $actions, true ) && ! in_array( $handle, $options['dont_combine'][ $type ], true ) ) {
+					$options['dont_combine'][ $type ][] = $handle;
 				}
 			}
 		}

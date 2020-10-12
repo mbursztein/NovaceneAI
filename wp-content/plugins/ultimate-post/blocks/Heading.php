@@ -248,7 +248,7 @@ class Heading{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn'
                     ],
                 ],
             ],
@@ -260,7 +260,7 @@ class Heading{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
                     ],
                 ],
             ],
@@ -272,7 +272,7 @@ class Heading{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
                     ],
                 ],
             ],

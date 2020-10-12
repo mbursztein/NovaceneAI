@@ -196,10 +196,16 @@ class Page_Cache extends Module {
 		}
 
 		$caching_plugins = array(
-			'wp-super-cache/wp-cache.php'         => 'WP Super Cache',
-			'w3-total-cache/w3-total-cache.php'   => 'W3 Total Cache',
-			'wp-fastest-cache/wpFastestCache.php' => 'WP Fastest Cache',
-			'litespeed-cache/litespeed-cache.php' => 'LiteSpeed Cache',
+			'autoptimize/autoptimize.php'               => 'Autoptimize',
+			'litespeed-cache/litespeed-cache.php'       => 'LiteSpeed Cache',
+			'speed-booster-pack/speed-booster-pack.php' => 'Speed Booster Pack',
+			'swift-performance-lite/performance.php'    => 'Swift Performance Lite',
+			'w3-total-cache/w3-total-cache.php'         => 'W3 Total Cache',
+			'wp-fastest-cache/wpFastestCache.php'       => 'WP Fastest Cache',
+			'wp-optimize/wp-optimize.php'               => 'WP-Optimize',
+			'wp-performance-score-booster'              => 'WP Performance Score Booster',
+			'wp-performance/wp-performance.php'         => 'WP Performance',
+			'wp-super-cache/wp-cache.php'               => 'WP Super Cache',
 		);
 
 		foreach ( $caching_plugins as $plugin => $plugin_name ) {
@@ -378,6 +384,8 @@ class Page_Cache extends Module {
 		$wphb_cache_config->mobile = isset( $settings['settings']['mobile'] ) ? (bool) $settings['settings']['mobile'] : true;
 		// Clear cache on comment post.
 		$wphb_cache_config->comment_clear = isset( $settings['settings']['comment_clear'] ) ? (bool) $settings['settings']['comment_clear'] : true;
+		// Cache Headers.
+		$wphb_cache_config->cache_headers = isset( $settings['settings']['cache_headers'] ) ? (bool) $settings['settings']['cache_headers'] : false;
 
 		$wphb_cache_config->exclude_url     = $settings['exclude']['url_strings'];
 		$wphb_cache_config->exclude_agents  = $settings['exclude']['user_agents'];
@@ -393,12 +401,11 @@ class Page_Cache extends Module {
 	 * @used-by \Hummingbird\Admin\Pages\Caching::page_caching_metabox()
 	 */
 	public function get_settings() {
-		/**
-		 * Filesystem module.
-		 *
-		 * @var Filesystem $wphb_fs
-		 */
 		global $wphb_fs;
+
+		if ( ! $wphb_fs ) {
+			$wphb_fs = Filesystem::instance();
+		}
 
 		$config_file = $wphb_fs->basedir . 'wphb-cache.php';
 
@@ -442,9 +449,10 @@ class Page_Cache extends Module {
 				'compress'         => 0,
 				'mobile'           => 1,
 				'comment_clear'    => 1,
+				'cache_headers'    => 0,
 			),
 			'exclude'           => array(
-				'url_strings' => array( 'wp-.*\.php', 'index\.php', 'xmlrpc\.php', 'sitemap\.xml' ),
+				'url_strings' => array( 'wp-.*\.php', 'index\.php', 'xmlrpc\.php', 'sitemap[^\/.]*\.xml' ),
 				'user_agents' => array( 'bot', 'is_archive', 'slurp', 'crawl', 'spider', 'Yandex' ),
 				'cookies'     => array( 'wp_woocommerce_session_' ),
 			),
@@ -516,7 +524,7 @@ class Page_Cache extends Module {
 			return array( 'frontpage', 'home', 'page', 'single', 'archive', 'category', 'tag' );
 		}
 
-		$pages = array(
+		return array(
 			'frontpage' => __( 'Frontpage', 'wphb' ),
 			'home'      => __( 'Blog', 'wphb' ),
 			'page'      => __( 'Pages', 'wphb' ),
@@ -525,8 +533,6 @@ class Page_Cache extends Module {
 			'category'  => __( 'Categories', 'wphb' ),
 			'tag'       => __( 'Tags', 'wphb' ),
 		);
-
-		return $pages;
 	}
 	/**
 	 * Skip custom post type added in settings.
@@ -557,9 +563,9 @@ class Page_Cache extends Module {
 	 * @param   string $request_uri  URI string.
 	 */
 	private static function get_file_cache_path( $request_uri ) {
-		global $wphb_cache_config, $wphb_cache_file;
+		global $wphb_cache_config, $wphb_cache_file, $wphb_meta_file;
 
-		// Prepare some varibales.
+		// Prepare some variables.
 		$http_host = htmlentities( stripslashes( $_SERVER['HTTP_HOST'] ) ); // Input var ok.
 		$port      = isset( $_SERVER['SERVER_PORT'] ) ? intval( $_SERVER['SERVER_PORT'] ) : 0; // Input var ok.
 
@@ -587,7 +593,11 @@ class Page_Cache extends Module {
 
 		$mobile = self::is_mobile_agent() ? '/mobile/' : '';
 
-		$wphb_cache_file = str_replace( '//', '/', $wphb_cache_config->cache_dir . $http_host . $mobile . $request_uri . $hash . $ext );
+		$filename = str_replace( '//', '/', $wphb_cache_config->cache_dir . $http_host . $mobile . $request_uri . $hash );
+
+		$wphb_cache_file = $filename . $ext;
+		$wphb_meta_file  = $filename . '-meta.php';
+
 		self::log_msg( 'Caching to file: ' . $wphb_cache_file );
 	}
 
@@ -700,7 +710,7 @@ class Page_Cache extends Module {
 		if ( ! is_array( $wphb_cache_config->page_types ) ) {
 			return false;
 		}
-		$blog_is_frontpage = ( 'posts' === get_option( 'show_on_front' ) && ! is_multisite() ) ? true : false;
+		$blog_is_frontpage = 'posts' === get_option( 'show_on_front' ) && ! is_multisite();
 
 		if ( is_front_page() && ! in_array( 'frontpage', $wphb_cache_config->page_types, true ) ) {
 			return true;
@@ -854,11 +864,6 @@ class Page_Cache extends Module {
 	 * @param   string $content  File content.
 	 */
 	private function write_file( $file, $content ) {
-		/**
-		 * Filesystem module.
-		 *
-		 * @var Filesystem $wphb_fs
-		 */
 		global $wphb_fs;
 
 		$wphb_fs->write( $file, $content );
@@ -901,12 +906,11 @@ class Page_Cache extends Module {
 			$settings['settings']['cache_identifier'] = 1;
 		}
 
-		/**
-		 * Filesystem module.
-		 *
-		 * @var Filesystem $wphb_fs
-		 */
 		global $wphb_cache_config, $wphb_fs;
+
+		if ( ! $wphb_fs ) {
+			$wphb_fs = Filesystem::instance();
+		}
 
 		$wphb_cache_config            = new stdClass();
 		$wphb_cache_config->cache_dir = $wphb_fs->cache_dir;
@@ -931,11 +935,6 @@ class Page_Cache extends Module {
 	 * @used-by Page_Cache::toggle_service()
 	 */
 	private function cleanup() {
-		/**
-		 * Filesystem module.
-		 *
-		 * @var Filesystem $wphb_fs
-		 */
 		global $wphb_fs;
 
 		if ( ! $wphb_fs ) {
@@ -1069,7 +1068,7 @@ class Page_Cache extends Module {
 	 * @return mixed
 	 */
 	public function cache_request( $buffer ) {
-		global $wphb_cache_file, $wphb_cache_config;
+		global $wphb_cache_file, $wphb_cache_config, $wphb_meta_file;
 
 		$cache_page = true;
 		$is_404     = false;
@@ -1126,7 +1125,7 @@ class Page_Cache extends Module {
 		$time_to_create = microtime( true ) - $this->start_time;
 
 		if ( $wphb_cache_config->cache_identifier ) {
-			$content .= '<!-- Hummingbird cache file was created in ' . $time_to_create . ' seconds, on ' . date( 'd-m-y G:i:s', current_time( 'timestamp' ) ) . ' -->';
+			$content .= '<!-- Hummingbird cache file was created in ' . $time_to_create . ' seconds, on ' . gmdate( 'd-m-y G:i:s', time() ) . ' -->';
 		}
 
 		$content = apply_filters( 'wphb_cache_content', $content );
@@ -1145,6 +1144,12 @@ class Page_Cache extends Module {
 
 			self::log_msg( 'Saving page to cache file: ' . $wphb_cache_file );
 			$this->write_file( $wphb_cache_file, $content );
+
+			// Cache Headers if enabled.
+			if ( $wphb_cache_config->cache_headers ) {
+				self::log_msg( 'Saving page headers to cache file: ' . $wphb_meta_file );
+				$this->write_file( $wphb_meta_file, '<?php die(); ?>' . wp_json_encode( $this->get_page_headers() ) );
+			}
 
 			// Update cached pages count.
 			$count = Settings::get_setting( 'pages_cached', 'page_cache' );
@@ -1165,19 +1170,25 @@ class Page_Cache extends Module {
 	private static function send_headers() {
 		global $wphb_cache_file, $wphb_cache_config;
 
+		// Get Cached headers.
+		$headers = self::get_page_headers_cached();
+
+		$headers_default = array(
+			/**
+			 * Vary: Accept-Encoding only with Content-Encoding: gzip
+			 * Do we want to Vary: Cookie?
+			 * https://www.fastly.com/blog/best-practices-using-vary-header/
+			 */
+			'Vary'          => 'Vary: Accept-Encoding, Cookie',
+			'Content-Type'  => 'Content-Type: text/html; charset=UTF-8',
+			'Cache-Control' => 'Cache-Control: max-age=3600, must-revalidate',
+		);
+
+		$headers = array_merge( $headers_default, $headers );
+
 		// Get meta from meta file. Meta should contain headers.
 		$meta = array(
-			'headers' =>
-				array(
-					/**
-					 * Vary: Accept-Encoding only with Content-Encoding: gzip
-					 * Do we want to Vary: Cookie?
-					 * https://www.fastly.com/blog/best-practices-using-vary-header/
-					 */
-					'Vary'          => 'Vary: Accept-Encoding, Cookie',
-					'Content-Type'  => 'Content-Type: text/html; charset=UTF-8',
-					'Cache-Control' => 'Cache-Control: max-age=3600, must-revalidate',
-				),
+			'headers' => $headers,
 			'uri'     => 'local.wordpress.dev/?switched_off=true',
 			'blog_id' => 1,
 			'post'    => 0,
@@ -1261,11 +1272,6 @@ class Page_Cache extends Module {
 	 * @return bool
 	 */
 	public function clear_cache( $directory = '' ) {
-		/**
-		 * Filesystem module.
-		 *
-		 * @var Filesystem $wphb_fs
-		 */
 		global $wphb_fs;
 
 		$directory_origin = $directory;
@@ -1314,8 +1320,8 @@ class Page_Cache extends Module {
 		// Purge specific folder.
 		$http_host = isset( $_SERVER['HTTP_HOST'] ) ? htmlentities( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : ''; // Input var ok.
 
-		$directory = $http_host . $directory;
-		$full_path = $wphb_fs->cache_dir . $directory;
+		$cache_dir = $http_host . $directory;
+		$full_path = $wphb_fs->cache_dir . $cache_dir;
 
 		// Check if current blog is mapped and change directory to mapped domain.
 		if ( class_exists( 'domain_map' ) ) {
@@ -1323,8 +1329,8 @@ class Page_Cache extends Module {
 			$utils         = $dm_map->utils();
 			$mapped_domain = $utils->get_mapped_domain();
 			if ( $mapped_domain ) {
-				$directory = $mapped_domain;
-				$full_path = $wphb_fs->cache_dir . $mapped_domain;
+				$cache_dir = $mapped_domain;
+				$full_path = $wphb_fs->cache_dir . $cache_dir;
 			}
 		}
 
@@ -1335,9 +1341,16 @@ class Page_Cache extends Module {
 
 		// Decrease cached pages count by 1.
 		$count = Settings::get_setting( 'pages_cached', 'page_cache' );
-		Settings::update_setting( 'pages_cached', --$count, 'page_cache' );
 
-		$status = $wphb_fs->purge( 'cache/' . $directory );
+		if ( $wphb_fs->purge( 'cache/' . $http_host . '/mobile' . $directory ) ) {
+			self::log_msg( 'Mobile cache has been cleared.' );
+			Settings::update_setting( 'pages_cached', --$count, 'page_cache' );
+		}
+
+		$status = $wphb_fs->purge( 'cache/' . $cache_dir );
+		if ( $status ) {
+			Settings::update_setting( 'pages_cached', --$count, 'page_cache' );
+		}
 
 		do_action( 'wphb_page_cache_cleared', $directory_origin );
 
@@ -1481,7 +1494,7 @@ class Page_Cache extends Module {
 	 * @used-by advanced-cache.php
 	 */
 	public static function serve_cache() {
-		global $wphb_cache_file, $wphb_cache_config;
+		global $wphb_cache_file, $wphb_cache_config, $wphb_meta_file;
 
 		// Exit early if in admin.
 		if ( is_admin() ) {
@@ -1521,6 +1534,12 @@ class Page_Cache extends Module {
 					return;
 				}
 			}
+			// Cache headers enabled: Check for header cache file, if doesn't exists; unlink page cache file.
+			if ( $wphb_cache_config->cache_headers && ! file_exists( $wphb_meta_file ) ) {
+				self::log_msg( "Cache file found, but header cache file doesn't exists. Removing file." );
+				unlink( $wphb_cache_file );
+				return;
+			}
 
 			self::log_msg( 'Cached file found. Serving to user.' );
 
@@ -1537,7 +1556,7 @@ class Page_Cache extends Module {
 	 * @used-by init action
 	 */
 	public function init_caching() {
-		global $wphb_cache_file;
+		global $wphb_cache_file, $wphb_cache_config, $wphb_meta_file;
 
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? stripslashes( $_SERVER['REQUEST_URI'] ) : ''; // Input var ok.
 
@@ -1552,10 +1571,16 @@ class Page_Cache extends Module {
 		 */
 		self::get_file_cache_path( $request_uri );
 
+		$is_cached = file_exists( $wphb_cache_file );
+
+		if ( $wphb_cache_config->cache_headers ) {
+			$is_cached = file_exists( $wphb_meta_file );
+		}
+
 		/**
 		 * 2. Check if the files are there?
 		 */
-		if ( file_exists( $wphb_cache_file ) ) {
+		if ( $is_cached ) {
 			self::log_msg( 'Cached file found. Serving to user.' );
 
 			self::send_headers();
@@ -1685,7 +1710,7 @@ class Page_Cache extends Module {
 			$message = print_r( $message, true );
 		}
 
-		$message = '[' . date( 'H:i:s' ) . '] ' . $message . PHP_EOL;
+		$message = '[' . date( 'c' ) . '] ' . $message . PHP_EOL;
 
 		$file = WP_CONTENT_DIR . '/wphb-logs/page-caching-log.php';
 
@@ -1698,7 +1723,7 @@ class Page_Cache extends Module {
 			}
 
 			if ( $wphb_fs ) {
-				$wphb_fs->write( $file, '<?php die(); ?>' );
+				$wphb_fs->write( $file, '<?php die(); ?>' . PHP_EOL );
 			}
 		}
 
@@ -1857,6 +1882,87 @@ class Page_Cache extends Module {
 		}
 
 		return $current;
+	}
+
+	/**
+	 * Gets the list of page headers being sent.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return array Empty array or list of headers
+	 */
+	public function get_page_headers() {
+		if ( ! function_exists( 'headers_list' ) ) {
+			return array();
+		}
+
+		$headers_list = headers_list();
+		if ( empty( $headers_list ) || ! is_array( $headers_list ) ) {
+			return array();
+		}
+
+		$headers = array();
+		foreach ( $headers_list as $header ) {
+			$pos = strpos( $header, ':' );
+
+			if ( empty( $pos ) ) {
+				continue;
+			}
+
+			$key = rtrim( substr( $header, 0, $pos ) );
+			$val = ltrim( substr( $header, $pos + 1 ) );
+
+			if ( ! empty( $headers[ $key ] ) ) {
+				$val = $headers[ $key ] . ', ' . $val;
+			}
+
+			$headers[ $key ] = $val;
+		}
+
+		return $headers;
+	}
+
+	/**
+	 * Get the headers from cached meta file if header caching is enabled and the cached file exists already.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @return array Array of headers with array( Header => Header: Value ) syntax or empty array.
+	 */
+	public static function get_page_headers_cached() {
+		global $wphb_meta_file, $wphb_cache_config;
+
+		// If headers caching is disabled or the headers file doesn't exists.
+		if ( ! $wphb_cache_config->cache_headers || ! file_exists( $wphb_meta_file ) ) {
+			return array();
+		}
+
+		$headers     = array();
+		$headers_raw = file_get_contents( $wphb_meta_file );
+
+		/* Remove <?php die(); ?> from file */
+		if ( 0 === strpos( $headers_raw, '<?php die(); ?>' ) ) {
+			$headers = substr( $headers_raw, 15 );
+		}
+		$headers = (array) json_decode( $headers );
+
+		if ( ! is_array( $headers ) ) {
+			return array();
+		}
+
+		/**
+		 * The only reason we do this is to please sir RIPS-a-Lot flagging this as code quality issue.
+		 *
+		 * Loop Iteration Change.
+		 * If it is not intended to override the loop counter dynamically within the body, a new variable can be introduced and used.
+		 */
+		$new_headers = array();
+		foreach ( $headers as $k => $v ) {
+			$new_headers[ $k ] = "$k: $v";
+		}
+		unset( $headers );
+
+		return $new_headers;
 	}
 
 }

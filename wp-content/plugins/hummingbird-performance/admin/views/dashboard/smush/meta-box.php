@@ -37,9 +37,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Plugin is installed but not active -->
 	<?php elseif ( $is_installed && ! $is_active && $can_activate ) : ?>
-		<div class="sui-notice sui-notice-warning">
-			<p><?php esc_html_e( 'WP Smush is installed but not activated! Activate and set up now to reduce page load time.', 'wphb' ); ?></p>
-		</div>
+		<?php
+		$this->admin_notices->show_inline(
+			esc_html__( 'WP Smush is installed but not activated! Activate and set up now to reduce page load time.', 'wphb' ),
+			'warning'
+		);
+		?>
 		<?php if ( $is_pro ) : ?>
 			<a href="<?php echo esc_url( $activate_pro_url ); ?>" class="sui-button sui-button-blue" id="smush-activate">
 				<?php esc_html_e( 'Activate Smush Pro', 'wphb' ); ?>
@@ -52,15 +55,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Plugin is installed and active -->
 	<?php elseif ( $is_installed && $is_active ) : ?>
-		<?php if ( 0 === $smush_data['bytes'] || 0 === $smush_data['percent'] ) : ?>
-			<div class="sui-notice sui-notice-success">
-				<p><?php esc_html_e( 'WP Smush is installed but no images have been smushed yet. Get in there and smush away!', 'wphb' ); ?></p>
-			</div>
-		<?php else : ?>
-			<div class="sui-notice sui-notice-success">
-				<p><?php printf( esc_html__( "WP Smush is installed. So far you've saved %1\$s of space. That's a total savings of %2\$s. Nice one!", 'wphb' ), $smush_data['human'], number_format_i18n( $smush_data['percent'], 2 ) . '%' ); ?></p>
-			</div>
-		<?php endif; ?>
+		<?php
+		if ( 0 === $smush_data['bytes'] || 0 === $smush_data['percent'] ) {
+			$this->admin_notices->show_inline(
+				esc_html__( 'WP Smush is installed but no images have been smushed yet. Get in there and smush away!', 'wphb' )
+			);
+		} else {
+			$this->admin_notices->show_inline(
+				sprintf(
+					esc_html__( "WP Smush is installed. So far you've saved %1\$s of space. That's a total savings of %2\$s. Nice one!", 'wphb' ),
+					$smush_data['human'],
+					number_format_i18n( $smush_data['percent'], 2 ) . '%'
+				)
+			);
+		}
+		?>
 	<?php endif; ?>
 </div>
 
@@ -77,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				printf(
 					__( 'Did you know WP Smush Pro delivers up to 2x better compression, allows you to smush your originals and removes any bulk smushing limits? <a href="%s" target="_blank">Try it absolutely FREE</a>', 'wphb' ),
-					\Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_dash_smush_upsell_link' )
+					\Hummingbird\Core\Utils::get_link( 'smush-plugin', 'hummingbird_dash_smush_upsell_link' )
 				);
 				?>
 			</p>

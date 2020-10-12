@@ -3,7 +3,7 @@
  * Plugin Name:  Redirection for Contact Form 7
  * Plugin URI:   http://querysol.com
  * Description:  Contact Form 7 Add-on - Redirect after mail sent.
- * Version:      1.3.6
+ * Version:      1.3.7
  * Author:       Query Solutions
  * Author URI:   http://querysol.com
  * Contributors: querysolutions, yuvalsabar
@@ -31,18 +31,18 @@ class WPCF7_Redirect {
 	public function __construct() {
 		$this->plugin_url  = plugin_dir_url( __FILE__ );
 		$this->plugin_path = plugin_dir_path( __FILE__ );
-		$this->version     = '1.3.6';
+		$this->version     = '1.3.7';
 		$this->add_actions();
 	}
 
 	static function plugin_activated( $file ) {
-		update_option( 'wpcf7_redirect_admin_notice_dismiss', 0 );
+		update_option( 'wpcf7_redirect_admin_notice_ver_dismiss', 0 );
 		update_option( 'wpcf7_redirect_banner_dismiss', 0 );
 	}
 
 	public function dismiss_ads() {
 		if ( isset( $_GET['wpcf7_redirect_dismiss_notice'] ) && 1 == $_GET['wpcf7_redirect_dismiss_notice'] ) {
-			update_option( 'wpcf7_redirect_admin_notice_dismiss', 1 );
+			update_option( 'wpcf7_redirect_admin_notice_ver_dismiss', 1 );
 		}
 
 		if ( isset( $_GET['wpcf7_redirect_dismiss_banner'] ) && 1 == $_GET['wpcf7_redirect_dismiss_banner'] ) {
@@ -288,10 +288,10 @@ class WPCF7_Redirect {
 
 				<div class="wpcf7-redirect-error error notice">
 					<h3>
-						<?php esc_html_e( 'Contact Form Redirection', 'wpcf7-redirect' ); ?>
+						<?php esc_html_e( 'Redirection for Contact Form 7', 'wpcf7-redirect' ); ?>
 					</h3>
 					<p>
-						<?php esc_html_e( 'Error: Contact Form 7 version is too old. Contact Form Redirection is compatible from version 4.8 and above. Please update Contact Form 7.', 'wpcf7-redirect' ); ?>
+						<?php esc_html_e( 'Error: Contact Form 7 version is too old. Redirection for Contact Form 7 is compatible from version 4.8 and above. Please update Contact Form 7.', 'wpcf7-redirect' ); ?>
 					</p>
 				</div>
 
@@ -302,7 +302,7 @@ class WPCF7_Redirect {
 			?>
 			<div class="wpcf7-redirect-error error notice">
 				<h3>
-					<?php esc_html_e( 'Contact Form Redirection', 'wpcf7-redirect' ); ?>
+					<?php esc_html_e( 'Redirection for Contact Form 7', 'wpcf7-redirect' ); ?>
 				</h3>
 				<p>
 					<?php esc_html_e( 'Error: Please install and activate Contact Form 7.', 'wpcf7-redirect' ); ?>
@@ -314,21 +314,22 @@ class WPCF7_Redirect {
 	}
 
 	public function pro_notice() {
-		if ( ! get_option( 'wpcf7_redirect_admin_notice_dismiss' ) ) :
+		if ( ! get_option( 'wpcf7_redirect_admin_notice_ver_dismiss' ) ) :
 			?>
 
 			<div class="wpcf7-redirect-pro-admin-notice updated notice is-dismissible">
+				<h3>IMPORTANT NOTICE!</h3>
 				<p>
-					<a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">
-						Redirection Pro For Contact Form 7 - We've added exciting new features!
-					</a>
+					The next update of Redirection for Contact Form 7 will be a major update, and so <a href="https://querysol.com/product/contact-form-7-redirection/beta-testers/" target="_blank">we need beta-testers for the next update.</a> The first 20 people who are willing to help, will get <strong>one year of free updates</strong> of <a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">Redirection for Contact Form 7 Pro</a> (standard plan).
+				</p>
+				<p>
+					Also, we will be happy if you can take a few moments and <a href="https://wordpress.org/support/plugin/wpcf7-redirect/reviews/" target="_blank">rate our plugin</a>.
 				</p>
 			</div>
 
 			<?php
 		endif;
 	}
-
 
 	/**
 	 * Add plugin support to browsers that don't support ajax
@@ -402,32 +403,20 @@ class WPCF7_Redirect {
 		<fieldset>
 			<div class="field-wrap field-wrap-page-id">
 				<label for="wpcf7-redirect-page-id">
-					<?php esc_html_e( 'Select a page to redirect to on successful form submission.', 'wpcf7-redirect' ); ?>   
+					<?php esc_html_e( 'Select a page to redirect to on successful form submission.', 'wpcf7-redirect' ); ?>
 				</label>
 
 				<?php
-				$pages = get_posts(
+				wp_dropdown_pages(
 					array(
-						'post_type'        => 'page',
-						'posts_per_page'   => -1,
-						'suppress_filters' => true,
+						'name'              => 'wpcf7-redirect[page_id]',
+						'show_option_none'  => __( 'Choose Page', 'wpcf7-redirect' ),
+						'option_none_value' => '0',
+						'selected'          => $fields['page_id'],
+						'id'                => 'wpcf7-redirect-page-id',
 					)
 				);
 				?>
-
-				<select name="wpcf7-redirect[page_id]" id="wpcf7-redirect-page-id">
-					<option value="0" <?php selected( 0, $fields['page_id'] ); ?>>
-						<?php _e( 'Choose Page', 'wpcf7-redirect' ); ?>
-					</option>
-
-					<?php foreach ( $pages as $p ) : ?>
-
-						<option value="<?php echo $p->ID; ?>" <?php selected( $p->ID, $fields['page_id'] ); ?>>
-							<?php echo $p->post_title; ?>
-						</option>
-
-					<?php endforeach ?>
-				</select>     
 			</div>
 
 			<div class="field-wrap field-wrap-external-url">
@@ -449,7 +438,7 @@ class WPCF7_Redirect {
 
 				<div class="field-notice field-notice-alert field-notice-hidden">
 					<strong>
-						<?php esc_html_e( 'Notice!', 'wpcf7-redirect' ); ?>        
+						<?php esc_html_e( 'Notice!', 'wpcf7-redirect' ); ?>
 					</strong>
 
 					<?php esc_html_e( 'This option might not work as expected, since browsers often block popup windows. This option depends on the browser settings.', 'wpcf7-redirect' ); ?>
@@ -460,7 +449,7 @@ class WPCF7_Redirect {
 				<input type="checkbox" id="wpcf7-redirect-http-build-query" class="checkbox-radio-1" name="wpcf7-redirect[http_build_query]" <?php checked( $fields['http_build_query'], 'on', true ); ?>/>
 
 				<label for="wpcf7-redirect-http-build-query">
-					<?php esc_html_e( 'Pass all the fields from the form as URL query parameters', 'wpcf7-redirect' ); ?>      
+					<?php esc_html_e( 'Pass all the fields from the form as URL query parameters', 'wpcf7-redirect' ); ?>
 				</label>
 			</div>
 
@@ -468,7 +457,7 @@ class WPCF7_Redirect {
 				<input type="checkbox" id="wpcf7-redirect-http-build-query-selectively" class="checkbox-radio-1" name="wpcf7-redirect[http_build_query_selectively]" <?php checked( $fields['http_build_query_selectively'], 'on', true ); ?>/>
 
 				<label for="wpcf7-redirect-http-build-query-selectively">
-					<?php esc_html_e( 'Pass specific fields from the form as URL query parameters', 'wpcf7-redirect' ); ?>      
+					<?php esc_html_e( 'Pass specific fields from the form as URL query parameters', 'wpcf7-redirect' ); ?>
 				</label>
 
 				<input type="text" id="wpcf7-redirect-http-build-query-selectively-fields" class="field-hidden" placeholder="<?php esc_html_e( 'Fields to pass, separated by commas', 'wpcf7-redirect' ); ?>" name="wpcf7-redirect[http_build_query_selectively_fields]" value="<?php echo $fields['http_build_query_selectively_fields']; ?>">
@@ -476,7 +465,7 @@ class WPCF7_Redirect {
 
 			<div class="field-wrap field-wrap-delay-redirect">
 				<label for="wpcf7-redirect-delay-redirect">
-					<?php esc_html_e( 'Delay redirect (in milliseconds)', 'wpcf7-redirect' ); ?>      
+					<?php esc_html_e( 'Delay redirect (in milliseconds)', 'wpcf7-redirect' ); ?>
 				</label>
 
 				<input type="number" id="wpcf7-redirect-delay-redirect" name="wpcf7-redirect[delay_redirect]" value="<?php echo $fields['delay_redirect']; ?>">
@@ -497,7 +486,7 @@ class WPCF7_Redirect {
 
 				<div class="field-notice field-warning-alert field-notice-hidden">
 					<strong>
-						<?php esc_html_e( 'Warning!', 'wpcf7-redirect' ); ?>        
+						<?php esc_html_e( 'Warning!', 'wpcf7-redirect' ); ?>
 					</strong>
 
 					<?php esc_html_e( 'This option is for developers only - use with caution. If the plugin does not redirect after you have added scripts, it means you have a problem with your script. Either fix the script, or remove it.', 'wpcf7-redirect' ); ?>
@@ -507,12 +496,20 @@ class WPCF7_Redirect {
 
 		<div class="get-pro-wrap">
 			<div class="get-pro">
-				<span class="dashicons dashicons-star-filled"></span>
-				<a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">
-					<?php _e( "Redirection Pro For Contact Form 7 - We've added exciting new features!", 'wpcf7-redirect' ); ?>
+				<div class="get-pro-text">
+					<span class="dashicons dashicons-star-filled"></span>
+
+					<a href="https://querysol.com/product/contact-form-7-redirection/" target="_blank">
+					Redirection Pro For Contact Form 7 - We've added exciting new features!
 				</a>
+
 				<span class="dashicons dashicons-star-filled"></span>
 			</div>
+
+			<div class="rate-text">
+				<a href="https://wordpress.org/support/plugin/wpcf7-redirect/reviews/" target="_blank">We will be happy if you can take a few moments and rate our plugin.</a>
+			</div>
+		</div>
 		</div>
 
 		<?php

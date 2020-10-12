@@ -1,7 +1,7 @@
 /* global wphbGlobal */
 /* global ajaxurl */
 
-( function() {
+( function () {
 	'use strict';
 
 	const WPHBGlobal = {
@@ -36,7 +36,7 @@
 		post: ( url, action ) => {
 			const xhr = new XMLHttpRequest();
 			xhr.open( 'POST', url + '?action=' + action );
-			xhr.onload = function() {
+			xhr.onload = function () {
 				if ( xhr.status === 200 ) {
 					location.reload();
 				} else {
@@ -49,7 +49,7 @@
 		},
 	};
 
-	document.addEventListener( 'DOMContentLoaded', function() {
+	document.addEventListener( 'DOMContentLoaded', function () {
 		WPHBGlobal.init();
 	} );
 } )();

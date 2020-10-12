@@ -5,10 +5,8 @@
 @import "../common/mixins";
 
 /* General tab */
-.wpmud .box-advanced-general {
-    #cart_fragments_desc .sui-notice {
-        margin-top: 10px;
-    }
+.wpmud .box-advanced-general #cart_fragments_desc .sui-notice {
+    margin-top: 10px;
 }
 
 /* Database cleanup tab */

@@ -2,26 +2,18 @@
 
 import Fetcher from '../utils/fetcher';
 
-( function( $ ) {
+( function ( $ ) {
 	WPHB_Admin.dashboard = {
 		module: 'dashboard',
 
 		init() {
 			if ( wphbDashboardStrings ) this.strings = wphbDashboardStrings;
 
-			$( '.wphb-performance-report-item' ).click( function() {
+			$( '.wphb-performance-report-item' ).click( function () {
 				const url = $( this ).data( 'performance-url' );
 				if ( url ) {
 					location.href = url;
 				}
-			} );
-
-			$( '#dismiss-cf-notice' ).click( function( e ) {
-				e.preventDefault();
-				Fetcher.common.call( 'wphb_cf_notice_dismiss' );
-				const cloudFlareDashNotice = $( '.cf-dash-notice' );
-				cloudFlareDashNotice.slideUp();
-				cloudFlareDashNotice.parent().addClass( 'no-background-image' );
 			} );
 
 			return this;
@@ -29,10 +21,14 @@ import Fetcher from '../utils/fetcher';
 
 		/**
 		 * Skip quick setup.
+		 *
+		 * @param {boolean} reload  Reload the page after skipping setup.
 		 */
-		skipSetup() {
+		skipSetup( reload = true ) {
 			Fetcher.common.call( 'wphb_dash_skip_setup' ).then( () => {
-				window.location.reload();
+				if ( reload ) {
+					window.location.reload();
+				}
 			} );
 		},
 
@@ -50,16 +46,23 @@ import Fetcher from '../utils/fetcher';
 			);
 
 			window.WPHB_Admin.Tracking.track( 'plugin_scan_started', {
-				score_mobile_previous: wphbPerformanceStrings.previousScoreMobile,
-				score_desktop_previous: wphbPerformanceStrings.previousScoreDesktop,
+				score_mobile_previous:
+					wphbPerformanceStrings.previousScoreMobile,
+				score_desktop_previous:
+					wphbPerformanceStrings.previousScoreDesktop,
 			} );
 
-			this.skipSetup();
+			this.skipSetup( false );
 
 			// Run performance test
 			window.WPHB_Admin.getModule( 'performance' ).performanceTest(
 				this.strings.finishedTestURLsLink
 			);
+		},
+
+		hideUpgradeSummary: () => {
+			window.SUI.closeModal();
+			Fetcher.common.call( 'wphb_hide_upgrade_summary' );
 		},
 	};
 } )( jQuery );

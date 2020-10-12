@@ -17,6 +17,10 @@ class Taxonomy{
             //--------------------------
             //      Query Setting
             //--------------------------
+            'queryQuick' => [
+                'type' => 'string',
+                'default' =>'',
+            ],
             'queryNumber' => [
                 'type' => 'string',
                 'default' =>5,
@@ -43,7 +47,7 @@ class Taxonomy{
                 'default' => '[]',
                 'style' => [
                     (object)[
-                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'tag']]
+                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'post_tag']]
                     ],
                 ],
             ],
@@ -368,7 +372,7 @@ class Taxonomy{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn'
+                        'selector'=>'{{ULTP}} .ultp-block-wrapper .ultp-heading-wrap .ultp-heading-btn'
                     ],
                 ],
             ],
@@ -380,7 +384,7 @@ class Taxonomy{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
                     ],
                 ],
             ],
@@ -392,7 +396,7 @@ class Taxonomy{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
                     ],
                 ],
             ],
@@ -725,6 +729,32 @@ class Taxonomy{
                 'type' => 'string',
                 'default' => 'aboveTitle',
             ],
+            'customCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
+            'seperatorLink' => [
+                'type' => 'string',
+                'default' => admin_url( 'edit-tags.php?taxonomy=category' ),
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
+            'onlyCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
             'catLineWidth' => [
                 'type' => 'object',
                 'default' => (object)['lg'=>'20'],
@@ -794,6 +824,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { color:{{catColor}}; }'
                     ],
@@ -806,6 +837,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -818,6 +850,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -830,6 +863,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { border-radius:{{catRadius}}; }'
                     ],
@@ -842,6 +876,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover { color:{{catHoverColor}}; }'
                     ],
@@ -854,6 +889,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -866,6 +902,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -890,6 +927,7 @@ class Taxonomy{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { padding:{{catPadding}}; }'
                     ],
@@ -2144,11 +2182,11 @@ class Taxonomy{
 
                             include ULTP_PATH.'blocks/template/category.php';
                             
-                            $post_loop .= '<div class="ultp-block-item">';
+                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item">';
                                 $post_loop .= '<div class="ultp-block-content-wrap">';
                                     if( has_post_thumbnail() && $attr['showImage'] ){
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                            $post_loop .= '<a href="'.$titlelink.'"><img alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, ($attr['imgCrop'] ? $attr['imgCrop'] : 'full') ).'" /></a>';
+                                            $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             if( ($attr['catPosition'] != 'aboveTitle') && $attr['catShow'] ) {
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
                                             }

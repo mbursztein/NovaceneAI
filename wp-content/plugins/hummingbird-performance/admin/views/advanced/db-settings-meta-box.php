@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="scheduled_cleanup" class="sui-toggle">
 				<input type="checkbox" name="scheduled_cleanup" id="scheduled_cleanup" aria-labelledby="scheduled_cleanup-label">
 				<span class="sui-toggle-slider" aria-hidden="true"></span>
-				<span id="scheduled_cleanup-label" class="sui-toggle-label"><?php esc_html_e( 'Enabled scheduled cleanups', 'wphb' ); ?></span>
+				<span id="scheduled_cleanup-label" class="sui-toggle-label"><?php esc_html_e( 'Enable scheduled cleanups', 'wphb' ); ?></span>
 			</label>
 		</div>
 	</div>

@@ -154,11 +154,11 @@ class Dashboard extends Page {
 	 */
 	public function render_header() {
 		if ( filter_input( INPUT_GET, 'wphb-cache-cleared' ) ) {
-			$this->admin_notices->show( 'updated', __( 'Your cache has been successfully cleared. Your assets will regenerate the next time someone visits your website.', 'wphb' ), 'success' );
+			$this->admin_notices->show_floating( __( 'Your cache has been successfully cleared. Your assets will regenerate the next time someone visits your website.', 'wphb' ) );
 		}
 
 		if ( filter_input( INPUT_GET, 'wphb-cache-cleared-with-cloudflare' ) ) {
-			$this->admin_notices->show( 'updated', __( 'Your local and Cloudflare caches have been successfully cleared. Your assets will regenerate the next time someone visits your website.', 'wphb' ), 'success' );
+			$this->admin_notices->show_floating( __( 'Your local and Cloudflare caches have been successfully cleared. Your assets will regenerate the next time someone visits your website.', 'wphb' ) );
 		}
 
 		add_action( 'wphb_sui_header_sui_actions_right', array( $this, 'add_header_actions' ) );
@@ -869,25 +869,27 @@ class Dashboard extends Page {
 
 		// Remove those assets that we don't want to display.
 		foreach ( $collection['styles'] as $key => $item ) {
-			if ( ! apply_filters( 'wphb_minification_display_enqueued_file', true, $item, 'styles' ) ) {
+			if ( ! apply_filters( 'wphb_minification_display_enqueued_file', true, $item, 'styles' )
+				|| ! isset( $item['original_size'], $item['compressed_size'] ) ) {
 				unset( $collection['styles'][ $key ] );
 			}
 		}
 		foreach ( $collection['scripts'] as $key => $item ) {
-			if ( ! apply_filters( 'wphb_minification_display_enqueued_file', true, $item, 'scripts' ) ) {
+			if ( ! apply_filters( 'wphb_minification_display_enqueued_file', true, $item, 'scripts' )
+				|| ! isset( $item['original_size'], $item['compressed_size'] ) ) {
 				unset( $collection['scripts'][ $key ] );
 			}
 		}
 
 		$enqueued_files = count( $collection['scripts'] ) + count( $collection['styles'] );
 
-		$original_size_styles  = Utils::calculate_sum( @wp_list_pluck( $collection['styles'], 'original_size' ) );
-		$original_size_scripts = Utils::calculate_sum( @wp_list_pluck( $collection['scripts'], 'original_size' ) );
+		$original_size_styles  = Utils::calculate_sum( wp_list_pluck( $collection['styles'], 'original_size' ) );
+		$original_size_scripts = Utils::calculate_sum( wp_list_pluck( $collection['scripts'], 'original_size' ) );
 
 		$original_size = $original_size_scripts + $original_size_styles;
 
-		$compressed_size_styles  = Utils::calculate_sum( @wp_list_pluck( $collection['styles'], 'compressed_size' ) );
-		$compressed_size_scripts = Utils::calculate_sum( @wp_list_pluck( $collection['scripts'], 'compressed_size' ) );
+		$compressed_size_styles  = Utils::calculate_sum( wp_list_pluck( $collection['styles'], 'compressed_size' ) );
+		$compressed_size_scripts = Utils::calculate_sum( wp_list_pluck( $collection['scripts'], 'compressed_size' ) );
 		$compressed_size         = $compressed_size_scripts + $compressed_size_styles;
 
 		if ( ( $original_size_scripts + $original_size_styles ) <= 0 ) {

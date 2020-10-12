@@ -1,6 +1,10 @@
+/* global WPHB_Admin */
+/* global wphbCachingStrings */
+/* global SUI */
+
 import Fetcher from '../utils/fetcher';
 
-( function( $ ) {
+( function ( $ ) {
 	WPHB_Admin.DashboardCloudFlare = {
 		init( settings ) {
 			this.currentStep = settings.currentStep;
@@ -8,7 +12,6 @@ import Fetcher from '../utils/fetcher';
 			this.email = settings.email;
 			this.apiKey = settings.apiKey;
 			this.$stepsContainer = $( '#cloudflare-steps' );
-			this.$infoBox = $( '#cloudflare-info' );
 			this.$spinner = $( '.cloudflare-spinner' );
 			this.$deactivateButton = $( '.cloudflare-deactivate.button' );
 			this.$body = $( 'body' );
@@ -18,7 +21,7 @@ import Fetcher from '../utils/fetcher';
 			this.$body.on(
 				'click',
 				'input[type="submit"].cloudflare-clear-cache',
-				function( e ) {
+				function ( e ) {
 					e.preventDefault();
 					this.purgeCache.apply( $( e.target ), [ this ] );
 				}.bind( this )
@@ -27,7 +30,7 @@ import Fetcher from '../utils/fetcher';
 			this.$body.on(
 				'click',
 				'#cf-recheck-zones',
-				function( e ) {
+				function ( e ) {
 					e.preventDefault();
 					$( '#cf-recheck-zones' ).addClass( 'sui-button-onload' );
 					this.updateZones.apply( $( e.target ), [ this ] );
@@ -41,18 +44,19 @@ import Fetcher from '../utils/fetcher';
 			$button.attr( 'disabled', true );
 			self.showSpinner();
 
-			Fetcher.common.call( 'wphb_cloudflare_purge_cache' ).then( () => {
-				// Show notice
-				WPHB_Admin.notices.show(
-					'wphb-ajax-update-notice',
-					true,
-					'success',
-					wphbCachingStrings.successCloudflarePurge
-				);
-				// Remove spinner
-				$button.removeAttr( 'disabled' );
-				self.hideSpinner();
-			} );
+			Fetcher.common.call( 'wphb_cloudflare_purge_cache' )
+				.then( ( response ) => {
+					WPHB_Admin.notices.show(
+						wphbCachingStrings.successCloudflarePurge
+					);
+				} )
+				.catch( ( reject ) => {
+					WPHB_Admin.notices.show( reject.responseText, 'error' );
+				} );
+
+			// Remove spinner
+			$button.removeAttr( 'disabled' );
+			self.hideSpinner();
 		},
 
 		renderStep( step ) {
@@ -69,7 +73,7 @@ import Fetcher from '../utils/fetcher';
 					.html( template( this.data ) )
 					.fadeIn()
 					.find( 'form' )
-					.on( 'submit', function( e ) {
+					.on( 'submit', function ( e ) {
 						e.preventDefault();
 						self.submitStep.call( self, $( this ) );
 					} );
@@ -87,12 +91,12 @@ import Fetcher from '../utils/fetcher';
 
 			$howToInstructions.hide();
 
-			$( 'a.cloudflare-how-to-title' ).click( function( e ) {
+			$( 'a.cloudflare-how-to-title' ).click( function ( e ) {
 				e.preventDefault();
 				$howToInstructions.toggle();
 			} );
 
-			this.$stepsContainer.find( 'select' ).each( function() {
+			this.$stepsContainer.find( 'select' ).each( function () {
 				SUI.suiSelect( this );
 			} );
 
@@ -103,13 +107,7 @@ import Fetcher from '../utils/fetcher';
 			}
 		},
 
-		emptyInfoBox() {
-			this.$infoBox.html( '' );
-			this.$infoBox.removeClass();
-		},
-
 		updateZones( self ) {
-			self.hideInfoBox();
 			Fetcher.common
 				.call( 'wphb_cloudflare_recheck_zones' )
 				.then( ( response ) => {
@@ -118,21 +116,9 @@ import Fetcher from '../utils/fetcher';
 					$( '#cf-recheck-zones' ).removeClass( 'sui-button-onload' );
 				} )
 				.catch( ( error ) => {
-					self.showInfoBox( error, 'warning' );
+					WPHB_Admin.notices.show( error, 'error' );
 					$( '#cf-recheck-zones' ).removeClass( 'sui-button-onload' );
 				} );
-		},
-
-		showInfoBox( message, notice_class = 'error' ) {
-			this.$infoBox.addClass( 'sui-notice' );
-			this.$infoBox.addClass( 'sui-notice-' + notice_class );
-			this.$infoBox.addClass( 'sui-notice-sm' );
-			this.$infoBox.html( '<p>' + message + ' </p>' );
-		},
-
-		hideInfoBox() {
-			this.$infoBox.removeClass();
-			this.$infoBox.html( '' );
 		},
 
 		showSpinner() {
@@ -147,7 +133,6 @@ import Fetcher from '../utils/fetcher';
 			const self = this;
 
 			$form.find( 'input[type=submit]' ).attr( 'disabled', 'true' );
-			this.emptyInfoBox();
 			this.showSpinner();
 
 			Fetcher.cloudflare
@@ -161,7 +146,7 @@ import Fetcher from '../utils/fetcher';
 					}
 				} )
 				.catch( ( error ) => {
-					self.showInfoBox( error );
+					WPHB_Admin.notices.show( error, 'error' );
 				} );
 
 			$form.find( 'input[type=submit]' ).removeAttr( 'disabled' );
@@ -169,7 +154,7 @@ import Fetcher from '../utils/fetcher';
 		},
 	};
 
-	WPHB_Admin.DashboardCloudFlare.template = _.memoize( function( id ) {
+	WPHB_Admin.DashboardCloudFlare.template = _.memoize( function ( id ) {
 		let compiled,
 			options = {
 				evaluate: /<#([\s\S]+?)#>/g,
@@ -178,7 +163,7 @@ import Fetcher from '../utils/fetcher';
 				variable: 'data',
 			};
 
-		return function( data ) {
+		return function ( data ) {
 			_.templateSettings = options;
 			compiled = compiled || _.template( $( id ).html() );
 			return compiled( data );

@@ -21,24 +21,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <p><?php esc_html_e( "Store temporary data on your visitors' devices so that they don’t have to download assets twice if they don’t have to.", 'wphb' ); ?></p>
-<?php if ( $issues ) : ?>
-	<div class="sui-notice sui-notice-warning">
-		<p>
-			<?php
-			printf(
-				/* translators: %s: Number of issues */
-				__( '%1$s of your cache types don’t meet the recommended expiry period of 1 year. Configure browser caching <a href="%2$s" id="configure-link">here</a>.', 'wphb' ),
-				absint( $issues ),
-				esc_attr( $configure_caching_url )
-			);
-			?>
-		</p>
-	</div>
-<?php else : ?>
-	<div class="sui-notice sui-notice-success">
-		<p><?php esc_html_e( 'All of your cache types meet the recommended expiry period of 1 year. Great work!', 'wphb' ); ?></p>
-	</div>
-<?php endif; ?>
+<?php
+if ( $issues ) {
+	$this->admin_notices->show_inline(
+		sprintf( /* translators: %s: Number of issues */
+			__( '%1$s of your cache types don’t meet the recommended expiry period of 1 year. Configure browser caching <a href="%2$s" id="configure-link">here</a>.', 'wphb' ),
+			absint( $issues ),
+			esc_attr( $configure_caching_url )
+		),
+		'warning'
+	);
+} else {
+	$this->admin_notices->show_inline( esc_html__( 'All of your cache types meet the recommended expiry period of 1 year. Great work!', 'wphb' ) );
+}
+?>
 
 <ul class="sui-list sui-no-margin-bottom">
 	<li class="sui-list-header">

@@ -73,15 +73,18 @@ class Notices {
 
 		// This will show notice on both multisite and single site.
 		add_action( 'admin_notices', array( $this, 'clear_cache' ) );
+		add_action( 'network_admin_notices', array( $this, 'clear_cache' ) );
 
 		if ( is_multisite() ) {
 			add_action( 'network_admin_notices', array( $this, 'upgrade_to_pro' ) );
 			add_action( 'network_admin_notices', array( $this, 'free_version_deactivated' ) );
 			add_action( 'network_admin_notices', array( $this, 'free_version_rate' ) );
+			add_action( 'network_admin_notices', array( $this, 'plugin_compat_check' ) );
 		} else {
 			add_action( 'admin_notices', array( $this, 'upgrade_to_pro' ) );
 			add_action( 'admin_notices', array( $this, 'free_version_deactivated' ) );
 			add_action( 'admin_notices', array( $this, 'free_version_rate' ) );
+			add_action( 'admin_notices', array( $this, 'plugin_compat_check' ) );
 		}
 
 		add_action( 'upgrader_process_complete', array( $this, 'plugin_changed' ) );
@@ -135,7 +138,7 @@ class Notices {
 	 *
 	 * @since  1.7.0
 	 * @access private
-	 * @param  string $id             Accepted: upgrade-to-pro, free-deactivated, free-rated.
+	 * @param  string $id             Accepted: upgrade-to-pro, free-deactivated, free-rated, plugin-compat.
 	 * @param  string $message        Notice message.
 	 * @param  bool   $additional     Additional content that goes after the message text.
 	 * @param  bool   $only_hb_pages  Show message only on Hummingbird pages.
@@ -149,26 +152,32 @@ class Notices {
 		$dismiss_url = wp_nonce_url( add_query_arg( 'wphb-dismiss', $id ), 'wphb-dismiss-notice' );
 		?>
 		<div class="notice-info notice wphb-notice">
-			<p>
-				<?php echo $message; ?>
-				<a class="wphb-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">
-					<span class="dashicons dashicons-dismiss"></span>
-					<span class="screen-reader-text">
-						<?php esc_html_e( 'Dismiss this notice.', 'wphb' ); ?>
-					</span>
-				</a>
-			</p>
+			<a class="wphb-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">
+				<span class="dashicons dashicons-dismiss"></span>
+				<span class="screen-reader-text">
+					<?php esc_html_e( 'Dismiss this notice.', 'wphb' ); ?>
+				</span>
+			</a>
+			<?php echo wp_kses_post( $message ); ?>
 			<?php if ( $additional ) : ?>
 				<p>
-					<?php echo $additional; ?>
+					<?php echo wp_kses_post( $additional ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
 		<style>
 			.wphb-notice .wphb-dismiss {
+				color: #aaaaaa;
+				float: right;
+				padding: 15px;
+				position: absolute;
+				right: 1px;
 				text-decoration: none;
-				float:right;
-				color: #333333;
+				top: 0;
+			}
+			body:not(.wpmud) .wphb-notice .wphb-dismiss {
+				position: relative;
+				padding: 10px 0;
 			}
 		</style>
 		<?php
@@ -194,6 +203,8 @@ class Notices {
 		if ( 'option' === $mode ) {
 			return 'yes' !== get_option( 'wphb-notice-' . $notice . '-show' );
 		}
+
+		return false;
 	}
 
 	/**
@@ -208,6 +219,7 @@ class Notices {
 
 		$user_notices = array(
 			'upgrade-to-pro',
+			'plugin-compat',
 		);
 
 		$options_notices = array(
@@ -228,21 +240,121 @@ class Notices {
 	}
 
 	/**
-	 * Show info notice (HB style, not WP).
+	 * Show top floating notice (SUI style).
 	 *
-	 * @param string $id           Unique identifier for the notice.
-	 * @param string $message      The notice text.
-	 * @param string $class        Class for the notice wrapper.
-	 * @param bool   $can_dismiss  If is dissmisable or not.
-	 * @param bool   $notice_top   Show notice on top.
+	 * @since 2.6.0
+	 *
+	 * @param string $message  The notice text.
+	 * @param string $type     Notice type.
 	 */
-	public function show( $id, $message, $class = 'error', $can_dismiss = false, $notice_top = true ) {
+	public function show_floating( $message, $type = 'success' ) {
+		?>
+		<script>
+			document.addEventListener( 'DOMContentLoaded', function () {
+				WPHB_Admin.notices.show(
+					"<?php echo wp_kses_post( $message ); ?>",
+					"<?php echo esc_attr( $type ); ?>"
+				);
+			} );
+		</script>
+		<?php
+	}
+
+	/**
+	 * Show inline notice (SUI style).
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $message  The notice text.
+	 * @param string $class    Class for the notice wrapper.
+	 * @param mixed  ...$data  Variable list of addition text.
+	 */
+	public function show_inline( $message, $class = 'success', ...$data ) {
+		if ( 'sui-upsell-notice' === $class ) {
+			$this->show_inline_upsell( $message, ...$data );
+			return;
+		}
+		?>
+		<div class="sui-notice sui-notice-<?php echo esc_attr( $class ); ?>">
+			<div class="sui-notice-content">
+				<div class="sui-notice-message">
+					<i class="sui-notice-icon sui-icon-info sui-md" aria-hidden="true"></i>
+					<p><?php echo wp_kses_post( $message ); ?></p>
+					<?php foreach ( $data as $p ) : ?>
+						<?php if ( ! empty( $p ) ) : ?>
+							<?php echo '<p>' . wp_kses_post( $p ) . '</p>'; ?>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Show inline upsell notice (SUI style).
+	 *
+	 * This is an upsell implementation of an upsell notice to show with an image on the left side.
+	 * Can be triggered by calling show_inline() with a 'sui-upsell-notice' $class as an argument.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $message  The notice text.
+	 * @param mixed  ...$data  Variable list of addition text.
+	 */
+	private function show_inline_upsell( $message, ...$data ) {
+		?>
+		<div class="sui-upsell-notice">
+			<p>
+				<?php echo wp_kses_post( $message ); ?>
+				<?php foreach ( $data as $p ) : ?>
+					<?php echo wp_kses_post( $p ); ?>
+				<?php endforeach; ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Check if the notice can be displayed.
+	 *
+	 * @since 2.6.0  Refactored from show().
+	 *
+	 * @param string $id  Unique identifier for the notice.
+	 *
+	 * @return bool
+	 */
+	public function can_show_notice( $id ) {
 		// Is already dismissed ?
-		if ( $can_dismiss && $this->is_dismissed( $id, 'option' ) ) {
+		if ( $this->is_dismissed( $id, 'option' ) ) {
+			return false;
+		}
+
+		if ( in_array( $id, self::$displayed_notices, true ) ) {
+			return false;
+		}
+
+		self::$displayed_notices[] = $id;
+
+		return true;
+	}
+
+	/**
+	 * Show inline dismissible notice (SUI style).
+	 *
+	 * @since 2.6.0  Refactored from show().
+	 *
+	 * @param string $id       Unique identifier for the notice.
+	 * @param string $message  The notice text.
+	 * @param string $class    Class for the notice wrapper.
+	 */
+	public function show_inline_dismissible( $id, $message, $class = 'sui-notice-error' ) {
+		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
 			return;
 		}
 
-		if ( ! current_user_can( Utils::get_admin_capability() ) ) {
+		// Is already dismissed ?
+		if ( $this->is_dismissed( $id, 'option' ) ) {
 			return;
 		}
 
@@ -251,23 +363,20 @@ class Notices {
 		}
 
 		self::$displayed_notices[] = $id;
-
 		?>
-		<div class="<?php echo $notice_top ? 'sui-notice-top ' : 'sui-notice '; ?>sui-notice-<?php echo esc_attr( $class ); ?> sui-can-dismiss" <?php if ( $can_dismiss ) : ?>
-			id="wphb-dismissable"
-			data-id="<?php echo esc_attr( $id ); ?>"<?php endif; ?>>
+		<div class="sui-notice <?php echo esc_attr( $class ); ?>" id="<?php echo esc_attr( $id ); ?>" role="alert" style="display: block">
 			<div class="sui-notice-content">
-				<p><?php echo $message; ?></p>
+				<div class="sui-notice-message">
+					<i class="sui-notice-icon sui-icon-info sui-md" aria-hidden="true"></i>
+					<p><?php echo wp_kses_post( $message ); ?></p>
+					<p>
+						<a role="button" href="#" style="color: #888;text-transform: uppercase" onclick="WPHB_Admin.notices.dismiss( this )">
+							<?php esc_html_e( 'Dismiss', 'wphb' ); ?>
+						</a>
+					</p>
+				</div>
 			</div>
-			<span class="sui-notice-dismiss">
-				<?php if ( $notice_top ) : ?>
-					<a role="button" href="#" aria-label="<?php esc_html_e( 'Dismiss', 'wphb' ); ?>" class="sui-icon-check"></a>
-				<?php else : ?>
-					<a role="button" href="#"><?php esc_html_e( 'Dismiss', 'wphb' ); ?></a>
-				<?php endif; ?>
-			</span>
 		</div>
-
 		<?php
 	}
 
@@ -307,6 +416,7 @@ class Notices {
 			$url = WPMUDEV_Dashboard::$ui->page_urls->plugins_url;
 			/* translators: %s: Upgrade URL */
 			$message = sprintf( __( 'Awww yeah! You’ve got access to Hummingbird Pro! Let’s upgrade your free version so you can start using premium features. <a href="%s">Upgrade</a>', 'wphb' ), esc_url( $url ) );
+			$message = '<p>' . $message . '</p>';
 			$this->show_notice( 'upgrade-to-pro', $message, false, true );
 		}
 	}
@@ -330,9 +440,10 @@ class Notices {
 			return;
 		}
 
+		$text = '<p>' . __( 'We noticed you’re running both the free and pro versions of Hummingbird. No biggie! We’ve deactivated the free version for you. Enjoy the pro features!', 'wphb' ) . '</p>';
 		$this->show_notice(
 			'free-deactivated',
-			__( 'We noticed you’re running both the free and pro versions of Hummingbird. No biggie! We’ve deactivated the free version for you. Enjoy the pro features!', 'wphb' )
+			$text
 		);
 	}
 
@@ -356,10 +467,12 @@ class Notices {
 			return;
 		}
 
+		$text            = '<p>' . esc_html__( "We've spent countless hours developing Hummingbird and making it free for you to use. We would really appreciate it if you dropped us a quick rating!", 'wphb' ) . '</p>';
+		$additional_text = '<p><a href="https://wordpress.org/support/plugin/hummingbird-performance/reviews/" class="sui-button sui-button-blue" target="_blank">' . __( 'Rate Hummingbird', 'wphb' ) . '</a></p>';
 		$this->show_notice(
 			'free-rated',
-			__( "We've spent countless hours developing Hummingbird and making it free for you to use. We would really appreciate it if you dropped us a quick rating!", 'wphb' ),
-			'<a href="https://wordpress.org/support/plugin/hummingbird-performance/reviews/" class="sui-button sui-button-blue" target="_blank">' . __( 'Rate Hummingbird', 'wphb' ) . '</a>'
+			$text,
+			$additional_text
 		);
 	}
 
@@ -412,11 +525,74 @@ class Notices {
 			}
 		}
 
+		$text = '<p>' . $text . '</p>';
 		$this->show_notice(
 			'cache-cleaned',
 			$text,
 			$additional
 		);
+	}
+
+	/**
+	 * Generates text for the admin notice with a list of incompatible plugins
+	 *
+	 * @param array $incompat_plugins List of incompatible plugins if any.
+	 *
+	 * @return string Text message to be displayed
+	 */
+	public static function plugin_incompat_message( $incompat_plugins ) {
+
+		$text = '<p>' . esc_html__( 'You have multiple WordPress performance plugins installed. This may cause unpredictable behavior and can even break your site. For best results, use only one performance plugin at a time. ', 'wphb' );
+
+		if ( count( $incompat_plugins ) > 1 ) {
+			$text .= esc_html__( 'These plugins may cause issues with Hummingbird:', 'wphb' ) . '</p>';
+
+			$text .= '<ul id="wphb-incompat-plugin-list">';
+
+			foreach ( $incompat_plugins as $plugin_k => $plugin ) {
+				$text .= "<li><strong>$plugin</strong></li>";
+			}
+
+			$text .= '</ul>';
+		} else {
+			$text .= sprintf( /* translators: %s - plugin name */
+				esc_html__( '%s plugin may cause issues with Hummingbird.', 'wphb' ),
+				'<strong>' . $incompat_plugins[ key( $incompat_plugins ) ] . '</strong>'
+			) . '</p>';
+		}
+
+		return $text;
+	}
+
+	/**
+	 * Display a admin notice if any of the incompatible plugin is installed.
+	 */
+	public function plugin_compat_check() {
+		if ( $this->is_dismissed( 'plugin-compat' ) ) {
+			return;
+		}
+
+		$incompat_plugins = Utils::get_incompat_plugin_list();
+
+		if ( count( $incompat_plugins ) <= 0 ) {
+			return;
+		}
+
+		$text = $this->plugin_incompat_message( $incompat_plugins );
+
+		// CTA.
+		if ( is_multisite() && current_user_can( 'manage_network_plugins' ) ) {
+			$plugins_url = network_admin_url( 'plugins.php' );
+		} else {
+			$plugins_url = admin_url( 'plugins.php' );
+		}
+
+		$dismiss_url = wp_nonce_url( add_query_arg( 'wphb-dismiss', 'plugin-compat' ), 'wphb-dismiss-notice' );
+
+		$additional  = '<a href="' . esc_url( $plugins_url ) . '" id="wphb-manage-plugins" class="button button-primary">' . esc_html__( 'Manage plugins', 'wphb' ) . '</a>';
+		$additional .= '<a role="button" href="' . esc_url( $dismiss_url ) . '" class="wphb-dismiss-cta">' . esc_html__( 'Dismiss', 'wphb' ) . '</a>';
+
+		$this->show_notice( 'plugin-compat', $text, $additional, true );
 	}
 
 }

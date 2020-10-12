@@ -16,16 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p><?php esc_html_e( 'Hummingbird stores static HTML copies of your pages and posts to decrease page load time.', 'wphb' ); ?></p>
 <div class="sui-box-settings-row">
-
-	<?php if ( is_wp_error( $error ) ) : ?>
-		<div class="sui-notice sui-notice-error">
-			<p><?php echo $error->get_error_message(); ?></p>
-		</div>
-	<?php else : ?>
-		<div class="sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'Page caching is currently active.', 'wphb' ); ?></p>
-		</div>
-	<?php endif; ?>
+	<?php
+	if ( is_wp_error( $error ) ) {
+		$this->admin_notices->show_inline( $error->get_error_message(), 'error' );
+	} else {
+		$this->admin_notices->show_inline( esc_html__( 'Page caching is currently active.', 'wphb' ) );
+	}
+	?>
 </div><!-- end row -->
 
 <div class="sui-box-settings-row">

@@ -10,18 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$tour = \Hummingbird\Core\Settings::get( 'wphb-new-user-tour' );
 ?>
 
 <div class="sui-modal sui-modal-sm">
 	<div role="dialog" class="sui-modal-content wphb-assets-modal" id="wphb-assets-modal" aria-modal="true" aria-labelledby="assetsFound">
 		<div class="sui-box">
-			<div class="sui-box-header sui-flatten sui-content-center sui-spacing-top--60">
-				<button class="sui-button-icon sui-button-float--right" id="dialog-close-div" onclick="WPHB_Admin.minification.goToSettings(<?php echo (bool) $tour; ?>)">
-					<i class="sui-icon-close sui-md" aria-hidden="true"></i>
-					<span class="sui-screen-reader-text"><?php esc_attr_e( 'Close this dialog window', 'wphb' ); ?></span>
-				</button>
-
+			<div class="sui-box-header sui-flatten sui-content-center sui-spacing-top--40">
 				<h3 class="sui-box-title sui-lg" id="assetsFound">
 					<?php
 					/* translators: %s - number of assets */
@@ -35,14 +29,15 @@ $tour = \Hummingbird\Core\Settings::get( 'wphb-new-user-tour' );
 			</div>
 
 			<div class="sui-box-body">
-				<div class="sui-notice sui-notice-warning">
-					<p>
-						<?php esc_html_e( 'This is an advanced feature and can break themes easily. We recommend modifying each file individually and checking your frontend regularly for issues.', 'wphb' ); ?>
-					</p>
-				</div>
+				<?php
+				$this->admin_notices->show_inline(
+					esc_html__( 'This is an advanced feature and can break themes easily. We recommend modifying each file individually and checking your frontend regularly for issues.', 'wphb' ),
+					'warning'
+				);
+				?>
 
 				<div class="sui-block-content-center">
-					<button class="sui-button" onclick="WPHB_Admin.minification.goToSettings(<?php echo (bool) $tour; ?>)">
+					<button class="sui-button" onclick="WPHB_Admin.minification.goToSettings()">
 						<?php esc_html_e( 'Got It', 'wphb' ); ?>
 					</button>
 				</div>

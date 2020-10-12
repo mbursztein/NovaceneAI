@@ -1,6 +1,6 @@
 import Fetcher from '../utils/fetcher';
 
-( function( $ ) {
+( function ( $ ) {
 	'use strict';
 	WPHB_Admin.performance = {
 		module: 'performance',
@@ -20,7 +20,7 @@ import Fetcher from '../utils/fetcher';
 
 			this.wphbSetInterval();
 
-			document.onkeyup = function( e ) {
+			document.onkeyup = function ( e ) {
 				clearInterval( self.key_timer );
 				self.wphbSetInterval();
 				e = e || event;
@@ -41,7 +41,7 @@ import Fetcher from '../utils/fetcher';
 			};
 
 			// Run performance test from empty report meta box.
-			$( '#run-performance-test' ).on( 'click', function( e ) {
+			$( '#run-performance-test' ).on( 'click', function ( e ) {
 				e.preventDefault();
 
 				window.SUI.openModal(
@@ -72,18 +72,13 @@ import Fetcher from '../utils/fetcher';
 			}
 
 			// Save performance test settings
-			$( 'body' ).on( 'submit', '.settings-frm', function( e ) {
+			$( 'body' ).on( 'submit', '.settings-frm', function ( e ) {
 				e.preventDefault();
 				const formData = $( this ).serialize();
 
 				Fetcher.performance
 					.savePerformanceTestSettings( formData )
-					.then( () =>
-						WPHB_Admin.notices.show(
-							'wphb-ajax-update-notice',
-							true
-						)
-					);
+					.then( () => WPHB_Admin.notices.show() );
 				return false;
 			} );
 
@@ -132,7 +127,7 @@ import Fetcher from '../utils/fetcher';
 			 *
 			 * @since 2.0.0
 			 */
-			$( 'input[name=desktop-report]' ).on( 'change', function( e ) {
+			$( 'input[name=desktop-report]' ).on( 'change', function ( e ) {
 				const otherClass =
 					'desktop_report-true' === e.target.id
 						? 'desktop_report-false'
@@ -148,7 +143,7 @@ import Fetcher from '../utils/fetcher';
 			 *
 			 * @since 2.0.0
 			 */
-			$( 'input[name=subsite-tests]' ).on( 'change', function( e ) {
+			$( 'input[name=subsite-tests]' ).on( 'change', function ( e ) {
 				const otherClass =
 					'subsite_tests-false' === e.target.id
 						? 'subsite_tests-true'
@@ -164,7 +159,7 @@ import Fetcher from '../utils/fetcher';
 			 *
 			 * @since 2.0.0
 			 */
-			$( 'input[name=report-type]' ).on( 'change', function( e ) {
+			$( 'input[name=report-type]' ).on( 'change', function ( e ) {
 				const divs = document.querySelectorAll(
 					'input[name=report-type]'
 				);
@@ -181,7 +176,7 @@ import Fetcher from '../utils/fetcher';
 			 */
 			$( 'select[name=wphb-performance-report-type]' ).on(
 				'change',
-				function( e ) {
+				function ( e ) {
 					const url = new URL( window.location );
 					url.searchParams.set( 'type', e.target.value );
 					window.location = url;
@@ -194,7 +189,7 @@ import Fetcher from '../utils/fetcher';
 		wphbSetInterval() {
 			const self = this;
 
-			this.key_timer = window.setInterval( function() {
+			this.key_timer = window.setInterval( function () {
 				// Clean pressedKeys every 1sec
 				self.pressedKeys = [];
 			}, 1000 );
@@ -215,7 +210,7 @@ import Fetcher from '../utils/fetcher';
 				.then( ( response ) => {
 					if ( ! response.finished ) {
 						// Try again 3 seconds later
-						window.setTimeout( function() {
+						window.setTimeout( function () {
 							self.performanceTest( redirect );
 						}, 3000 );
 					} else if ( redirect ) {
@@ -231,7 +226,7 @@ import Fetcher from '../utils/fetcher';
 						);
 
 						// Give a second for the report to be saved to the db.
-						window.setTimeout( function() {
+						window.setTimeout( function () {
 							window.location = redirect;
 						}, 2000 );
 					}
@@ -245,7 +240,7 @@ import Fetcher from '../utils/fetcher';
 			if ( 0 === this.progress ) {
 				this.progress = 2;
 
-				this.timer = window.setInterval( function() {
+				this.timer = window.setInterval( function () {
 					self.progress += 1;
 					self.updateProgressBar();
 				}, 100 );
@@ -263,7 +258,7 @@ import Fetcher from '../utils/fetcher';
 				clearInterval( this.timer );
 				this.timer = false;
 
-				this.timer = window.setInterval( function() {
+				this.timer = window.setInterval( function () {
 					self.progress += 1;
 					self.updateProgressBar();
 				}, 1000 );

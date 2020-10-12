@@ -35,7 +35,7 @@ function wpcf7_redirect_mailsent_handler() {
 
 			http_query = http_query.slice(0, -1);
 			redirect_url = redirect_url + decodeURIComponent(http_query);
-		} 
+		}
 
 		// Redirect
 		if ( redirect_url ) {

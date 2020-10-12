@@ -116,6 +116,15 @@ trait WPConfig {
 	 * @return bool
 	 */
 	private function can_continue() {
+		// Taken from wp-load.php.
+		// If config file doesn't exists in root directory, try to locate it in a directory above.
+		if ( ! file_exists( $this->wp_config_file )
+			&& ( file_exists( dirname( ABSPATH ) . '/wp-config.php' ) && ! file_exists( dirname( ABSPATH ) . '/wp-settings.php' ) ) )
+		{
+			// The config file resides one level above ABSPATH but is not part of another installation.
+			$this->wp_config_file = dirname( ABSPATH ) . '/wp-config.php';
+		}
+
 		if ( ! file_exists( $this->wp_config_file ) ) {
 			WP_Hummingbird::get_instance()->core->logger->log( 'Failed to locate wp-config.php file.', $this->get_slug() );
 			return false;

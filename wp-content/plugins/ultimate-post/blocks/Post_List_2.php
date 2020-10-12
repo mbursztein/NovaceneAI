@@ -16,9 +16,39 @@ class Post_List_2{
                 'type' => 'string',
                 'default' => '',
             ],
+            
+            //--------------------------
+            //      Layout
+            //--------------------------
+            'layout' => [
+                'type' => 'string',
+                'default' => 'layout1',
+            ],
+            'largeHeight' => [
+                'type' => 'object',
+                'default' => (object)['lg' =>'', 'unit' =>'px'],
+                'style' => [
+                    (object)[ 
+                        'selector'=>'{{ULTP}} .ultp-block-item:first-child .ultp-block-image img {width: 100%; object-fit: cover; height: {{largeHeight}};}'
+                    ],
+                ],
+            ],
+            'spaceLargeItem' => [
+                'type' => 'object',
+                'default' => (object)['lg' =>'40', 'unit' =>'px'],
+                'style' => [
+                    (object)[
+                        'selector'=>'{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-block-item:first-child { margin-bottom: {{spaceLargeItem}};}'
+                    ],
+                ],
+            ],
             //--------------------------
             //      Query Setting
             //--------------------------
+            'queryQuick' => [
+                'type' => 'string',
+                'default' =>'',
+            ],
             'queryNumber' => [
                 'type' => 'string',
                 'default' => 5,
@@ -45,7 +75,7 @@ class Post_List_2{
                 'default' => '[]',
                 'style' => [
                     (object)[
-                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'tag']]
+                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'post_tag']]
                     ],
                 ],
             ],
@@ -115,7 +145,7 @@ class Post_List_2{
             ],
             'readMore' => [
                 'type' => 'boolean',
-                'default' => true,
+                'default' => false,
             ],
 
 
@@ -352,7 +382,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn'
                     ],
                 ],
             ],
@@ -364,7 +394,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
                     ],
                 ],
             ],
@@ -376,7 +406,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
                     ],
                 ],
             ],
@@ -724,6 +754,18 @@ class Post_List_2{
                     ],
                 ],
             ],
+            'titleLgPadding' => [
+                'type' => 'object',
+                'default' => (object)['lg'=>(object)['top'=>10,'bottom'=>8, 'unit'=>'px']],
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'titleShow','condition'=>'==','value'=>true],
+                        ],
+                        'selector'=>'{{ULTP}} .ultp-block-item:first-child .ultp-block-title { padding:{{titleLgPadding}}; }'
+                    ],
+                ],
+            ],
 
             //--------------------------
             // Content Setting/Style
@@ -811,6 +853,95 @@ class Post_List_2{
             ],
 
             //--------------------------
+            // Count Style Setting/Style
+            //--------------------------
+            'counterTypo' => [
+                'type' => 'object',
+                'default' => (object)['openTypography' => 1, 'size' => (object)['lg' =>14, 'unit' =>'px'], 'height' => (object)['lg' =>'', 'unit' =>'px'], 'spacing' => (object)['lg' =>0, 'unit' =>'px'], 'transform' => 'capitalize', 'weight' => '400', 'decoration' => 'none','family'=>'' ],
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector'=>'{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before'
+                    ],
+                ],
+            ],
+            'counterColor' => [
+                'type' => 'string',
+                'default' => '#828282',
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector' => '{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before { color:{{counterColor}}; }'
+                    ],
+                ]
+            ],
+            'counterBgColor' => [
+                'type' => 'object',
+                'default' => (object)['openColor' => 1,'type' => 'color', 'color' => ''],
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector'=>'{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before'
+                    ],
+                ],
+            ],
+            'counterWidth' => [
+                'type' => 'string',
+                'default' => '',
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector' => '{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before { width:{{counterWidth}}px; }'
+                    ],
+                ]
+            ],
+            'counterHeight' => [
+                'type' => 'string',
+                'default' => '',
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector' => '{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before { height:{{counterHeight}}px; }'
+                    ],
+                ]
+            ],
+            'counterBorder' => [
+                'type' => 'object',
+                'default' => (object)['openBorder'=>0, 'width' => (object)[ 'top' => 1, 'right' => 1, 'bottom' => 1, 'left' => 1],'color' => '#009fd4','type' => 'solid' ],
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector'=>'{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before'
+                    ],
+                ],
+            ],
+            'counterRadius' => [
+                'type' => 'object',
+                'default' => (object)['lg' =>'', 'unit' =>'px'],
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'layout','condition'=>'==','value'=>['layout3', 'layout4']],
+                        ],
+                        'selector'=>'{{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-item:first-child .ultp-block-content::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout4 .ultp-block-item::before, {{ULTP}}.wp-block-ultimate-post-post-list-2 .ultp-layout3 .ultp-block-content::before { border-radius:{{counterRadius}}; }'
+                    ],
+                ],
+            ],
+
+
+            //--------------------------
             // Category Setting/Style
             //--------------------------
             'showSmallCat' => [
@@ -824,6 +955,32 @@ class Post_List_2{
             'catPosition' => [
                 'type' => 'string',
                 'default' => 'aboveTitle',
+            ],
+            'customCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
+            'seperatorLink' => [
+                'type' => 'string',
+                'default' => admin_url( 'edit-tags.php?taxonomy=category' ),
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
+            'onlyCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
             ],
             'catLineWidth' => [
                 'type' => 'object',
@@ -883,7 +1040,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-category-grid a'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-category-grid a'
                     ],
                 ],
             ],
@@ -894,6 +1051,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { color:{{catColor}}; }'
                     ],
@@ -906,6 +1064,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -918,6 +1077,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -930,6 +1090,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { border-radius:{{catRadius}}; }'
                     ],
@@ -942,6 +1103,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover { color:{{catHoverColor}}; }'
                     ],
@@ -954,6 +1116,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -966,6 +1129,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -990,6 +1154,7 @@ class Post_List_2{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { padding:{{catPadding}}; }'
                     ],
@@ -999,6 +1164,10 @@ class Post_List_2{
             //--------------------------
             // Meta Setting/Style
             //--------------------------
+            'showSmallMeta' => [
+                'type' => 'boolean',
+                'default' => true,
+            ],
             'metaPosition' => [
                 'type' => 'string',
                 'default' => 'top',
@@ -1027,7 +1196,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'metaShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-block-meta span, {{ULTP}} .ultp-block-meta span a'
+                        'selector'=>'{{ULTP}} .ultp-block-meta span, {{ULTP}} .ultp-block-item .ultp-block-meta span a'
                     ],
                 ],
             ],
@@ -1244,9 +1413,6 @@ class Post_List_2{
                 'default' => false,
                 'style' => [
                     (object)[
-                        'depends' => [
-                            (object)['key'=>'imgFlip','condition'=>'==','value'=>true],
-                        ],
                         'selector'=>'{{ULTP}} .ultp-block-content-true .ultp-block-media, {{ULTP}} .ultp-block-content-1 .ultp-block-media { flex-direction: row-reverse; }'
                     ]
                 ],
@@ -1381,6 +1547,18 @@ class Post_List_2{
                     ],
                 ],
             ],
+            'largeimgSpacing' => [
+                'type' => 'object',
+                'default' => (object)['lg'=>''],
+                'style' => [
+                    (object)[
+                        'depends' => [
+                            (object)['key'=>'showImage','condition'=>'==','value'=>true]
+                        ],
+                        'selector'=>'{{ULTP}} .ultp-block-item:first-child .ultp-block-image { margin-bottom: {{largeimgSpacing}}px; }'
+                    ]
+                ],
+            ],
             'imgOverlay' => [
                'type' => 'boolean',
                 'default' => false,
@@ -1498,7 +1676,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'readMore','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-block-readmore a'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-block-readmore a'
                     ],
                 ],
             ],
@@ -1672,7 +1850,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'filterShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-filter-wrap ul li a'
+                        'selector'=>'{{ULTP}} .ultp-filter-navigation .ultp-filter-wrap ul li a'
                     ],
                 ],
             ],
@@ -1914,7 +2092,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-loadmore-action'
+                        'selector'=>'{{ULTP}} .ultp-pagination-wrap .ultp-pagination li a, {{ULTP}} .ultp-loadmore .ultp-loadmore-action'
                     ],
                 ],
 
@@ -1927,7 +2105,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'paginationType','condition'=>'==','value'=>'navigation'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-next-prev-wrap ul li a { font-size:{{pagiArrowSize}}px; }'
+                        'selector'=>'{{ULTP}} .ultp-next-prev-wrap ul li a svg { width:{{pagiArrowSize}}px; }'
                     ],
                 ],
 
@@ -1940,7 +2118,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore-action { color:{{pagiColor}}; } .ultp-next-prev-wrap ul li a svg { fill:{{pagiColor}}; } .ultp-pagination li a svg { fill:{{pagiColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore .ultp-loadmore-action { color:{{pagiColor}}; } {{ULTP}} .ultp-next-prev-wrap ul li a svg, {{ULTP}} .ultp-loadmore .ultp-loadmore-action svg { fill:{{pagiColor}}; } {{ULTP}} .ultp-pagination li a svg { fill:{{pagiColor}}; }'
                     ],
                 ],
             ],
@@ -1952,7 +2130,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore-action'
+                        'selector'=>'{{ULTP}} .ultp-pagination li a, {{ULTP}} .ultp-next-prev-wrap ul li a, {{ULTP}} .ultp-loadmore .ultp-loadmore-action'
                     ],
                 ],
             ],
@@ -2000,7 +2178,7 @@ class Post_List_2{
                         'depends' => [
                             (object)['key'=>'paginationShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-pagination li.pagination-active a, {{ULTP}} .ultp-next-prev-wrap ul li a:hover, {{ULTP}} .ultp-loadmore-action:hover { color:{{pagiHoverColor}}; } {{ULTP}} .ultp-pagination li a:hover svg { fill:{{pagiHoverColor}}; } {{ULTP}} .ultp-next-prev-wrap ul li a:hover svg { fill:{{pagiHoverColor}}; } @media (min-width: 768px) { {{ULTP}} .ultp-pagination li a:hover { color:{{pagiHoverColor}};}}'
+                        'selector'=>'{{ULTP}} .ultp-pagination li.pagination-active a, {{ULTP}} .ultp-next-prev-wrap ul li a:hover, {{ULTP}} .ultp-loadmore-action:hover { color:{{pagiHoverColor}}; } {{ULTP}} .ultp-pagination li a:hover svg, {{ULTP}} .ultp-loadmore .ultp-loadmore-action:hover svg { fill:{{pagiHoverColor}}; } {{ULTP}} .ultp-next-prev-wrap ul li a:hover svg { fill:{{pagiHoverColor}}; } @media (min-width: 768px) { {{ULTP}} .ultp-pagination li a:hover { color:{{pagiHoverColor}};}}'
                     ],
                 ],
             ],
@@ -2092,6 +2270,15 @@ class Post_List_2{
             //--------------------------
             //  Wrapper Style
             //--------------------------
+            'loadingColor' => [
+                'type' => 'string',
+                'default' => '#000',
+                'style' => [
+                    (object)[
+                        'selector'=>'{{ULTP}} .ultp-loading .ultp-loading-blocks div { --loading-block-color: {{loadingColor}}; }'
+                    ],
+                ],
+            ],
             'wrapBg' => [
                 'type' => 'object',
                 'default' => (object)['openColor' => 0, 'type' => 'color', 'color' => '#f5f5f5'],
@@ -2282,22 +2469,22 @@ class Post_List_2{
                         $wraper_before .= '</div>';
                     }
              
-                    $wraper_before .= '<div class="ultp-block-items-wrap ultp-block-content-'.$attr['varticalAlign'].' ultp-block-content-'.$attr['imgFlip'].'">';
-                        $idx = $noAjax ? 1 : 0;
+                    $wraper_before .= '<div class="ultp-block-items-wrap ultp-block-content-'.$attr['varticalAlign'].($attr['imgFlip'] ? ' ultp-block-content-true' : '').' ultp-'.$attr['layout'].'">';
+                        $idx = 0;
                         while ( $recent_posts->have_posts() ): $recent_posts->the_post();
                             
                             include ULTP_PATH.'blocks/template/data.php';
 
                             include ULTP_PATH.'blocks/template/category.php';
                             
-                            $post_loop .= '<div class="ultp-block-item ultp-block-media">';
-                                $post_loop .= '<div class="ultp-block-content-wrap">';
+                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item ultp-block-media">';
+                                $post_loop .= '<div class="ultp-block-content-wrap'.(($idx===0) ? ' ultp-first-postlist-2' : ' ultp-all-postlist-2').'">';
                                     if( has_post_thumbnail() && $attr['showImage'] ){
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
                                             if ($idx == 0) {
-                                                $post_loop .= '<a href="'.$titlelink.'"><img alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, ($attr['imgCrop'] ? $attr['imgCrop'] : 'full') ).'" /></a>';
+                                                $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             } else {
-                                                $post_loop .= '<a href="'.$titlelink.'"><img alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, ($attr['imgCropSmall'] ? $attr['imgCropSmall'] : 'full') ).'" /></a>';
+                                               if( ($attr['layout'] === 'layout1') || ($attr['layout'] === 'layout4') ) { $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCropSmall'], '', $title).'</a>'; }
                                             } 
                                             if( ($attr['catPosition'] != 'aboveTitle') && ($idx == 0 || $attr['showSmallCat']) && $attr['catShow'] ) {
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
@@ -2316,8 +2503,8 @@ class Post_List_2{
                                             include ULTP_PATH.'blocks/template/title.php';
                                         }
                                         
-                                        // Meta
-                                        if( $attr['metaPosition'] =='top' ) {
+                                        // Meta Top
+                                        if( $attr['metaShow'] && ($idx == 0 || $attr['showSmallMeta']) && $attr['metaPosition'] =='top' ) {
                                             include ULTP_PATH.'blocks/template/meta.php';
                                         }
                                         
@@ -2340,8 +2527,8 @@ class Post_List_2{
                                             $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
                                         }
 
-                                        // Bottom
-                                        if( $attr['metaPosition'] =='bottom' ) {
+                                        // Meta Bottom
+                                        if( $attr['metaShow'] && ($idx == 0 || $attr['showSmallMeta']) && $attr['metaPosition'] =='bottom' ) {
                                             include ULTP_PATH.'blocks/template/meta.php';
                                         }
                                     $post_loop .= '</div>';

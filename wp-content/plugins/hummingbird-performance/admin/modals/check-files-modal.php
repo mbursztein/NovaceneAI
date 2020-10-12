@@ -50,23 +50,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 
 				<?php if ( ! \Hummingbird\Core\Utils::is_member() ) : ?>
-					<div class="sui-notice sui-notice-info">
-						<p style="font-size:13px;line-height:22px;">
-							<?php
-							printf(
-								/* translators: %s - learn more link */
-								__( 'Did you know the Pro version of Hummingbird comes up to 2x better compression and a CDN to store your assets on? Get it as part of a WPMU DEV membership. <a href="%s" target="_blank">Learn more.</a>', 'wphb' ),
-								esc_url( \Hummingbird\Core\Utils::get_link( 'plugin' ) )
-							);
-							?>
-						</p>
-					</div>
+					<?php
+					$this->admin_notices->show_inline(
+						esc_html__( 'Did you know the Pro version of Hummingbird comes up to 2x better compression and a CDN to store your assets on? Get it as part of a WPMU DEV membership.', 'wphb' ),
+						'info',
+						sprintf( /* translators: %1$s - opening a tag, %2$s - </a> */
+							esc_html__( '%1$sLearn more%2$s', 'wphb' ),
+							'<a href="' . esc_url( \Hummingbird\Core\Utils::get_link( 'plugin' ) ) . '" target="_blank">',
+							'</a>'
+						)
+					);
+					?>
 				<?php endif; ?>
 
 				<?php $cdn_status = \Hummingbird\Core\Utils::get_module( 'minify' )->get_cdn_status(); ?>
 				<?php if ( ! is_multisite() && \Hummingbird\Core\Utils::is_member() ) : ?>
-					<form method="post" class="sui-border-frame" id="enable-cdn-form">
-						<div class="sui-form-field">
+					<form method="post" id="enable-cdn-form">
+						<div class="sui-border-frame">
 							<label for="enable_cdn" class="sui-toggle">
 								<input type="checkbox" name="enable_cdn" id="enable_cdn" aria-labelledby="enable_cdn-label" aria-describedby="enable_cdn-description" <?php checked( $cdn_status ); ?>>
 								<span class="sui-toggle-slider" aria-hidden="true"></span>
@@ -85,11 +85,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php elseif ( is_multisite() && \Hummingbird\Core\Utils::is_member() ) : ?>
 					<input type="checkbox" aria-hidden="true" name="enable_cdn" id="enable_cdn" <?php checked( $cdn_status ); ?> style="display: none" hidden>
 				<?php endif; ?>
-
 			</div>
+
 			<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
-				<img class="sui-image" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?>"
-					srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary@2x.png' ); ?> 2x">
+				<div class="sui-box-footer sui-content-center sui-flatten sui-spacing-bottom--0">
+					<img class="sui-image sui-no-margin-bottom" alt="" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?>"
+						srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/hb-graphic-minify-summary@2x.png' ); ?> 2x">
+				</div>
 			<?php endif; ?>
 		</div>
 	</div>

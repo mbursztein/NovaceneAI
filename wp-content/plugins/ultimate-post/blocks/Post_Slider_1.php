@@ -19,6 +19,10 @@ class Post_Slider_1{
             //--------------------------
             //      Query Setting
             //--------------------------
+            'queryQuick' => [
+                'type' => 'string',
+                'default' =>'',
+            ],
             'queryNumber' => [
                 'type' => 'string',
                 'default' =>'5'
@@ -45,7 +49,7 @@ class Post_Slider_1{
                 'default' => '[]',
                 'style' => [
                     (object)[
-                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'tag']]
+                        'depends' => [(object)['key' => 'queryTax','condition' => '==','value' => 'post_tag']]
                     ],
                 ],
             ],
@@ -384,7 +388,7 @@ class Post_Slider_1{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn'
                     ],
                 ],
             ],
@@ -396,7 +400,7 @@ class Post_Slider_1{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn { color:{{headingBtnColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn svg { fill:{{headingBtnColor}}; }'
                     ],
                 ],
             ],
@@ -408,7 +412,7 @@ class Post_Slider_1{
                         'depends' => [
                             (object)['key'=>'headingStyle','condition'=>'==','value'=>'style11'],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
+                        'selector'=>'{{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover { color:{{headingBtnHoverColor}}; } {{ULTP}} .ultp-heading-wrap .ultp-heading-btn:hover svg { fill:{{headingBtnHoverColor}}; }'
                     ],
                 ],
             ],
@@ -947,7 +951,7 @@ class Post_Slider_1{
             ],
             'contentWrapShadow' => [
                 'type' => 'object',
-                'default' => (object)['openShadow' => 1, 'width' => (object)['top' => 0, 'right' => 5, 'bottom' => 15, 'left' => 0],'color' => 'rgba(0,0,0,0.15)'],
+                'default' => (object)['openShadow' => 0, 'width' => (object)['top' => 0, 'right' => 5, 'bottom' => 15, 'left' => 0],'color' => 'rgba(0,0,0,0.15)'],
                 'style' => [
                     (object)[
                         'selector'=>'{{ULTP}} .ultp-block-content-inner'
@@ -956,7 +960,7 @@ class Post_Slider_1{
             ],
             'contentWrapHoverShadow' => [
                 'type' => 'object',
-                'default' => (object)['openShadow' => 1, 'width' => (object)['top' => 0, 'right' => 10, 'bottom' => 25, 'left' => 0],'color' => 'rgba(0,0,0,0.25)'],
+                'default' => (object)['openShadow' => 0, 'width' => (object)['top' => 0, 'right' => 10, 'bottom' => 25, 'left' => 0],'color' => 'rgba(0,0,0,0.25)'],
                 'style' => [
                     (object)[
                         'selector'=>'{{ULTP}} .ultp-block-content-inner:hover'
@@ -1353,6 +1357,32 @@ class Post_Slider_1{
                 'type' => 'string',
                 'default' => 'aboveTitle',
             ],
+            'customCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
+            'seperatorLink' => [
+                'type' => 'string',
+                'default' => admin_url( 'edit-tags.php?taxonomy=category' ),
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
+            'onlyCatColor' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'depends' => [ 
+                            (object)['key'=>'customCatColor','condition'=>'==','value'=>true],
+                        ]
+                    ]
+                ]
+            ],
             'catLineWidth' => [
                 'type' => 'object',
                 'default' => (object)['lg'=>'20'],
@@ -1411,7 +1441,7 @@ class Post_Slider_1{
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-category-grid a'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-category-grid a'
                     ],
                 ],
             ],
@@ -1422,6 +1452,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { color:{{catColor}}; }'
                     ],
@@ -1434,6 +1465,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -1446,6 +1478,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a'
                     ],
@@ -1458,6 +1491,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { border-radius:{{catRadius}}; }'
                     ],
@@ -1470,6 +1504,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover { color:{{catHoverColor}}; }'
                     ],
@@ -1482,6 +1517,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'customCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -1494,6 +1530,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a:hover'
                     ],
@@ -1518,6 +1555,7 @@ class Post_Slider_1{
                     (object)[
                         'depends' => [
                             (object)['key'=>'catShow','condition'=>'==','value'=>true],
+                            (object)['key'=>'onlyCatColor','condition'=>'!=','value'=>true],
                         ],
                         'selector'=>'{{ULTP}} .ultp-category-grid a { padding:{{catPadding}}; }'
                     ],
@@ -1526,8 +1564,13 @@ class Post_Slider_1{
 
 
             //--------------------------
-            // Image Setting/Style
+            // Image Overlay Setting/Style
             //--------------------------
+            'imgCrop' => [
+                'type' => 'string',
+                'default' => 'full',
+                'depends' => [(object)['key' => 'showImage','condition' => '==','value' => 'true']]
+            ],
             'imgOverlay' => [
                 'type' => 'boolean',
                  'default' => false,
@@ -1662,7 +1705,7 @@ class Post_Slider_1{
                         'depends' => [
                             (object)['key'=>'readMore','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-block-readmore a'
+                        'selector'=>'{{ULTP}} .ultp-block-item .ultp-block-readmore a'
                     ],
                 ],
             ],
@@ -1826,7 +1869,7 @@ class Post_Slider_1{
                         'depends' => [
                             (object)['key'=>'metaShow','condition'=>'==','value'=>true],
                         ],
-                        'selector'=>'{{ULTP}} .ultp-block-meta span, {{ULTP}} .ultp-block-meta span a'
+                        'selector'=>'{{ULTP}} .ultp-block-meta span, {{ULTP}} .ultp-block-item .ultp-block-meta span a'
                     ],
                 ],
             ],
@@ -2091,13 +2134,13 @@ class Post_Slider_1{
                             
                             include ULTP_PATH.'blocks/template/data.php';
 
-                            $post_loop .= '<div class="ultp-block-item">';
+                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item">';
                                 $post_loop .= '<div class="ultp-block-slider-wrap">';
 
                                     $post_loop .= '<div class="ultp-block-image-inner">';
                                         if(has_post_thumbnail()) {
                                             $post_loop .= '<div class="ultp-block-image '.($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                                $post_loop .= '<a href="'.$titlelink.'"><img class="ultp-block-img" alt="'.$title.'" src="'.wp_get_attachment_image_url($post_thumb_id, 'full').'" /></a>';
+                                                $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             $post_loop .= '</div>'; //.ultp-block-image    
                                         }
                                     $post_loop .= '</div>'; //.ultp-block-image-inner                  

@@ -25,43 +25,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="<?php echo $show_cf_notice ? 'sui-box-body' : ''; ?>">
-	<?php if ( $htaccess_issue ) : ?>
-		<div class="wphb-caching-error sui-notice sui-notice-error">
-			<p><?php esc_html_e( 'Browser Caching is not working properly:', 'wphb' ); ?></p>
-			<ul>
-				<li>- <?php esc_html_e( 'Your server may not have the "expires" module enabled (mod_expires for Apache, ngx_http_headers_module for NGINX)', 'wphb' ); ?></li>
-				<li>- <?php esc_html_e( 'Another plugin may be interfering with the configuration', 'wphb' ); ?></li>
-			</ul>
-
-			<?php
-			printf(
-				/* translators: %s: Support link */
-				__( 'If re-checking and restarting does not resolve, please check with your host or <a href="%s" target="_blank">open a support ticket with us</a>.', 'wphb' ),
-				esc_url( Utils::get_link( 'support' ) )
-			);
-			?>
-		</div>
-	<?php endif; ?>
-
 	<p><?php esc_html_e( "Store temporary data on your visitors' devices so that they don’t have to download assets twice if they don’t have to. This results in a much faster second time round page load speed.", 'wphb' ); ?></p>
 
-	<?php if ( $issues ) : ?>
-		<div class="sui-notice sui-notice-warning">
-			<p>
-				<?php
-				printf(
-					/* translators: %s: Number of issues */
-					__( '%s of your cache types don’t meet the recommended expiry period of 1 year. Configure browser caching <a href="#" id="configure-link">here</a>.', 'wphb' ),
-					absint( $issues )
-				);
-				?>
-			</p>
-		</div>
-	<?php else : ?>
-		<div class="sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'All of your cache types meet the recommended expiry period of 1 year. Great work!', 'wphb' ); ?></p>
-		</div>
-	<?php endif; ?>
+	<?php
+	if ( $htaccess_issue ) {
+		$this->admin_notices->show_inline(
+			esc_html__( 'Browser Caching is not working properly:', 'wphb' ),
+			'error',
+			'<ul><li>- ' . esc_html__( 'Your server may not have the "expires" module enabled (mod_expires for Apache, ngx_http_headers_module for NGINX)', 'wphb' ) . '</li>' .
+			'<li>- ' . esc_html__( 'Another plugin may be interfering with the configuration', 'wphb' ) . '</li></ul>',
+			sprintf( /* translators: %s: Support link */
+				__( 'If re-checking and restarting does not resolve, please check with your host or <a href="%s" target="_blank">open a support ticket with us</a>.', 'wphb' ),
+				esc_url( Utils::get_link( 'support' ) )
+			)
+		);
+	}
+
+	if ( $issues ) {
+		$this->admin_notices->show_inline(
+			sprintf( /* translators: %s: Number of issues */
+				__( '%s of your cache types don’t meet the recommended expiry period of 1 year. Configure browser caching <a href="#" id="configure-link">here</a>.', 'wphb' ),
+				absint( $issues )
+			),
+			'warning'
+		);
+	} else {
+		$this->admin_notices->show_inline( esc_html__( 'All of your cache types meet the recommended expiry period of 1 year. Great work!', 'wphb' ) );
+	}
+	?>
 
 	<div class="wphb-border-frame">
 		<div class="table-header">
@@ -180,35 +171,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 				src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell.png' ); ?>"
 				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell.png' ); ?> 1x, <?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell@2x.png' ); ?> 2x">
 		<?php endif; ?>
+		<?php
+		$message = sprintf( /* translators: %s: notice text, */
+			esc_html__( '%s Connect your account to control your settings via Hummingbird.', 'wphb' ),
+			esc_html( $cf_notice )
+		);
 
-		<div class="<?php echo( apply_filters( 'wpmudev_branding_hide_branding', false ) ? esc_attr( 'sui-notice' ) : esc_attr( 'sui-upsell-notice' ) ); ?>">
-			<p>
-				<?php
-				printf(
-					/* translators: %s: notice text, */
-					esc_html__( '%s Connect your account to control your settings via Hummingbird.', 'wphb' ),
-					esc_html( $cf_notice )
-				);
+		if ( ! $cf_server ) {
+			$message .= ' ';
+			$message .= esc_html__( 'CloudFlare is a Content Delivery Network (CDN) that sends traffic through its global network to automatically optimize the delivery of your site so your visitors can browse your site at top speeds. There is a free plan and we recommend using it.', 'wphb' );
+		}
 
-				if ( ! $cf_server ) {
-					echo ' ';
-					esc_html_e( 'CloudFlare is a Content Delivery Network (CDN) that sends traffic through its global network to automatically optimize the delivery of your site so your visitors can browse your site at top speeds. There is a free plan and we recommend using it.', 'wphb' );
-				}
-				?>
+		$buttons  = apply_filters( 'wpmudev_branding_hide_branding', false ) ? '' : '<br>';
+		$buttons .= sprintf( /* translators: %1$s - opening tags, %2$s - closing tags */
+			esc_html__( '%1$sConnect%2$s', 'wphb' ),
+			'<a href="#" class="sui-button sui-button-ghost sui-button-icon-left connect-cloudflare-link"><i class="sui-icon-plus-circle" aria-hidden="true"></i>',
+			'</a>'
+		);
 
-				<span>
-					<a href="#" class="sui-button sui-button-ghost sui-button-icon-left connect-cloudflare-link">
-						<i class="sui-icon-plus-circle" aria-hidden="true"></i>
-						<?php esc_html_e( 'Connect', 'wphb' ); ?>
-					</a>
+		if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) {
+			$buttons .= sprintf( /* translators: %1$s - opening tags, %2$s - closing tags */
+				esc_html__( '%1$sLearn More%2$s', 'wphb' ),
+				'<a href="https://premium.wpmudev.org/blog/cloudflare-review/" target="_blank">',
+				'</a>'
+			);
+		}
 
-					<a href="<?php echo apply_filters( 'wpmudev_branding_hide_doc_link', false ) ? '#' : 'https://premium.wpmudev.org/blog/cloudflare-review/'; ?>" target="_blank">
-						<?php esc_html_e( 'Learn More', 'wphb' ); ?>
-					</a>
-				</span>
-
-				<a href="#" id="dismiss-cf-notice"><?php esc_html_e( 'Dismiss', 'wphb' ); ?></a>
-			</p>
-		</div>
+		$this->admin_notices->show_inline(
+			$message,
+			apply_filters( 'wpmudev_branding_hide_branding', false ) ? 'grey' : 'sui-upsell-notice',
+			$buttons
+		);
+		?>
 	</div>
 <?php endif; ?>

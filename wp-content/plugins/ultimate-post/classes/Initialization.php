@@ -6,7 +6,6 @@ defined('ABSPATH') || exit;
 class Initialization{
 
     private $all_blocks;
-    private $api_endpoint = 'https://demo.wpxpo.com/wp-json/restapi/v2/';
 
     public function __construct(){
         $this->requires();
@@ -26,19 +25,18 @@ class Initialization{
         add_action('wp_ajax_nopriv_ultp_filter',    array($this, 'ultp_filter_callback')); // Next Previous AJAX Call Logout User
         add_action('wp_ajax_ultp_pagination',       array($this, 'ultp_pagination_callback')); // Page Number AJAX Call
         add_action('wp_ajax_nopriv_ultp_pagination',array($this, 'ultp_pagination_callback')); // Page Number AJAX Call Logout User
-        
         register_activation_hook(ULTP_PATH.'ultimate-post.php', array($this, 'install_hook'));
-
         add_action( 'activated_plugin',             array($this, 'activation_redirect'));
     }
 
     public function register_scripts_option_panel_callback(){
-        if( null !== ( $screen = get_current_screen() ) && 'toplevel_page_ultp-settings' !== $screen->id ) {
-            return;
-        }
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
         wp_enqueue_script('ultp-option-script', ULTP_URL.'assets/js/ultp-option.js', array('jquery'), ULTP_VER, true);
+        wp_enqueue_style('ultp-option-style', ULTP_URL.'assets/css/ultp-option.css', array(), ULTP_VER);
+        wp_localize_script('ultp-option-script', 'ultp_option', array(
+            'width' => ultimate_post()->get_setting('editor_container')
+        ));
     }
 
     public function register_scripts_common(){
@@ -69,7 +67,9 @@ class Initialization{
         $this->register_scripts_common();
         wp_enqueue_script('ultp-blocks-editor-script', ULTP_URL.'assets/js/editor.blocks.min.js', array('wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ), ULTP_VER, true);
         wp_enqueue_style('ultp-blocks-editor-css', ULTP_URL.'assets/css/blocks.editor.css', array(), ULTP_VER);
-        if(is_rtl()){ wp_enqueue_style('ultp-blocks-editor-rtl-css', ULTP_URL.'assets/css/rtl.css', array(), ULTP_VER); }
+        if(is_rtl()){ 
+            wp_enqueue_style('ultp-blocks-editor-rtl-css', ULTP_URL.'assets/css/rtl.css', array(), ULTP_VER); 
+        }
         
         $import = '';
         $options = get_option('ultp_options');
@@ -86,7 +86,9 @@ class Initialization{
             'url' => ULTP_URL,
             'ajax' => admin_url('admin-ajax.php'),
             'security' => wp_create_nonce('ultp-nonce'),
-            'hide_import_btn' => $import
+            'hide_import_btn' => $import,
+            'upload' => wp_upload_dir()['basedir'] . '/ultp',
+            'license' => get_option('edd_ultp_license_key')
         ));
     }
 
@@ -167,12 +169,13 @@ class Initialization{
             if($blockName == $value['blockName']) {
                 if($value['attrs']['blockId'] == $blockId) {
                     $attr = $this->all_blocks[$blockRaw]->get_attributes(true);
-                    $value['attrs']['queryTax'] = $taxtype == 'category' ? 'category' : 'tag';
-                    if($taxtype == 'category' && $taxonomy) {
-                        $value['attrs']['queryCat'] = json_encode(array($taxonomy));
-                    }
-                    if($taxtype == 'post_tag' && $taxonomy) {
-                        $value['attrs']['queryTag'] = json_encode(array($taxonomy));
+                    if($taxonomy) {
+                        if($taxtype == 'category'){
+                            $value['attrs']['queryCat'] = json_encode(array($taxonomy));
+                        }elseif($taxtype == 'post_tag'){
+                            $value['attrs']['queryTag'] = json_encode(array($taxonomy));
+                        }
+                        $value['attrs']['queryTax'] = $taxtype;
                     }
                     if(isset($value['attrs']['queryNumber'])){
                         $value['attrs']['queryNumber'] = $value['attrs']['queryNumber'];
@@ -214,35 +217,48 @@ class Initialization{
         require_once ULTP_PATH.'blocks/Post_List_1.php';
         require_once ULTP_PATH.'blocks/Post_List_2.php';
         require_once ULTP_PATH.'blocks/Post_List_3.php';
+        require_once ULTP_PATH.'blocks/Post_List_4.php';
         require_once ULTP_PATH.'blocks/Post_Slider_1.php';
         require_once ULTP_PATH.'blocks/Post_Grid_1.php';
         require_once ULTP_PATH.'blocks/Post_Grid_2.php';
         require_once ULTP_PATH.'blocks/Post_Grid_3.php';
         require_once ULTP_PATH.'blocks/Post_Grid_4.php';
+        require_once ULTP_PATH.'blocks/Post_Grid_5.php';
+        require_once ULTP_PATH.'blocks/Post_Grid_6.php';
+        require_once ULTP_PATH.'blocks/Post_Grid_7.php';
         require_once ULTP_PATH.'blocks/Heading.php';
         require_once ULTP_PATH.'blocks/Image.php';
-        //require_once ULTP_PATH.'blocks/Taxonomy.php';
+        require_once ULTP_PATH.'blocks/Post_Module_1.php';
+        require_once ULTP_PATH.'blocks/Post_Module_2.php';
         $this->all_blocks['ultimate-post_post-list-1'] = new \ULTP\blocks\Post_List_1();
         $this->all_blocks['ultimate-post_post-list-2'] = new \ULTP\blocks\Post_List_2();
         $this->all_blocks['ultimate-post_post-list-3'] = new \ULTP\blocks\Post_List_3();
+        $this->all_blocks['ultimate-post_post-list-4'] = new \ULTP\blocks\Post_List_4();
         $this->all_blocks['ultimate-post_post-slider-1'] = new \ULTP\blocks\Post_Slider_1();
         $this->all_blocks['ultimate-post_post-grid-1'] = new \ULTP\blocks\Post_Grid_1();
         $this->all_blocks['ultimate-post_post-grid-2'] = new \ULTP\blocks\Post_Grid_2();
         $this->all_blocks['ultimate-post_post-grid-3'] = new \ULTP\blocks\Post_Grid_3();
         $this->all_blocks['ultimate-post_post-grid-4'] = new \ULTP\blocks\Post_Grid_4();
+        $this->all_blocks['ultimate-post_post-grid-5'] = new \ULTP\blocks\Post_Grid_5();
+        $this->all_blocks['ultimate-post_post-grid-6'] = new \ULTP\blocks\Post_Grid_6();
+        $this->all_blocks['ultimate-post_post-grid-7'] = new \ULTP\blocks\Post_Grid_7();
         $this->all_blocks['ultimate-post_heading'] = new \ULTP\blocks\Heading();
-        //$this->all_blocks['ultimate-post_taxonomy'] = new \ULTP\blocks\Taxonomy();
         $this->all_blocks['ultimate-post_image'] = new \ULTP\blocks\Image();
+        $this->all_blocks['ultimate-post_post-module-1'] = new \ULTP\blocks\Post_Module_1();
+        $this->all_blocks['ultimate-post_post-module-2'] = new \ULTP\blocks\Post_Module_2();
     }
 
     // Require Categories
     public function requires() {
+        require_once ULTP_PATH.'classes/Notice.php';
         require_once ULTP_PATH.'classes/Styles.php';
         require_once ULTP_PATH.'classes/Options.php';
         require_once ULTP_PATH.'classes/REST_API.php';
-
+        require_once ULTP_PATH.'classes/Caches.php';
+        new \ULTP\Caches();
         new \ULTP\Options();
         new \ULTP\Styles();
+        new \ULTP\Notice();
     }
 
     // Block Categories

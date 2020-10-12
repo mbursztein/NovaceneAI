@@ -5,6 +5,54 @@ defined('ABSPATH') || exit;
 
 class Functions{
 
+    public function get_setting($key){
+        $data = get_option( 'ultp_options' );
+        if(!$data){
+            $data = $this->init_set_data();
+        }
+        if(isset($data[$key])){
+            return $data[$key];
+        }else{
+            $data = $this->init_set_data();
+            return $data[$key];
+        }
+    }
+    
+
+    public function get_image_html($url = '', $size = 'full', $class = '', $alt = ''){
+        $alt = $alt ? ' alt="'.$alt.'" ' : '';
+        if( function_exists('ultimate_post_pro') ){
+            $addon_enable = get_option('ultp_pro_options');
+            if($addon_enable['addons_imageloading']){
+                $class = $class ? ' class="ultp-lazy '.$class.'" ' : ' class="ultp-lazy" ';
+                return '<img loading="lazy" loading="lazy" '.$class.$alt.' '.ultimate_post_pro()->get_size($size).' src="'.ultimate_post_pro()->img_placeholder($size).'" data-src="'.$url.'"/>';    
+            }else{
+                $class = $class ? ' class="'.$class.'" ' : '';
+                return '<img loading="lazy" '.$class.$alt.' src="'.$url.'" />';
+            }
+        } else {
+            $class = $class ? ' class="'.$class.'" ' : '';
+            return '<img loading="lazy" '.$class.$alt.' src="'.$url.'" />';
+        }
+    }
+
+    public function get_image($attach_id, $size = 'full', $class = '', $alt = ''){
+        $alt = $alt ? ' alt="'.$alt.'" ' : '';
+        if( function_exists('ultimate_post_pro') ){
+            $addon_enable = get_option('ultp_pro_options');
+            if($addon_enable['addons_imageloading']){
+                $class = $class ? ' class="ultp-lazy '.$class.'" ' : ' class="ultp-lazy" ';
+                return '<img loading="lazy" '.$class.$alt.' '.ultimate_post_pro()->get_size($size).' src="'.ultimate_post_pro()->img_placeholder($size).'" data-src="'.wp_get_attachment_image_url( $attach_id, $size ).'"/>';
+            }else{
+                $class = $class ? ' class="'.$class.'" ' : '';
+                return '<img loading="lazy" '.$class.$alt.' src="'.wp_get_attachment_image_url( $attach_id, $size ).'" />';
+            }
+        } else {
+            $class = $class ? ' class="'.$class.'" ' : '';
+            return '<img loading="lazy" '.$class.$alt.' src="'.wp_get_attachment_image_url( $attach_id, $size ).'" />';
+        }
+    }
+
     // Init data
     public function init_set_data(){
         $option_data = array(
@@ -12,6 +60,7 @@ class Functions{
             'preloader_style' => 'style1',
             'preloader_color' => '#1740f5',
             'container_width' => '1140',
+            'editor_container' => 'full_width',
             'hide_import_btn' => ''
         );
         update_option('ultp_options', $option_data);
@@ -40,12 +89,10 @@ class Functions{
             }
         }
 
-        if(isset($attr['queryOffset']) && $attr['queryOffset'] && !($query_args['paged'] > 1) ){
-            $query_args['offset'] = isset($attr['queryOffset']) ? $attr['queryOffset'] : 0;
-        }
-
         if(isset($attr['queryInclude']) && $attr['queryInclude']){
             $query_args['post__in'] = explode(',', $attr['queryInclude']);
+            $query_args['ignore_sticky_posts'] = 1;
+            $query_args['orderby'] = 'post__in';
         }
 
         if(isset($attr['queryExclude']) && $attr['queryExclude']){
@@ -59,17 +106,42 @@ class Functions{
                     foreach (json_decode($attr['queryCat']) as $val) {
                         $var[] = array('taxonomy'=>'category', 'field' => 'slug', 'terms' => $val );
                     }
-                    $query_args['tax_query'] = $var;
+                    if(count($var) > 1){
+                        $query_args['tax_query'] = $var;
+                    }
                 }
             }
             if(isset($attr['queryTag'])){
-                if($attr['queryTax'] == 'tag' && !empty($attr['queryTag'])){
+                if($attr['queryTax'] == 'post_tag' && !empty($attr['queryTag'])){
                     $var = array('relation'=>'OR');
                     foreach (json_decode($attr['queryTag']) as $val) {
                         $var[] = array('taxonomy'=>'post_tag', 'field' => 'slug', 'terms' => $val );
                     }
                     $query_args['tax_query'] = $var;
                 }
+            }
+        }
+
+        if(isset($attr['queryQuick'])){
+            if($attr['queryQuick'] != ''){
+                if(function_exists('ultimate_post_pro')){
+                    $query_args = ultimate_post_pro()->get_quick_query($attr, $query_args);
+                }
+            }
+        }
+
+        if(isset($attr['queryOffset']) && $attr['queryOffset'] ){
+            if($query_args['paged'] > 1){
+                $offset_post = wp_get_recent_posts($query_args, OBJECT);
+                if( count($offset_post) > 0 ){
+                    $offset = array();
+                    for($x = count($offset_post); $x > count($offset_post) - $attr['queryOffset']; $x--){
+                        $offset[] = $offset_post[$x-1]->ID;
+                    }
+                    $query_args['post__not_in'] = $offset;
+                }
+            }else{
+                $query_args['offset'] = isset($attr['queryOffset']) ? $attr['queryOffset'] : 0;
             }
         }
 

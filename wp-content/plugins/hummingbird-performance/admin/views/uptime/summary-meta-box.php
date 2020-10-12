@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div class="sui-summary-image-space">
+<div class="sui-summary-image-space" style="background-image: url( '<?php echo esc_url( apply_filters( 'wpmudev_branding_hero_image', '' ) ); ?>' )">
 </div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">

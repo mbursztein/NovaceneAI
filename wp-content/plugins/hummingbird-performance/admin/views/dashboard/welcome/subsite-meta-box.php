@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class="sui-summary-image-space" aria-hidden="true"></div>
+<div class="sui-summary-image-space" aria-hidden="true" style="background-image: url( '<?php echo esc_url( apply_filters( 'wpmudev_branding_hero_image', '' ) ); ?>' )"></div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">
 		<?php if ( $last_report && ! is_wp_error( $last_report ) && ! $report_dismissed ) : ?>

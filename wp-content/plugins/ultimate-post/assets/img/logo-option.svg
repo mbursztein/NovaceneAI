@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="123px" height="67px" viewBox="0 0 123 67" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 56.2 (81672) - https://sketch.com -->
+<svg width="164px" height="39px" viewBox="0 0 164 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
     <title>Shape Copy 3</title>
     <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="19.5" cy="19.5" r="19.5"></circle>
+        <filter x="-2.6%" y="-2.6%" width="105.1%" height="105.1%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="1" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="0" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.313920455 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Screenshot-2020-01-03-at-3.36.01-PM-2" transform="translate(-1273.000000, -55.000000)">
-            <g id="Shape-Copy-3" transform="translate(1272.000000, 55.000000)">
-                <text id="Ultimate-Post-Copy" font-family="Avenir-Heavy, Avenir" font-size="22" font-weight="600" letter-spacing="-1" fill="#000000">
-                    <tspan x="0" y="66">Ultimate</tspan>
-                    <tspan x="80.066" y="66" font-family="Avenir-Book, Avenir" font-weight="normal"> </tspan>
-                    <tspan x="85.182" y="66" font-family="Avenir-Light, Avenir" font-weight="300">Post</tspan>
-                </text>
-                <circle id="Oval" fill="#1740F5" cx="62" cy="21" r="21"></circle>
-                <path d="M75,27 C75,27.5523437 74.5782948,28 74.057971,28 L62.942029,28 C62.4217052,28 62,27.5523437 62,27 C62,26.4476563 62.4217052,26 62.942029,26 L74.057971,26 C74.5782948,26 75,26.4476563 75,27 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
-                <path d="M74.0878318,22 L66.9121682,22 C66.4083378,22 66,22.4478516 66,23 C66,23.5523437 66.4083378,24 66.9121682,24 L74.0878318,24 C74.5916622,24 75,23.5523437 75,23 C75,22.4478516 74.5916622,22 74.0878318,22 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
-                <path d="M74.1573126,18 L70.8426874,18 C70.3772343,18 70,18.4476563 70,19 C70,19.5523437 70.3772343,20 70.8426874,20 L74.1573126,20 C74.6227657,20 75,19.5523437 75,19 C75,18.4476563 74.6227657,18 74.1573126,18 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
-                <g id="Group-7" transform="translate(47.000000, 8.000000)" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="1.5">
-                    <path d="M21.3526492,6.64576388 L7.52898437,20.4693771 C7.38254733,20.6159663 7.18387234,20.6979887 6.97660082,20.6979887 L2.3659547,20.6951988 C1.93431715,20.6949376 1.58428001,20.3448969 1.58402183,19.913258 L1.58126385,15.3025972 C1.58126385,15.095325 1.66328871,14.8966499 1.80987846,14.7502134 L15.6335433,0.92660017 C15.9384681,0.621523867 16.4332944,0.62182327 16.7385843,0.927268793 L21.3519883,5.54071937 C21.6574307,5.84601237 21.6577267,6.34084029 21.3526492,6.64576388 Z" id="Path" transform="translate(11.581264, 10.697989) rotate(-4.000000) translate(-11.581264, -10.697989) "></path>
+        <g id="Group-8" transform="translate(-681.000000, -67.000000)">
+            <g id="overview" transform="translate(153.000000, 27.000000)">
+                <g id="Shape-Copy-3" transform="translate(528.000000, 40.000000)">
+                    <text id="Ultimate-Post-Copy" font-family="Avenir-Heavy, Avenir" font-size="20" font-weight="600" letter-spacing="-0.909090909" fill="#000000">
+                        <tspan x="51" y="26">Ultimate</tspan>
+                        <tspan x="123.787273" y="26" font-family="Avenir-Book, Avenir" font-weight="normal"> </tspan>
+                        <tspan x="128.438182" y="26" font-family="Avenir-Light, Avenir" font-weight="300">Post</tspan>
+                    </text>
+                    <g id="Oval">
+                        <use fill="#1740F5" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    </g>
+                    <path d="M31,26.5 C31,26.7761719 30.6107337,27 30.1304348,27 L19.8695652,27 C19.3892663,27 19,26.7761719 19,26.5 C19,26.2238281 19.3892663,26 19.8695652,26 L30.1304348,26 C30.6107337,26 31,26.2238281 31,26.5 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+                    <path d="M30.1891838,22 L23.8108162,22 C23.3629669,22 23,22.2239258 23,22.5 C23,22.7761719 23.3629669,23 23.8108162,23 L30.1891838,23 C30.6370331,23 31,22.7761719 31,22.5 C31,22.2239258 30.6370331,22 30.1891838,22 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+                    <path d="M30.3258501,18 L27.6741499,18 C27.3017874,18 27,18.2238281 27,18.5 C27,18.7761719 27.3017874,19 27.6741499,19 L30.3258501,19 C30.6982126,19 31,18.7761719 31,18.5 C31,18.2238281 30.6982126,18 30.3258501,18 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+                    <g id="Group-7" transform="translate(8.000000, 8.000000)" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="1.3">
+                        <path d="M19.2981541,6.38674761 L6.26441291,19.4204401 C6.1263437,19.5586528 5.93902156,19.6359881 5.74359413,19.6359881 L1.3964135,19.6333576 C0.98944095,19.6331114 0.659405934,19.303073 0.659162506,18.8960992 L0.656562131,14.5489047 C0.656562131,14.3534766 0.733899856,14.1661544 0.872113047,14.0280858 L13.9058542,0.994393257 C14.1933547,0.706749886 14.6599052,0.70703218 14.94775,0.995023673 L19.2975309,5.34484851 C19.5855195,5.63269619 19.5857985,6.09924823 19.2981541,6.38674761 Z" id="Path" transform="translate(10.085134, 10.207417) rotate(-4.000000) translate(-10.085134, -10.207417) "></path>
+                    </g>
                 </g>
             </g>
         </g>

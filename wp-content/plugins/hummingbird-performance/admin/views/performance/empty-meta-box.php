@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</p>
 
-	<button role="button" class="sui-button sui-button-blue" data-a11y-dialog-show="run-performance-test" id="run-performance-test">
+	<button role="button" class="sui-button sui-button-blue" data-modal-open="run-performance-test-modal" id="run-performance-test">
 		<?php esc_html_e( 'Test my website', 'wphb' ); ?>
 	</button>
 </div>

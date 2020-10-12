@@ -3,7 +3,7 @@
 
 import Fetcher from '../utils/fetcher';
 
-( function( $ ) {
+( function ( $ ) {
 	'use strict';
 
 	WPHB_Admin.settings = {
@@ -38,7 +38,7 @@ import Fetcher from '../utils/fetcher';
 				}
 
 				Fetcher.settings.saveSettings( form_data ).then( () => {
-					WPHB_Admin.notices.show( 'wphb-ajax-update-notice', true );
+					WPHB_Admin.notices.show();
 				} );
 
 				return false;
@@ -47,7 +47,7 @@ import Fetcher from '../utils/fetcher';
 			/**
 			 * Parse remove settings change.
 			 */
-			$( 'input[name=remove_settings]' ).on( 'change', function( e ) {
+			$( 'input[name=remove_settings]' ).on( 'change', function ( e ) {
 				const otherClass =
 					'remove_settings-false' === e.target.id
 						? 'remove_settings-true'
@@ -61,7 +61,7 @@ import Fetcher from '../utils/fetcher';
 			/**
 			 * Parse remove data change.
 			 */
-			$( 'input[name=remove_data]' ).on( 'change', function( e ) {
+			$( 'input[name=remove_data]' ).on( 'change', function ( e ) {
 				const otherClass =
 					'remove_data-false' === e.target.id
 						? 'remove_data-true'
@@ -70,6 +70,90 @@ import Fetcher from '../utils/fetcher';
 				document
 					.getElementById( otherClass )
 					.parentNode.classList.remove( 'active' );
+			} );
+
+			/**
+			 * Handle import file change.
+			 *
+			 * @since 2.6.0
+			 */
+			$( '#wphb-import-file-input' ).on( 'change', function () {
+				const elm = $( this )[ 0 ];
+				if ( elm.files.length ) {
+					const file = elm.files[ 0 ];
+					$( '#wphb-import-file-name' ).text( file.name );
+					$( '#wphb-import-upload-wrap' ).addClass( 'sui-has_file' );
+					$( '#wphb-import-btn' ).removeAttr( 'disabled' );
+				} else {
+					$( '#wphb-import-file-name' ).text( '' );
+					$( '#wphb-import-upload-wrap' ).removeClass(
+						'sui-has_file'
+					);
+					$( '#wphb-import-btn' ).attr( 'disabled', 'disabled' );
+				}
+			} );
+
+			/**
+			 * Handle import file remove button.
+			 *
+			 * @since 2.6.0
+			 */
+			$( '#wphb-import-remove-file' ).on( 'click', function () {
+				$( '#wphb-import-file-input' ).val( '' ).trigger( 'change' );
+			} );
+
+			/**
+			 * Handle import button click.
+			 *
+			 * @since 2.6.0
+			 */
+			$( '#wphb-begin-import-btn' ).on( 'click', function ( e ) {
+				e.preventDefault();
+				$( this ).attr( 'disabled', 'disabled' ).addClass('sui-button-onload-text');
+					
+				$( '#wphb-import-remove-file' ).attr( 'disabled', 'disabled' );
+
+				const file_elm = $( '#wphb-import-file-input' )[ 0 ];
+				if ( file_elm.files.length == 0 ) {
+					return false;
+				}
+
+				const form_data = new FormData();
+				form_data.append(
+					'settings_json_file',
+					file_elm.files[ 0 ],
+					file_elm.files[ 0 ].name
+				);
+
+				Fetcher.settings
+					.importSettings( form_data )
+					.then( ( response ) => {
+						WPHB_Admin.notices.show( response.message );
+						$( '#wphb-begin-import-btn' )
+							.removeAttr( 'disabled' )
+							.removeClass('sui-button-onload-text');
+						$( '#wphb-import-remove-file' ).removeAttr( 'disabled' );
+						$( '#wphb-import-remove-file' ).trigger( 'click' );
+						window.SUI.closeModal();
+					} )
+					.catch( ( error ) => {
+						WPHB_Admin.notices.show( error, 'error' );
+						$( '#wphb-begin-import-btn' )
+							.removeAttr( 'disabled' )
+							.removeClass('sui-button-onload-text');
+						$( '#wphb-import-remove-file' ).removeAttr( 'disabled' );
+						window.SUI.closeModal();
+					} );
+			} );
+
+			/**
+			 * Handle export button click.
+			 *
+			 * @since 2.6.0
+			 */
+			$( '#wphb-export-btn' ).on( 'click', function ( e ) {
+				e.preventDefault();
+				Fetcher.settings.exprotSettings();
 			} );
 
 			return this;

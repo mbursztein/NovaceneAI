@@ -304,7 +304,7 @@ class Minify_Group {
 		 * @var string $source_url Source URL
 		 * @var string $type scripts|styles
 		 */
-		if ( ! apply_filters( 'wphb_minify_resource', false, $handle, $this->type, $url ) ) {
+		if ( ! apply_filters( 'wphb_minify_resource', true, $handle, $this->type, $url ) ) {
 			$this->should_do_handle( $handle, 'minify', false );
 		}
 
@@ -318,7 +318,7 @@ class Minify_Group {
 		 * @var string $source_url Source URL
 		 * @var string $type scripts|styles
 		 */
-		if ( ! apply_filters( 'wphb_combine_resource', false, $handle, $this->type, $url ) ) {
+		if ( ! apply_filters( 'wphb_combine_resource', true, $handle, $this->type, $url ) ) {
 			$this->should_do_handle( $handle, 'combine', false );
 		}
 

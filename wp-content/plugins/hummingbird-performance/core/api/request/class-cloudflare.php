@@ -60,9 +60,20 @@ class Cloudflare extends Request {
 		$code = wp_remote_retrieve_response_code( $response );
 		$body = wp_remote_retrieve_body( $response );
 		$body = json_decode( $body );
-		if ( $body && 200 != $code ) {
-			/* translators: %s: cloudflare error */
-			throw new Exception( sprintf( __( 'Cloudflare error: %s', 'wphb' ), $body->errors[0]->message ), $code );
+		if ( $body && 200 !== (int) $code ) {
+			if ( isset( $body->errors ) ) {
+				/* translators: %s: cloudflare error */
+				throw new Exception( sprintf( __( 'Cloudflare error: %s', 'wphb' ), $body->errors[0]->message ), $code );
+			}
+
+			throw new Exception(
+				printf(
+				/* translators: %1$s - error code, %2$s - error description */
+					esc_html__( 'Cloudflare error code %1$s, error code: %2$s', 'wphb' ),
+					absint( $body->code ),
+					esc_attr( $body->error )
+				)
+			);
 		} elseif ( false === $body ) {
 			throw new Exception( __( 'Cloudflare unknown error', 'wphb' ), $code );
 		}

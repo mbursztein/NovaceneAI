@@ -25,18 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <p><?php esc_html_e( 'Hummingbird stores static HTML copies of your pages and posts to decrease page load time.', 'wphb' ); ?></p>
-<div class="sui-box-settings-row">
-
-	<?php if ( is_wp_error( $error ) ) : ?>
-		<div class="wphb-caching-error sui-notice sui-notice-error">
-			<p><?php echo $error->get_error_message(); ?></p>
-		</div>
-	<?php else : ?>
-		<div class="wphb-caching-success sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'Page caching is currently active.', 'wphb' ); ?></p>
-		</div>
-	<?php endif; ?>
-</div><!-- end row -->
+<?php
+if ( is_wp_error( $error ) ) {
+	$this->admin_notices->show_inline( $error->get_error_message(), 'error' );
+} else {
+	$this->admin_notices->show_inline( esc_html__( 'Page caching is currently active.', 'wphb' ) );
+}
+?>
 
 <div class="sui-box-settings-row">
 	<div class="sui-box-settings-col-1">
@@ -56,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="sui-box-settings-col-2">
 
-		<div class="wphb-dash-table three-columns">
+		<div class="wphb-dash-table three-columns sui-margin-bottom">
 			<?php foreach ( $pages as $page_type => $page_name ) : ?>
 				<div class="wphb-dash-table-row">
 					<div><?php echo esc_html( $page_name ); ?></div>
@@ -84,17 +79,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php endforeach; ?>
 		</div>
 
-		<div class="sui-notice sui-notice-sm">
-			<p>
-				<?php
-				printf(
-					/* translators: %s: code snippet. */
-					esc_html__( 'You can use the %s constant to instruct Hummingbird not to cache specific pages or templates.', 'wphb' ),
-					'<code>define(\'DONOTCACHEPAGE\', true);</code>'
-				);
-				?>
-			</p>
-		</div>
+		<?php
+		$this->admin_notices->show_inline(
+			sprintf( /* translators: %s: code snippet. */
+				esc_html__( 'You can use the %s constant to instruct Hummingbird not to cache specific pages or templates.', 'wphb' ),
+				'<code>define(\'DONOTCACHEPAGE\', true);</code>'
+			),
+			'grey'
+		);
+		?>
 	</div>
 </div>
 
@@ -102,19 +95,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="sui-box-settings-col-1">
 		<span class="sui-settings-label"><?php esc_html_e( 'Preload caching', 'wphb' ); ?></span>
 		<span class="sui-description">
-			<?php esc_html_e( 'By default, Hummingbird waits until someone visits your page before generating a cached version. Enable this feature to automatically run through and create cached versions of all your pages.', 'wphb' ); ?>
+			<?php esc_html_e( 'By default, Hummingbird waits until someone visits your page before generating a cached version. Enable this feature to automatically create cached versions of your homepage or any page or post.', 'wphb' ); ?>
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<div class="sui-form-field sui-no-margin-bottom">
-			<label class="sui-toggle">
-				<input type="checkbox" name="preload[enabled]" value="1" id="preload" <?php checked( $options['preload'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+		<div class="sui-form-field">
+			<label for="preload" class="sui-toggle">
+				<input type="checkbox" name="preload[enabled]" id="preload" value="1" aria-labelledby="preload-label" <?php checked( $options['preload'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="preload-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Enable preload caching', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( "The homepage will be preloaded once you enable this feature and then automatically whenever an action triggers your cache to be cleared. A page or post will be preloaded automatically if it's updated or its cached version is cleared.", 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="preload"><?php esc_html_e( 'Enable preload caching', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'Pages will be preloaded once you save changes, and then automatically whenever an action triggers your cache to be cleared as per your settings below.', 'wphb' ); ?>
-			</span>
 
 			<div class="sui-border-frame sui-toggle-content <?php echo $options['preload'] ? '' : 'sui-hidden'; ?>" id="page_cache_preload_type">
 				<span class="sui-description">
@@ -145,32 +140,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 	<div class="sui-box-settings-col-2">
-		<div class="sui-form-field sui-no-margin-bottom">
-			<label class="sui-toggle">
-				<input type="checkbox" name="clear_interval[enabled]" value="1" id="clear_interval" <?php checked( $settings['clear_interval']['enabled'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+		<div class="sui-form-field">
+			<label for="clear_interval" class="sui-toggle">
+				<input type="checkbox" name="clear_interval[enabled]" value="1" id="clear_interval" aria-labelledby="clear_interval-label" <?php checked( $settings['clear_interval']['enabled'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="clear_interval-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Clear cache on interval', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="clear_interval"><?php esc_html_e( 'Clear cache on interval', 'wphb' ); ?></label>
+
 			<span class="sui-description sui-toggle-description">
 				<?php esc_html_e( 'A cache cleanup will occur following page or post updates at the interval you set.', 'wphb' ); ?>
 			</span>
-		</div>
 
-		<div class="sui-border-frame sui-toggle-content <?php echo $settings['clear_interval']['enabled'] ? '' : 'sui-hidden'; ?>" id="page_cache_clear_interval">
-			<label class="sui-label" for="clear-cache-interval">
-				<?php esc_html_e( 'Clear cache timing', 'wphb' ); ?>
-			</label>
-			<div class="sui-form-field sui-form-field-inline sui-no-margin-bottom">
-				<input type="text" class="sui-form-control sui-input-sm" name="clear_interval[interval]" id="clear-cache-interval" value="<?php echo absint( $clear_interval[0] ); ?>" />
+			<div class="sui-border-frame sui-toggle-content <?php echo $settings['clear_interval']['enabled'] ? '' : 'sui-hidden'; ?>" id="page_cache_clear_interval">
+				<label class="sui-label" for="clear-cache-interval">
+					<?php esc_html_e( 'Clear cache timing', 'wphb' ); ?>
+				</label>
+				<div class="sui-form-field sui-form-field-inline sui-no-margin-bottom">
+					<input type="text" class="sui-form-control sui-input-sm" name="clear_interval[interval]" id="clear-cache-interval" value="<?php echo absint( $clear_interval[0] ); ?>" />
 
-				<select class="sui-input-sm" name="clear_interval[period]">
-					<option value="hours" <?php selected( $clear_interval[1], 'hours' ); ?>><?php esc_html_e( 'hours', 'wphb' ); ?></option>
-					<option value="days" <?php selected( $clear_interval[1], 'days' ); ?>><?php esc_html_e( 'days', 'wphb' ); ?></option>
-				</select>
+					<select class="sui-input-sm" name="clear_interval[period]">
+						<option value="hours" <?php selected( $clear_interval[1], 'hours' ); ?>><?php esc_html_e( 'hours', 'wphb' ); ?></option>
+						<option value="days" <?php selected( $clear_interval[1], 'days' ); ?>><?php esc_html_e( 'days', 'wphb' ); ?></option>
+					</select>
+				</div>
+				<span class="sui-description">
+					<?php esc_html_e( 'We recommend setting the interval to no less than 24 hours. Short intervals increase server loads and could negatively impact performance.', 'wphb' ); ?>
+				</span>
 			</div>
-			<span class="sui-description">
-				<?php esc_html_e( 'We recommend setting the interval to no less than 24 hours. Short intervals increase server loads and could negatively impact performance.', 'wphb' ); ?>
-			</span>
 		</div>
 	</div>
 </div>
@@ -184,30 +182,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="sui-box-settings-col-2">
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" name="integrations[varnish]" value="1" id="varnish" <?php checked( isset( $options['integrations']['varnish'] ) && $options['integrations']['varnish'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="varnish" class="sui-toggle">
+				<input type="checkbox" name="integrations[varnish]" id="varnish" value="1" aria-labelledby="varnish-label" <?php checked( isset( $options['integrations']['varnish'] ) && $options['integrations']['varnish'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="varnish-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Purge Varnish caching', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'Varnish caching increases response to HTTP requests and reduces server workload, significantly accelerating delivery. When enabled it will purge Varnish cache when you publish posts, pages or comments.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="varnish"><?php esc_html_e( 'Purge Varnish caching', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'Varnish caching increases response to HTTP requests and reduces server workload, significantly accelerating delivery. When enabled it will purge Varnish cache when you publish posts, pages or comments.', 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" name="integrations[opcache]" value="1" id="opcache" <?php checked( isset( $options['integrations']['opcache'] ) && $options['integrations']['opcache'] ); ?> <?php disabled( $opcache_enabled, false ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="opcache" class="sui-toggle">
+				<input type="checkbox" name="integrations[opcache]" id="opcache" value="1" aria-labelledby="opcache-label" <?php checked( isset( $options['integrations']['opcache'] ) && $options['integrations']['opcache'] ); ?> <?php disabled( $opcache_enabled, false ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="opcache-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Purge OpCache', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( "OpCache stores script bytecode in memory so PHP scripts don't have to be loaded and parsed with every request. OpCache cache will be cleared when you click “Clear cache” button located in the admin bar.", 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php
+					if ( ! $opcache_enabled ) {
+						$notice = esc_html__( 'Note: OpCache is only available if you have the service setup on your server.', 'wphb' );
+						if ( isset( $_SERVER['WPMUDEV_HOSTED'] ) && $_SERVER['WPMUDEV_HOSTED'] ) {
+							$notice = esc_html__( 'OpCache is already enabled and optimally preconfigured in our servers. It will automatically detect and recache any php file changes.', 'wphb' );
+						}
+
+						$this->admin_notices->show_inline( $notice, 'grey' );
+					}
+					?>
+				</span>
 			</label>
-			<label for="opcache"><?php esc_html_e( 'Purge OpCache', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( "OpCache stores script bytecode in memory so PHP scripts don't have to be loaded and parsed with every request. When enabled we will purge cache when you publish posts, pages or comments.", 'wphb' ); ?>
-				<?php if ( ! $opcache_enabled ) : ?>
-					<div class="sui-notice sui-notice-sm">
-						<p><?php esc_html_e( 'Note: OpCache is only available if you have the service setup on your server.', 'wphb' ); ?></p>
-					</div>
-				<?php endif; ?>
-			</span>
 		</div>
 	</div>
 </div>
@@ -221,59 +230,69 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="sui-box-settings-col-2">
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" name="settings[logged_in]" value="1" id="logged_in" <?php checked( $settings['settings']['logged_in'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="logged_in" class="sui-toggle">
+				<input type="checkbox" name="settings[logged_in]" id="logged_in" value="1" aria-labelledby="logged_in-label" <?php checked( $settings['settings']['logged_in'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="logged_in-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Include logged in users', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'Caching pages for logged in users can reduce load on your server, but can cause strange behavior with some themes/plugins.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="logged_in"><?php esc_html_e( 'Include logged in users', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'Caching pages for logged in users can reduce load on your server, but can cause strange behavior with some themes/plugins.', 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" name="settings[url_queries]" value="1" id="url_queries" <?php checked( $settings['settings']['url_queries'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="url_queries" class="sui-toggle">
+				<input type="checkbox" name="settings[url_queries]" id="url_queries" value="1" aria-labelledby="url_queries-label" <?php checked( $settings['settings']['url_queries'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="url_queries-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Cache URL queries', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'You can turn on caching pages with GET parameters (?x=y at the end of a url), though generally this isn’t a good idea if those pages are dynamic.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="url_queries"><?php esc_html_e( 'Cache URL queries', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'You can turn on caching pages with GET parameters (?x=y at the end of a url), though generally this isn’t a good idea if those pages are dynamic.', 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" class="toggle-checkbox" name="settings[cache_404]" value="1" id="cache_404" <?php checked( $settings['settings']['cache_404'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="cache_404" class="sui-toggle">
+				<input type="checkbox" name="settings[cache_404]" id="cache_404" value="1" aria-labelledby="cache_404-label" <?php checked( $settings['settings']['cache_404'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="cache_404-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Cache 404 requests', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'Even though 404s are bad and you will want to avoid them with redirects, you can still choose to cache your 404 page to avoid additional load on your server.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="cache_404"><?php esc_html_e( 'Cache 404 requests', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'Even though 404s are bad and you will want to avoid them with redirects, you can still choose to cache your 404 page to avoid additional load on your server.', 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" name="settings[clear_update]" value="1" id="clear_update" <?php checked( $settings['settings']['clear_update'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="clear_update" class="sui-toggle">
+				<input type="checkbox" name="settings[clear_update]" id="clear_update" value="1" aria-labelledby="clear_update-label" <?php checked( $settings['settings']['clear_update'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="clear_update-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Clear full cache when post/page is updated', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'If one of your pages or posts gets updated, turning this setting on will also regenerate all cached archives and taxonomies for all post types.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="clear_update"><?php esc_html_e( 'Clear full cache when post/page is updated', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'If one of your pages or posts gets updated, turning this setting on will also regenerate all cached archives and taxonomies for all post types.', 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" name="settings[debug_log]" value="1" id="debug_log" <?php checked( $settings['settings']['debug_log'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="debug_log" class="sui-toggle">
+				<input type="checkbox" name="settings[debug_log]" id="debug_log" value="1" aria-labelledby="debug_log-label" <?php checked( $settings['settings']['debug_log'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="debug_log-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Enable debug log', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'If you’re having issues with page caching, turn on the debug log to get insight into what’s going on.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="debug_log"><?php esc_html_e( 'Enable debug log', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'If you’re having issues with page caching, turn on the debug log to get insight into what’s going on.', 'wphb' ); ?>
-			</span>
-			<div class="sui-description sui-toggle-description sui-border-frame with-padding wphb-logging-box <?php echo $settings['settings']['debug_log'] ? '' : 'sui-hidden'; ?>">
+			<div class="sui-toggle-content sui-border-frame with-padding wphb-logging-box <?php echo $settings['settings']['debug_log'] ? '' : 'sui-hidden'; ?>">
 				<?php
 				esc_html_e(
 					'Debug logging is active. Logs are stored for 30 days, you can download the
@@ -300,60 +319,87 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="sui-form-field">
-			<input type="hidden" name="settings[cache_identifier]" value="0">
-			<label class="sui-toggle">
-				<input type="checkbox" name="settings[cache_identifier]" value="1" id="cache_identifier"
+			<label for="cache_identifier" class="sui-toggle">
+				<input type="hidden" name="settings[cache_identifier]" value="0">
+				<input type="checkbox" name="settings[cache_identifier]" id="cache_identifier" value="1" aria-labelledby="cache_identifier-label"
 					<?php checked( $settings['settings']['cache_identifier'] ); ?>
-					<?php disabled( ! \Hummingbird\Core\Utils::is_member() ); ?> />
-				<span class="sui-toggle-slider"></span>
+					<?php disabled( ! \Hummingbird\Core\Utils::is_member() ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="cache_identifier-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Identify cached pages', 'wphb' ); ?>
+					<?php if ( ! \Hummingbird\Core\Utils::is_member() ) : ?>
+						<span class="sui-tag sui-tag-pro"><?php esc_html_e( 'Pro', 'wphb' ); ?></span>
+					<?php endif; ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'Hummingbird will insert a comment into your page’s <head> tag to easily identify if it’s cached or not.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="cache_identifier"><?php esc_html_e( 'Identify cached pages', 'wphb' ); ?></label>
-			<?php if ( ! \Hummingbird\Core\Utils::is_member() ) : ?>
-				<span class="sui-tag sui-tag-pro"><?php esc_html_e( 'Pro', 'wphb' ); ?></span>
-			<?php endif; ?>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'Hummingbird will insert a comment into your page’s <head> tag to easily identify if it’s cached or not.', 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<label class="sui-toggle">
-				<input type="checkbox" class="toggle-checkbox" name="settings[compress]" value="1" id="compress" <?php checked( $settings['settings']['compress'] && $can_compress ); ?> <?php disabled( ! $can_compress ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="compress" class="sui-toggle">
+				<input type="checkbox" name="settings[compress]" id="compress" value="1" aria-labelledby="compress-label" <?php checked( $settings['settings']['compress'] && $can_compress ); ?> <?php disabled( ! $can_compress ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="compress-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Serve compressed versions of cached files', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'Improves performance on servers, where gzip compression is disabled or not available.', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php
+					if ( ! $can_compress ) {
+						$this->admin_notices->show_inline(
+							esc_html__( 'Note: Gzip compression already enabled on the server.', 'wphb' ),
+							'grey'
+						);
+					}
+					?>
+				</span>
 			</label>
-			<label for="compress"><?php esc_html_e( 'Serve compressed versions of cached files', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'Improves performance on servers, where gzip compression is disabled or not available.', 'wphb' ); ?>
-				<?php if ( ! $can_compress ) : ?>
-					<div class="sui-notice sui-notice-sm" style="margin-top: 10px">
-					<p><?php esc_html_e( 'Note: Gzip compression already enabled on the server.', 'wphb' ); ?></p>
-				</div>
-				<?php endif; ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<input type="hidden" name="settings[mobile]" value="0">
-			<label class="sui-toggle">
-				<input type="checkbox" class="toggle-checkbox" name="settings[mobile]" value="1" id="mobile" <?php checked( $settings['settings']['mobile'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="mobile" class="sui-toggle">
+				<input type="hidden" name="settings[mobile]" value="0">
+				<input type="checkbox" name="settings[mobile]" id="mobile" value="1" aria-labelledby="mobile-label" <?php checked( $settings['settings']['mobile'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="mobile-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Cache on mobile devices', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( "By default, page caching is enabled for mobile devices. If you don't want to use mobile caching, simply disable this setting.", 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="mobile"><?php esc_html_e( 'Cache on mobile devices', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( "By default, page caching is enabled for mobile devices. If you don't want to use mobile caching, simply disable this setting.", 'wphb' ); ?>
-			</span>
 		</div>
 
 		<div class="sui-form-field">
-			<input type="hidden" name="settings[comment_clear]" value="0">
-			<label class="sui-toggle">
-				<input type="checkbox" class="toggle-checkbox" name="settings[comment_clear]" value="1" id="comment_clear" <?php checked( $settings['settings']['comment_clear'] ); ?>>
-				<span class="sui-toggle-slider"></span>
+			<label for="comment_clear" class="sui-toggle">
+				<input type="hidden" name="settings[comment_clear]" value="0">
+				<input type="checkbox" name="settings[comment_clear]" id="comment_clear" value="1" aria-labelledby="comment_clear-label" <?php checked( $settings['settings']['comment_clear'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="comment_clear-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Clear cache on comment post', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( 'The page cache will be cleared after each comment made on a post.', 'wphb' ); ?>
+				</span>
 			</label>
-			<label for="comment_clear"><?php esc_html_e( 'Clear cache on comment post', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'The page cache will be cleared after each comment made on a post.', 'wphb' ); ?>
-			</span>
+		</div>
+
+		<div class="sui-form-field">
+			<label for="cache_headers" class="sui-toggle">
+				<input type="hidden" name="settings[cache_headers]" value="0">
+				<input type="checkbox" name="settings[cache_headers]" id="cache_headers" value="1" aria-labelledby="cache_headers-label" <?php checked( $settings['settings']['cache_headers'] ); ?>>
+				<span class="sui-toggle-slider" aria-hidden="true"></span>
+				<span id="cache_headers-label" class="sui-toggle-label">
+					<?php esc_html_e( 'Cache headers', 'wphb' ); ?>
+				</span>
+				<span class="sui-description sui-toggle-description">
+					<?php esc_html_e( "By default, Hummingbird won't cache headers. Enable this feature to include them.", 'wphb' ); ?>
+				</span>
+			</label>
 		</div>
 	</div><!-- end sui-box-settings-col-2 -->
 </div><!-- end row -->
@@ -364,15 +410,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="sui-settings-label"><?php esc_html_e( 'Subsites', 'wphb' ); ?></span>
 		</div>
 		<div class="sui-box-settings-col-2">
-			<input type="hidden" name="admins_disable_caching" value="0">
-			<label class="sui-toggle">
-				<input type="checkbox" class="toggle-checkbox" name="settings[admins_disable_caching]" value="1" id="admins_disable_caching" <?php checked( $admins_can_disable ); ?>>
-				<span class="sui-toggle-slider"></span>
-			</label>
-			<label for="admins_disable_caching"><?php esc_html_e( 'Allow subsites to disable page caching', 'wphb' ); ?></label>
-			<span class="sui-description sui-toggle-description">
-				<?php esc_html_e( 'This setting adds the Page Caching tab to Hummingbird and allows a network or subsite admin to disable Page Caching if they wish to. Note: It does not allow them to modify your network settings.', 'wphb' ); ?>
-			</span>
+			<div class="sui-form-field">
+				<label for="admins_disable_caching" class="sui-toggle">
+					<input type="hidden" name="admins_disable_caching" value="0">
+					<input type="checkbox" name="settings[admins_disable_caching]" id="admins_disable_caching" value="1" aria-labelledby="admins_disable_caching-label" <?php checked( $admins_can_disable ); ?>>
+					<span class="sui-toggle-slider" aria-hidden="true"></span>
+					<span id="admins_disable_caching-label" class="sui-toggle-label">
+						<?php esc_html_e( 'Allow subsites to disable page caching', 'wphb' ); ?>
+					</span>
+					<span class="sui-description sui-toggle-description">
+						<?php esc_html_e( 'This setting adds the Page Caching tab to Hummingbird and allows a network or subsite admin to disable Page Caching if they wish to. Note: It does not allow them to modify your network settings.', 'wphb' ); ?>
+					</span>
+				</label>
+			</div>
 		</div>
 	</div>
 <?php endif; ?>

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8b23c383183caf2262d4dbcf6f241460
+class ComposerStaticInit1ef930e5bc6c7605b679d92b260c7922
 {
     public static $files = array (
         '4940672e65e7c6c88ed7150711580427' => __DIR__ . '/..' . '/codeinwp/gutenberg-animation/load.php',
@@ -64,6 +64,7 @@ class ComposerStaticInit8b23c383183caf2262d4dbcf6f241460
         'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Button_CSS' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-button-css.php',
         'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Button_Group_CSS' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-button-group-css.php',
         'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Font_Awesome_Icons_CSS' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-font-awesome-icons-css.php',
+        'ThemeIsle\\GutenbergBlocks\\CSS\\Blocks\\Progress_Bar_CSS' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/css/blocks/class-progress-bar-css.php',
         'ThemeIsle\\GutenbergBlocks\\CSS\\CSS_Handler' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php',
         'ThemeIsle\\GutenbergBlocks\\Main' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/class-main.php',
         'ThemeIsle\\GutenbergBlocks\\Plugins\\Options_Settings' => __DIR__ . '/..' . '/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php',
@@ -83,9 +84,9 @@ class ComposerStaticInit8b23c383183caf2262d4dbcf6f241460
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8b23c383183caf2262d4dbcf6f241460::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8b23c383183caf2262d4dbcf6f241460::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8b23c383183caf2262d4dbcf6f241460::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1ef930e5bc6c7605b679d92b260c7922::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1ef930e5bc6c7605b679d92b260c7922::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1ef930e5bc6c7605b679d92b260c7922::$classMap;
 
         }, null, ClassLoader::class);
     }

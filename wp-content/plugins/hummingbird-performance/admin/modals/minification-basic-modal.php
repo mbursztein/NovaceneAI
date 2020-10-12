@@ -20,22 +20,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span class="sui-screen-reader-text"><?php esc_attr_e( 'Close this dialog window', 'wphb' ); ?></span>
 				</button>
 
-				<h3 class="sui-box-title sui-lg" id="switchBasic">
-					<?php esc_html_e( 'Are you sure?', 'wphb' ); ?>
+				<h3 class="sui-box-title sui-lg" id="switchBasic" style="white-space: inherit">
+					<?php esc_html_e( 'Preset configurations will be applied', 'wphb' ); ?>
 				</h3>
 
 				<p class="sui-description" id="dialogDescription">
-					<?php esc_html_e( 'Switching back to Basic mode will keep your basic compression settings, but you’ll lose any advanced configuration you have set up.', 'wphb' ); ?>
+					<?php
+					if ( 'speedy' === \Hummingbird\Core\Settings::get_setting( 'type', 'minify' ) ) {
+						printf(
+							/* translators: %1$s - <strong>, %2$s - </strong> */
+							esc_html__( 'The automatic %1$sSpeedy%2$s preset rules will be applied which will auto-compress and auto-combine your assets.You can always switch back to manual mode and reapply the configuration there.', 'wphb' ),
+							'<strong>',
+							'</strong>'
+						);
+					} else {
+						printf(
+							/* translators: %1$s - <strong>, %2$s - </strong> */
+							esc_html__( 'The automatic %1$sBasic%2$s preset rules will be applied which will auto-compress your assets. You can always switch back to manual mode and reapply the configuration there.', 'wphb' ),
+							'<strong>',
+							'</strong>'
+						);
+					}
+					?>
 				</p>
 			</div>
 
 			<div class="sui-box-body sui-content-center">
-				<button class="close sui-button sui-button-ghost" data-modal-close="">
-					<?php esc_html_e( 'Go back', 'wphb' ); ?>
-				</button>
+				<div class="sui-form-field">
+					<label for="hide-this-modal" class="sui-checkbox sui-checkbox-sm">
+						<input type="checkbox" id="hide-this-modal" aria-labelledby="hide-this-label"/>
+						<span aria-hidden="true"></span>
+						<span id="hide-this-label" class="sui-toggle-label">
+							<?php esc_html_e( "Don't show me this again", 'wphb' ); ?>
+						</span>
+					</label>
+				</div>
 
-				<button onclick="WPHB_Admin.minification.switchView( 'basic' )" class="sui-button">
-					<?php esc_html_e( 'Switch to basic mode', 'wphb' ); ?>
+				<button class="sui-button" onclick="WPHB_Admin.minification.switchView( 'basic' )" id="wphb-switch-to-basic">
+					<?php esc_html_e( 'Got it', 'wphb' ); ?>
 				</button>
 			</div>
 

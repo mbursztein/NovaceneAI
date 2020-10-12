@@ -144,7 +144,7 @@ export default class ServerInstructions extends React.Component {
 			<div id="enable-cache-wrap" className={ classNames }>
 				{ this.props.htaccessError && (
 					<Notice
-						classes={ [ 'sui-notice-warning', 'sui-notice-sm' ] }
+						classes={ [ 'sui-notice-warning' ] }
 						message={ noticeText }
 					/>
 				) }

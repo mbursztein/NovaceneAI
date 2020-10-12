@@ -2,15 +2,15 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: Ultimate Post\n"
-"POT-Creation-Date: 2019-11-29 22:05+0600\n"
-"PO-Revision-Date: 2019-11-29 22:05+0600\n"
+"Project-Id-Version: Gutenberg Post Blocks\n"
+"POT-Creation-Date: 2020-09-20 14:10+0600\n"
+"PO-Revision-Date: 2020-09-20 14:10+0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: ultimate-post.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -20,138 +20,188 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: blocks/Post_Grid_1.php:2218 blocks/Post_Grid_2.php:2117
-#: blocks/Post_Grid_3.php:2147 blocks/Post_Grid_4.php:2094
-#: blocks/Post_List_1.php:2234 blocks/Post_List_2.php:2196
-#: blocks/Post_List_3.php:2165 blocks/Post_Slider_1.php:2105
-#: blocks/Taxonomy.php:2161
+#: blocks/Heading.php:679 blocks/Image.php:547
+msgid "Show heading or title with ultimate controls."
+msgstr ""
+
+#: blocks/Heading.php:680 blocks/Image.php:548
+msgid "heading"
+msgstr ""
+
+#: blocks/Heading.php:680 blocks/Image.php:548
+msgid "title"
+msgstr ""
+
+#: blocks/Heading.php:680 blocks/Image.php:548
+msgid "section"
+msgstr ""
+
+#: blocks/Post_Grid_1.php:2202
+msgid "Post grid with classic style."
+msgstr ""
+
+#: blocks/Post_Grid_1.php:2203 blocks/Post_Grid_2.php:2087
+#: blocks/Post_Grid_3.php:2136 blocks/Post_Grid_4.php:2097
+#: blocks/Post_Grid_5.php:2081 blocks/Post_Grid_6.php:2080
+#: blocks/Post_Grid_7.php:2072 blocks/Post_List_1.php:2202
+#: blocks/Post_List_2.php:2398 blocks/Post_List_3.php:2421
+#: blocks/Post_List_4.php:2386
+msgid "grid"
+msgstr ""
+
+#: blocks/Post_Grid_1.php:2203 blocks/Post_Grid_2.php:2087
+#: blocks/Post_Grid_3.php:2136 blocks/Post_Grid_4.php:2097
+#: blocks/Post_Grid_5.php:2081 blocks/Post_Grid_6.php:2080
+#: blocks/Post_Grid_7.php:2072 blocks/Post_List_1.php:2202
+#: blocks/Post_List_2.php:2398 blocks/Post_List_3.php:2421
+#: blocks/Post_List_4.php:2386
+msgid "post"
+msgstr ""
+
+#: blocks/Post_Grid_1.php:2203 blocks/Post_Grid_2.php:2087
+#: blocks/Post_Grid_3.php:2136 blocks/Post_Grid_4.php:2097
+#: blocks/Post_Grid_5.php:2081 blocks/Post_Grid_6.php:2080
+#: blocks/Post_Grid_7.php:2072 blocks/Post_List_1.php:2202
+#: blocks/Post_List_2.php:2398 blocks/Post_List_3.php:2421
+#: blocks/Post_List_4.php:2386 blocks/Post_Module_1.php:2358
+#: blocks/Post_Module_2.php:2348
+msgid "article"
+msgstr ""
+
+#: blocks/Post_Grid_1.php:2203 blocks/Post_Grid_2.php:2087
+#: blocks/Post_Grid_3.php:2136 blocks/Post_Grid_4.php:2097
+#: blocks/Post_Grid_5.php:2081 blocks/Post_Grid_6.php:2080
+#: blocks/Post_Grid_7.php:2072 blocks/Post_List_1.php:2202
+#: blocks/Post_List_2.php:2398 blocks/Post_List_3.php:2421
+#: blocks/Post_List_4.php:2386
+msgid "listing"
+msgstr ""
+
+#: blocks/Post_Grid_1.php:2309 blocks/Post_Grid_2.php:2193
+#: blocks/Post_Grid_3.php:2242 blocks/Post_Grid_4.php:2203
+#: blocks/Post_Grid_5.php:2187 blocks/Post_Grid_6.php:2186
+#: blocks/Post_Grid_7.php:2178 blocks/Post_List_1.php:2302
+#: blocks/Post_List_2.php:2506 blocks/Post_List_3.php:2526
+#: blocks/Post_List_4.php:2494 blocks/Post_Module_1.php:2462
+#: blocks/Post_Module_2.php:2451 blocks/Post_Slider_1.php:2175
+#: blocks/Taxonomy.php:2224
 msgid "Read More"
 msgstr ""
 
-#: blocks/template/data.php:17 classes/REST_API.php:100
+#: blocks/Post_Grid_2.php:2086
+msgid "Post grid with gradient image overlay style."
+msgstr ""
+
+#: blocks/Post_Grid_3.php:2135
+msgid "Post grid with top big posts overlay style."
+msgstr ""
+
+#: blocks/Post_Grid_4.php:2096 blocks/Post_Grid_5.php:2080
+#: blocks/Post_Grid_6.php:2079 blocks/Post_Grid_7.php:2071
+msgid "Post grid with left big posts overlay style."
+msgstr ""
+
+#: blocks/Post_List_1.php:2201
+msgid "Listing your post with classic style."
+msgstr ""
+
+#: blocks/Post_List_2.php:2397 blocks/Post_List_4.php:2385
+#: blocks/Post_Module_1.php:2357 blocks/Post_Module_2.php:2347
+msgid "Listing your post with top big post."
+msgstr ""
+
+#: blocks/Post_List_3.php:2420
+msgid "Listing your post with left side image."
+msgstr ""
+
+#: blocks/Post_Module_1.php:2358 blocks/Post_Module_2.php:2348
+msgid "Post grid"
+msgstr ""
+
+#: blocks/Post_Module_1.php:2358 blocks/Post_Module_2.php:2348
+msgid "post List"
+msgstr ""
+
+#: blocks/Post_Module_1.php:2358 blocks/Post_Module_2.php:2348
+msgid "Post Module"
+msgstr ""
+
+#: blocks/Post_Slider_1.php:2102
+msgid "Dynamic post slider with lots of settings."
+msgstr ""
+
+#: blocks/Post_Slider_1.php:2103 blocks/Taxonomy.php:2126
+msgid "Latest Post"
+msgstr ""
+
+#: blocks/Post_Slider_1.php:2103 blocks/Taxonomy.php:2126
+msgid "Popular Post"
+msgstr ""
+
+#: blocks/Post_Slider_1.php:2103 blocks/Taxonomy.php:2126
+msgid "Article"
+msgstr ""
+
+#: blocks/Taxonomy.php:2125
+msgid "Listing your products in a easy way."
+msgstr ""
+
+#: blocks/template/data.php:16 classes/REST_API.php:135
 msgid " min read"
 msgstr ""
 
-#: blocks/template/meta.php:7 blocks/template/meta.php:8
-#: blocks/template/meta.php:10
+#: blocks/template/meta.php:8 blocks/template/meta.php:9
+#: blocks/template/meta.php:11
 msgid "By"
 msgstr ""
 
-#: blocks/template/meta.php:13
+#: blocks/template/meta.php:14
 msgid " comments"
 msgstr ""
 
-#: blocks/template/meta.php:15
+#: blocks/template/meta.php:16
 msgid " views"
 msgstr ""
 
-#: blocks/template/meta.php:17 blocks/template/meta.php:18
+#: blocks/template/meta.php:18 blocks/template/meta.php:19
 msgid " ago"
 msgstr ""
 
-#: classes/Functions.php:101 classes/Functions.php:168
+#: classes/Functions.php:161 classes/Functions.php:228
 msgid "Previous"
 msgstr ""
 
-#: classes/Functions.php:121 classes/Functions.php:173
+#: classes/Functions.php:181 classes/Functions.php:233
 msgid "Next"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-#: classes/Initialization.php:272 classes/Options.php:14 classes/Options.php:15
-msgid "Ultimate Post"
+#: classes/Initialization.php:270 classes/options/Heading.php:3
+msgid "Gutenberg Post Blocks"
 msgstr ""
 
-#: classes/Options.php:49
-msgid "CSS Save Method"
+#: classes/Options.php:20
+msgid "Docs"
 msgstr ""
 
-#: classes/Options.php:51
-msgid "Header"
+#: classes/Options.php:21
+msgid "Tutorials"
 msgstr ""
 
-#: classes/Options.php:52
-msgid "File System"
-msgstr ""
-
-#: classes/Options.php:55
-msgid "Select where you want to save CSS."
-msgstr ""
-
-#: classes/Options.php:59
-msgid "Preloader Style"
-msgstr ""
-
-#: classes/Options.php:61
-msgid "Preloader Style 1"
-msgstr ""
-
-#: classes/Options.php:62
-msgid "Preloader Style 2"
-msgstr ""
-
-#: classes/Options.php:65
-msgid "Select Preloader Style."
-msgstr ""
-
-#: classes/Options.php:75
-msgid "Container Width"
-msgstr ""
-
-#: classes/Options.php:77
-msgid "Change Container Width."
-msgstr ""
-
-#: classes/Options.php:106
-msgid "Download Now"
-msgstr ""
-
-#: classes/Options.php:154
-msgid "Released on "
-msgstr ""
-
-#: classes/Options.php:156
-msgid "Version"
-msgstr ""
-
-#: classes/Options.php:237
+#: classes/Options.php:22
 msgid "Support"
 msgstr ""
 
-#: classes/Options.php:238
-msgid ""
-"Need help with Ultimate Post Block? Ask a question and get help from the "
-"support staff. Don not forget to read the documentation first."
+#: classes/Options.php:35
+msgid "Go Pro"
 msgstr ""
 
-#: classes/Options.php:239
-msgid "Documentation"
-msgstr ""
-
-#: classes/Options.php:241
-msgid "Submit a Ticket"
-msgstr ""
-
-#: classes/Options.php:454 classes/Options.php:455
-msgid "Ultimate Post blocks"
-msgstr ""
-
-#: classes/Options.php:457
-msgid ""
-"Best Gutenberg Post Listing/Grid plugin. Build a fast and supercharged "
-"WordPress post blog easily and perfectly."
-msgstr ""
-
-#: classes/Options.php:461
+#: classes/Options.php:38
 msgid "Settings"
 msgstr ""
 
-#: classes/Options.php:462
-msgid "Recommended Theme"
-msgstr ""
-
-#: classes/Options.php:463
-msgid "Changelog"
+#: classes/Options.php:45 classes/Options.php:46
+msgid "Post Blocks"
 msgstr ""
 
 #: classes/Styles.php:76 classes/Styles.php:85
@@ -167,16 +217,428 @@ msgid "CSS can not be saved due to permission!!!"
 msgstr ""
 
 #: classes/Styles.php:116
-msgid "Ultimate Post block css file has been updated."
+msgid "Gutenberg Post block css file has been updated."
 msgstr ""
 
 #: classes/Templates.php:27
-msgid "Ultimate Post Template"
+msgid "Gutenberg Post Blocks Template"
+msgstr ""
+
+#: classes/options/Addons.php:15 classes/options/Features.php:57
+#: classes/options/Features.php:125
+msgid "Image Loading"
+msgstr ""
+
+#: classes/options/Addons.php:16
+msgid "Set your Image Loading Functionality for every blocks."
+msgstr ""
+
+#: classes/options/Addons.php:19
+msgid "Category"
+msgstr ""
+
+#: classes/options/Addons.php:20
+msgid "Set your category specific color for block design."
+msgstr ""
+
+#: classes/options/Addons.php:43
+msgid "Pro Addons"
+msgstr ""
+
+#: classes/options/Addons.php:54
+msgid "Get Pro"
+msgstr ""
+
+#: classes/options/Features.php:21
+msgid "Pro Features"
+msgstr ""
+
+#: classes/options/Features.php:28
+msgid "Quick Query Builder"
+msgstr ""
+
+#: classes/options/Features.php:29
+msgid ""
+"Using only one click you can change your query, no coding skill required. "
+"Most Comments, Most Popular, Latest Posts and much more pre-defined query."
+msgstr ""
+
+#: classes/options/Features.php:37 classes/options/Features.php:110
+msgid "Starter Packs"
+msgstr ""
+
+#: classes/options/Features.php:38 classes/options/Features.php:48
+msgid ""
+"Starter packs and design added many more pro starter packs and design. So "
+"you don’t need any design skill. Choose then click, import done."
+msgstr ""
+
+#: classes/options/Features.php:47
+msgid "Ready Design"
+msgstr ""
+
+#: classes/options/Features.php:58
+msgid ""
+"Image loading issue causes bad user experience from user end. To improve "
+"this experience we added an image lazy loading feature."
+msgstr ""
+
+#: classes/options/Features.php:63 classes/options/Overview.php:132
+msgid "More Features"
+msgstr ""
+
+#: classes/options/Features.php:69
+msgid "Reviews & Testimonials"
+msgstr ""
+
+#: classes/options/Features.php:73
+msgid ""
+"Plugin is excellent! Thank you for rarely a good great free plugin! To many "
+"options, easy to use.I really needed this plugin for the site i’m "
+"developing! No errors(bug)! I strongly recommend it! Please next update give "
+"to us ???? in options “Order By”: more option like: hits, most popular,last "
+"24hour! Of course if possible"
+msgstr ""
+
+#: classes/options/Features.php:74
+msgid "@blumen – A lot of option easy to use!"
+msgstr ""
+
+#: classes/options/Features.php:78
+msgid ""
+"I have been searching for hours for a plugin like this. Tried all plugins "
+"and this is the best! It’s wonderful, easy to use and so many themes to "
+"choose from. I can’t believe it’s free!"
+msgstr ""
+
+#: classes/options/Features.php:79
+msgid "@laursen299 – Lot of options and works well"
+msgstr ""
+
+#: classes/options/Features.php:85
+msgid ""
+"I was surprised by the versatility of this plugin. It’s great the other and "
+"most important thing is I contacted the developers and they have resolved "
+"both my doubts and fixed some minor problems. Thank you!!!!!"
+msgstr ""
+
+#: classes/options/Features.php:86
+msgid "@mparraud – Really good plugin!"
+msgstr ""
+
+#: classes/options/Features.php:90
+msgid ""
+"A great plugin for a blog or news site, with its help you can create not "
+"only the main page, but also display similar or recent posts by tags or "
+"categories, add exceptions. It has many ready-made styles that you can "
+"refine yourself, as there is a block for custom code."
+msgstr ""
+
+#: classes/options/Features.php:91
+msgid "@nalitana – There are no analogues"
+msgstr ""
+
+#: classes/options/Features.php:99
+msgid "Free Vs Pro Comparison"
+msgstr ""
+
+#: classes/options/Features.php:104 classes/options/Overview.php:92
+msgid "Core Features"
+msgstr ""
+
+#: classes/options/Features.php:105
+msgid "Free"
+msgstr ""
+
+#: classes/options/Features.php:106
+msgid "Pro"
+msgstr ""
+
+#: classes/options/Features.php:115
+msgid "Readymade Block Design"
+msgstr ""
+
+#: classes/options/Features.php:120
+msgid "Advacned Quick Query"
+msgstr ""
+
+#: classes/options/Features.php:130
+msgid "Priority Support"
+msgstr ""
+
+#: classes/options/Features.php:135
+msgid "Specific Category Color"
+msgstr ""
+
+#: classes/options/Features.php:142
+msgid "Live Demo"
+msgstr ""
+
+#: classes/options/Features.php:143
+msgid "Buy Now"
+msgstr ""
+
+#: classes/options/Features.php:152
+msgid "Money Back"
+msgstr ""
+
+#: classes/options/Features.php:155
+msgid "100% No-Risk Money Back Guarantee! <span>(No questions asked!)</span>"
+msgstr ""
+
+#: classes/options/Features.php:156
+msgid ""
+"You are fully protected by our 100% No-Risk Double-Guarantee. If you don’t "
+"like  plugins over the next 14 days, then we will happily refund 100% of "
+"your money."
+msgstr ""
+
+#: classes/options/Features.php:157
+msgid "Credit Cards"
+msgstr ""
+
+#: classes/options/Footer.php:4
+msgid "Documentations"
+msgstr ""
+
+#: classes/options/Footer.php:5
+msgid ""
+"Got a question? Read our super rich documentation and solve your problem "
+"ASAP."
+msgstr ""
+
+#: classes/options/Footer.php:6
+msgid "Documentation"
+msgstr ""
+
+#: classes/options/Footer.php:9
+msgid "Submit Your Review"
+msgstr ""
+
+#: classes/options/Footer.php:10
+msgid ""
+"Are you satisfied with this plugin? Submit your valuable review in Wordpress "
+"directory."
+msgstr ""
+
+#: classes/options/Footer.php:11
+msgid "Leave a Review"
+msgstr ""
+
+#: classes/options/Footer.php:14
+msgid "Need any Helps"
+msgstr ""
+
+#: classes/options/Footer.php:15
+msgid ""
+"Have you any questions? Our super fast support ninja is waiting for your "
+"problems."
+msgstr ""
+
+#: classes/options/Footer.php:16
+msgid "Submit a Ticket »"
+msgstr ""
+
+#: classes/options/Heading.php:5
+msgid "Welcome to <strong>Gutenberg Post Blocks</strong> - Version"
+msgstr ""
+
+#: classes/options/Heading.php:7
+msgid "Most Powerful & Advanced Gutenberg Post Blocks"
+msgstr ""
+
+#: classes/options/Heading.php:7
+msgid "Rate the plugin"
+msgstr ""
+
+#: classes/options/Overview.php:33
+msgid "Live Preview"
+msgstr ""
+
+#: classes/options/Overview.php:34
+msgid "Plugin Details"
+msgstr ""
+
+#: classes/options/Overview.php:41
+msgid "Why Upgrade to Pro"
+msgstr ""
+
+#: classes/options/Overview.php:42
+msgid ""
+"You are using lite version of Gutenberg Post Blocks. To get more awesome "
+"features to upgrade to the Pro version"
+msgstr ""
+
+#: classes/options/Overview.php:44
+msgid "Blocks Layouts Options"
+msgstr ""
+
+#: classes/options/Overview.php:45
+msgid "Ready Start Packs"
+msgstr ""
+
+#: classes/options/Overview.php:46
+msgid "Advanced Quick Query Options"
+msgstr ""
+
+#: classes/options/Overview.php:47
+msgid "Get Category Specific Color Options"
+msgstr ""
+
+#: classes/options/Overview.php:48
+msgid "Get All Blocks with Full Control"
+msgstr ""
+
+#: classes/options/Overview.php:49
+msgid "Fast & Priority Support"
+msgstr ""
+
+#: classes/options/Overview.php:51
+msgid "Upgrade Pro  ➤"
+msgstr ""
+
+#: classes/options/Overview.php:60
+msgid "Advacned <strong>Query</strong> Builder"
+msgstr ""
+
+#: classes/options/Overview.php:63
+msgid "<strong>Ajax</strong> Powered Post Filter"
+msgstr ""
+
+#: classes/options/Overview.php:66
+msgid "Quick <strong>Query</strong> Builder"
+msgstr ""
+
+#: classes/options/Overview.php:69
+msgid "Ready <strong>Starter</strong> Packs"
+msgstr ""
+
+#: classes/options/Overview.php:72
+msgid "Premade <strong>Block</strong> Design"
+msgstr ""
+
+#: classes/options/Overview.php:83
+msgid "Design Library"
+msgstr ""
+
+#: classes/options/Overview.php:84
+msgid ""
+"Gutenberg Post Blocks comes with a rich and beautiful readymade starter pack "
+"and design library. It helps you to create a beautiful site without design "
+"knowledge."
+msgstr ""
+
+#: classes/options/Overview.php:85
+msgid "Explore Details"
+msgstr ""
+
+#: classes/options/Overview.php:99
+msgid "AJAX Powered Post Filter"
+msgstr ""
+
+#: classes/options/Overview.php:100
+msgid ""
+"Category filter is the best element to show many contents in a small place. "
+"By clicking category users can easily read their interesting content."
+msgstr ""
+
+#: classes/options/Overview.php:108
+msgid "Advacned Pagination Options"
+msgstr ""
+
+#: classes/options/Overview.php:109
+msgid ""
+"Gutenberg Post Blocks comes with the AJAX powered Pagination system, that’s "
+"why content is loaded without a total page reload."
+msgstr ""
+
+#: classes/options/Overview.php:117
+msgid "Awesome Typography Control"
+msgstr ""
+
+#: classes/options/Overview.php:118
+msgid ""
+"Typography is one of the major concerns for readability. Gutenberg Post "
+"Blocks merges all the Google free fonts in one place."
+msgstr ""
+
+#: classes/options/Overview.php:126
+msgid "Dynamic Post Slider"
+msgstr ""
+
+#: classes/options/Overview.php:127
+msgid ""
+"Post Slider is now easier to build using post slider blocks. It is fully "
+"dynamic and can apply any custom query to display the post."
+msgstr ""
+
+#: classes/options/Settings.php:33
+msgid "CSS Add Via"
+msgstr ""
+
+#: classes/options/Settings.php:35
+msgid "Header - (Internal)"
+msgstr ""
+
+#: classes/options/Settings.php:36
+msgid "File System - (External)"
+msgstr ""
+
+#: classes/options/Settings.php:39
+msgid "Select where you want to save CSS."
+msgstr ""
+
+#: classes/options/Settings.php:43
+msgid "Preloader Style"
+msgstr ""
+
+#: classes/options/Settings.php:45
+msgid "Preloader Style 1"
+msgstr ""
+
+#: classes/options/Settings.php:46
+msgid "Preloader Style 2"
+msgstr ""
+
+#: classes/options/Settings.php:49
+msgid "Select Preloader Style."
+msgstr ""
+
+#: classes/options/Settings.php:53
+msgid "Container Width"
+msgstr ""
+
+#: classes/options/Settings.php:55
+msgid "Change Container Width."
+msgstr ""
+
+#: classes/options/Settings.php:59
+msgid "Hide Import Button"
+msgstr ""
+
+#: classes/options/Settings.php:61
+msgid "Hide Import Layout Button from the Gutenberg Editor."
+msgstr ""
+
+#: classes/options/Settings.php:111
+msgid "Released on "
+msgstr ""
+
+#: classes/options/Settings.php:113
+msgid "Version"
+msgstr ""
+
+#: classes/options/Settings.php:212
+msgid "General Settings"
+msgstr ""
+
+#: classes/options/Settings.php:213
+msgid "Changelog"
 msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"Ultimate Post blocks is a Gutenberg block Plugin for creating dynamic blog "
+"Gutenberg Post blocks is a Gutenberg block Plugin for creating dynamic blog "
 "listing, grid and slider."
 msgstr ""
 

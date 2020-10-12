@@ -22,24 +22,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="<?php echo $show_cf_notice ? 'sui-box-body' : ''; ?>">
 	<p><?php esc_html_e( "Store temporary data on your visitors' devices so that they don’t have to download assets twice if they don’t have to.", 'wphb' ); ?></p>
-	<?php if ( $issues ) : ?>
-		<div class="sui-notice sui-notice-warning">
-			<p>
-				<?php
-				printf(
-					/* translators: %s: Number of issues */
-					__( '%1$s of your cache types don’t meet the recommended expiry period of 1 year. Configure browser caching <a href="%2$s" id="configure-link">here</a>.', 'wphb' ),
-					absint( $issues ),
-					esc_attr( $configure_caching_url )
-				);
-				?>
-			</p>
-		</div>
-	<?php else : ?>
-		<div class="sui-notice sui-notice-success">
-			<p><?php esc_html_e( 'All of your cache types meet the recommended expiry period of 1 year. Great work!', 'wphb' ); ?></p>
-		</div>
-	<?php endif; ?>
+	<?php
+	if ( $issues ) {
+		$this->admin_notices->show_inline(
+			sprintf( /* translators: %s: Number of issues */
+				__( '%1$s of your cache types don’t meet the recommended expiry period of 1 year. Configure browser caching <a href="%2$s" id="configure-link">here</a>.', 'wphb' ),
+				absint( $issues ),
+				esc_attr( $configure_caching_url )
+			),
+			'warning'
+		);
+	} else {
+		$this->admin_notices->show_inline( esc_html__( 'All of your cache types meet the recommended expiry period of 1 year. Great work!', 'wphb' ) );
+	}
+	?>
 
 	<ul class="sui-list sui-no-margin-bottom">
 		<li class="sui-list-header">
@@ -101,26 +97,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</ul>
 </div>
 <?php if ( $show_cf_notice ) : ?>
-	<div class="sui-box-settings-row sui-upsell-row cf-dash-notice">
+	<div class="sui-box-settings-row sui-upsell-row cf-dash-notice sui-margin-top">
 		<?php if ( ! apply_filters( 'wpmudev_branding_hide_branding', false ) ) : ?>
 			<img class="sui-image sui-upsell-image"
-				 src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell.png' ); ?>"
-				 srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell@2x.png' ); ?> 2x"
-				 alt="<?php esc_attr_e( 'Connect your account to Cloudflare', 'wphb' ); ?>">
+				src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell.png' ); ?>"
+				srcset="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/graphic-hb-cf-sell@2x.png' ); ?> 2x"
+				alt="<?php esc_attr_e( 'Connect your account to Cloudflare', 'wphb' ); ?>">
 		<?php endif; ?>
-		<div class="<?php echo( apply_filters( 'wpmudev_branding_hide_branding', false ) ? esc_attr( 'sui-notice' ) : esc_attr( 'sui-upsell-notice' ) ); ?>">
-			<p>
-				<?php
-					echo esc_html( $cf_notice );
-				printf(
-					/* translators: %s: Connect CloudFlare link */
-					__( ' <a href="%s">Connect your account</a> to control your settings via Hummingbird.', 'wphb' ),
-					esc_url( $cf_connect_url )
-				);
-				?>
-				<span class="cf-dismiss">
-						<a href="#" id="dismiss-cf-notice"><?php esc_html_e( 'Dismiss', 'wphb' ); ?></a>
-					</span>
-		</div>
+		<?php
+		$this->admin_notices->show_inline(
+			$cf_notice,
+			apply_filters( 'wpmudev_branding_hide_branding', false ) ? 'grey' : 'sui-upsell-notice',
+			sprintf( /* translators: %s: Connect CloudFlare link */
+				__( ' <a href="%s">Connect your account</a> to control your settings via Hummingbird.', 'wphb' ),
+				esc_url( $cf_connect_url )
+			),
+			sprintf( /* translators: %1$s - opening a tag, %2$s - </a> */
+				esc_html__( '%1$sDismiss%2$s', 'wphb' ),
+				'<a href="#" id="dismiss-cf-notice">',
+				'</a>'
+			)
+		);
+		?>
 	</div>
 <?php endif; ?>

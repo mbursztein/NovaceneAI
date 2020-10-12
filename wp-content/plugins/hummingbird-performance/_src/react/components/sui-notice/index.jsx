@@ -18,9 +18,17 @@ export default function Notice( { message, classes, content } ) {
 
 	return (
 		<div className={ combinedClasses }>
-			<p>{ message }</p>
+			<div className="sui-notice-content">
+				<div className="sui-notice-message">
+					<i
+						className="sui-notice-icon sui-icon-info sui-md"
+						aria-hidden="true"
+					></i>
+					<p>{ message }</p>
 
-			{ content && <div className="sui-notice-buttons">{ content }</div> }
+					{ content && <p>{ content }</p> }
+				</div>
+			</div>
 		</div>
 	);
 }

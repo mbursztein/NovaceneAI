@@ -16,17 +16,3 @@
         text-shadow: none !important;
     }
 }
-
-.wpmud .wrap-wp-hummingbird .button-notice {
-    background-color: #E6E6E6 !important;
-    color: #AAAAAA !important;
-}
-
-.wpmud .wrap-wp-hummingbird .button-notice:hover:not(:focus):not(:active):not(.wph-button):not(#collapse-button):not([tooltip]),
-.wpmud .wrap-wp-hummingbird .button-notice:hover:not(:focus):not(:active),
-.wpmud .wrap-wp-hummingbird .button-notice:active,
-.wpmud .wrap-wp-hummingbird .button-notice:focus {
-    background-color: #888888 !important;
-    color: #FFFFFF !important;
-}
-

@@ -42,8 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="sui-box-settings-col-2">
 		<label for="lazy_load" class="sui-toggle">
-			<input type="checkbox" name="lazy_load" id="lazy_load" aria-labelledby="lazy-load-label" <?php checked( $is_enabled ); ?> />
-			<input aria-controls="lazy_load-method" />
+			<input type="checkbox" name="lazy_load" id="lazy_load" aria-controls="lazy_load-method" aria-labelledby="lazy-load-label" <?php checked( $is_enabled ); ?> />
 			<span class="sui-toggle-slider" aria-hidden="true"></span>
 			<span id="lazy-load-label" class="sui-toggle-label"><?php esc_html_e( 'Enable lazy loading comments', 'wphb' ); ?></span>
 		</label>
@@ -322,18 +321,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <?php if ( ! $is_smush_installed || ! $is_smush_active || ! $smush_lazy_load ) : ?>
-	<?php 
-	$smush_plugin_name 				= Utils::is_member() ? 'Smush Pro' : 'Smush'; 
-	$smush_installed_plugin_name 	= ( $is_smush_pro ) ? 'Smush Pro' : 'Smush'; 
+	<?php
+	$smush_plugin_name 				= Utils::is_member() ? 'Smush Pro' : 'Smush';
+	$smush_installed_plugin_name 	= ( $is_smush_pro ) ? 'Smush Pro' : 'Smush';
 	$can_install_plugin 			= ( ! is_multisite() || is_network_admin() );
 	$show_smush_box 				= false;
 	$message 						= '';
 	ob_start();
 	?>
 	<!-- Smush not installed -->
-	<?php 
-	if ( $can_install_plugin && ! $is_smush_installed ) : 
-		$show_smush_box = true; 
+	<?php
+	if ( $can_install_plugin && ! $is_smush_installed ) :
+		$show_smush_box = true;
 		?>
 		<a style="display: block; color: #17A8E3; margin-top: 10px;" href="<?php echo esc_url( Utils::get_link( 'smush' ) ); ?>" class="upsell-action-link" id="smush-install">
 			<?php
@@ -342,8 +341,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</a>
 	<!-- Smush is not active -->
-	<?php 
-	elseif ( $can_install_plugin && (  $is_smush_installed && ! $is_smush_active ) ) : 
+	<?php
+	elseif ( $can_install_plugin && (  $is_smush_installed && ! $is_smush_active ) ) :
 		$show_smush_box = true;
 		$activate_url 	= ( $is_smush_pro ) ? $smush_activate_pro_url : $smush_activate_url;
 		?>
@@ -353,18 +352,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			printf( esc_html__( 'Activate %s', 'wphb' ), esc_attr( $smush_installed_plugin_name ) );
 			?>
 		</a>
-	<?php 
-	elseif ( $is_smush_installed && $is_smush_active && $is_smush_lazy_load_configurable && ! $smush_lazy_load ) : 
-		$show_smush_box = true; 
+	<?php
+	elseif ( $is_smush_installed && $is_smush_active && $is_smush_lazy_load_configurable && ! $smush_lazy_load ) :
+		$show_smush_box = true;
 		?>
 		<a style="display: block; color: #17A8E3; margin-top: 10px;" href="<?php echo esc_url( $activate_smush_lazy_load_url ); ?>" class="upsell-action-link" id="smush-activate-lazy-load">
 			<?php printf( esc_html__( 'Activate Lazy Load', 'wphb' ), esc_attr( $smush_plugin_name ) ); ?>
 		</a>
-	<?php 
+	<?php
 	endif;
 	$message = ob_get_clean();
 
-	if ( $show_smush_box ) : 
+	if ( $show_smush_box ) :
 	?>
 	<div class="sui-box-settings-row sui-upsell-row">
 		<img class="sui-image sui-upsell-image" style="width: auto !important; height: 108px !important; margin-bottom: -30px" src="<?php echo esc_url( WPHB_DIR_URL . 'admin/assets/image/smush-share-widget.png' ); ?>"
@@ -381,7 +380,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 		</div>
 	</div>
-<?php 
+<?php
 	endif;
-endif; 
+endif;
 ?>

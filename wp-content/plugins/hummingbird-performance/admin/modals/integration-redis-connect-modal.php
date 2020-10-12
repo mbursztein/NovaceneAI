@@ -54,8 +54,13 @@ if ( is_object( $wp_object_cache ) && method_exists( $wp_object_cache, 'redis_st
 				</p>
 			</div>
 			<div class="sui-box-header sui-flatten sui-spacing-sides--30">
-				<div class="sui-notice sui-hidden sui-notice-error">
-					<p id="redis-connect-notice-on-modal"><!-- error message --></p>
+				<div class="sui-notice sui-notice-error sui-hidden">
+					<div class="sui-notice-content">
+						<div class="sui-notice-message">
+							<i class="sui-notice-icon sui-icon-info" aria-hidden="true"></i>
+							<p id="redis-connect-notice-on-modal"><!-- error message --></p>
+						</div>
+					</div>
 				</div>
 			</div>	
 

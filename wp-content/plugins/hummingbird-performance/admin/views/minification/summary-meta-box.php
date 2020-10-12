@@ -17,12 +17,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class="sui-summary-image-space" aria-hidden="true"></div>
+<div class="sui-summary-image-space" aria-hidden="true" style="background-image: url( '<?php echo esc_url( apply_filters( 'wpmudev_branding_hero_image', '' ) ); ?>' )"></div>
 <div class="sui-summary-segment">
 	<div class="sui-summary-details">
-		<span class="sui-summary-large">
-			<?php echo ! $percentage || '0.0' === $percentage ? '-' : esc_html( $percentage ) . '%'; ?>
-		</span>
+		<?php if ( ! $percentage || '0.0' === $percentage ) : ?>
+			<?php if ( 'basic' === $this->mode ) : ?>
+				<span class="sui-tooltip" data-tooltip="<?php esc_attr_e( 'All assets are auto-compressed', 'wphb' ); ?>">
+					<i class="sui-icon-check-tick sui-lg" aria-hidden="true"></i>
+				</span>
+			<?php else : ?>
+				&mdash;
+			<?php endif; ?>
+		<?php else : ?>
+			<span class="sui-summary-large">
+				<?php echo esc_html( $percentage ); ?>%
+			</span>
+		<?php endif; ?>
 		<span class="sui-summary-sub"><?php esc_html_e( 'Compression savings', 'wphb' ); ?></span>
 	</div>
 </div>
@@ -34,10 +44,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</li>
 		<li>
 			<span class="sui-list-label"><?php esc_html_e( 'Filesize reductions', 'wphb' ); ?></span>
-			<span class="sui-list-detail"><?php echo intval( $compressed_size ); ?>kb</span>
+			<span class="sui-list-detail">
+				<?php if ( 'basic' === $this->mode && 0 === intval( $compressed_size ) ) : ?>
+					<?php esc_html_e( 'Files are compressed', 'wphb' ); ?> <i class="sui-icon-check-tick sui-lg" aria-hidden="true"></i>
+				<?php else : ?>
+					<?php echo intval( $compressed_size ); ?>kb
+				<?php endif; ?>
+			</span>
 		</li>
 		<li>
-			<span class="sui-list-label"><?php esc_html_e( 'WPMU DEV CDN', 'wphb' ); ?></span>
+			<span class="sui-list-label">
+				<?php esc_html_e( 'WPMU DEV CDN', 'wphb' ); ?>
+				<?php if ( ! $is_member ) : ?>
+					<span class="sui-tag sui-tag-pro"><?php esc_html_e( 'Pro', 'wphb' ); ?></span>
+				<?php endif; ?>
+			</span>
 			<span class="sui-list-detail">
 				<?php if ( ! is_multisite() && $is_member ) : ?>
 					<label class="sui-toggle sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_html_e( 'Enable WPMU DEV CDN', 'wphb' ); ?>">
@@ -45,9 +66,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<span class="sui-toggle-slider"></span>
 					</label>
 				<?php elseif ( ! is_multisite() && ! $is_member ) : ?>
-					<span class="sui-tag sui-tag-upsell sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_html_e( 'Host your files on WPMU DEV’s blazing fast CDN', 'wphb' ); ?>" data-modal-open="wphb-upgrade-membership-modal" data-modal-open-focus="upgrade-to-pro-button" data-modal-mask="true">
-						<?php esc_html_e( 'Pro Feature', 'wphb' ); ?>
-					</span>
+					<a href="<?php echo esc_url( \Hummingbird\Core\Utils::get_link( 'plugin', 'hummingbird_topsummary_cdnbutton' ) ); ?>" target="_blank" class="sui-button sui-button-purple sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_html_e( 'Host your files on WPMU DEV’s blazing fast CDN', 'wphb' ); ?>">
+						<?php esc_html_e( 'Try CDN Free', 'wphb' ); ?>
+					</a>
 				<?php elseif ( $use_cdn && $is_member ) : ?>
 					<span class="sui-tooltip sui-tooltip-top-right" data-tooltip="<?php esc_html_e( 'The Network Admin has the WPMU DEV CDN turned on', 'wphb' ); ?>">
 						<i class="sui-icon-check-tick sui-md sui-info" aria-hidden="true"></i>

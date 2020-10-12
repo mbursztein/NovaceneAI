@@ -52,6 +52,13 @@ class Installer {
 
 		$settings = Settings::get_settings( 'settings' );
 		WP_Hummingbird::flush_cache( $settings['remove_data'], $settings['remove_settings'] );
+
+		Utils::get_module( 'page_cache' )->toggle_service( false );
+
+		if ( $settings['remove_settings'] ) {
+			// Completely remove hummingbird-asset folder.
+			Filesystem::instance()->purge( '', true );
+		}
 		do_action( 'wphb_deactivate' );
 	}
 
@@ -86,23 +93,21 @@ class Installer {
 			if ( false === $blog_version ) {
 				self::activate_blog();
 			}
+
+			if ( false !== $blog_version && WPHB_VERSION !== $blog_version ) {
+				if ( version_compare( $blog_version, '2.6.0', '<' ) ) {
+					self::upgrade_2_6_0_multi();
+				}
+
+				if ( version_compare( $version, '2.6.2', '<' ) ) {
+					self::upgrade_2_6_2_multi();
+				}
+			}
 		}
 
 		if ( false !== $version && WPHB_VERSION !== $version ) {
 			if ( ! defined( 'WPHB_UPGRADING' ) ) {
 				define( 'WPHB_UPGRADING', true );
-			}
-
-			if ( version_compare( $version, '2.0.0', '<' ) ) {
-				self::upgrade_2_0();
-			}
-
-			if ( version_compare( $version, '2.2.0', '<' ) ) {
-				self::upgrade_2_2_0();
-			}
-
-			if ( version_compare( $version, '2.2.1', '<' ) ) {
-				self::upgrade_2_2_1();
 			}
 
 			if ( version_compare( $version, '2.5.0', '<' ) ) {
@@ -111,6 +116,18 @@ class Installer {
 
 			if ( version_compare( $version, '2.5.1', '<' ) ) {
 				self::upgrade_2_5_1();
+			}
+
+			if ( version_compare( $version, '2.5.2', '<' ) ) {
+				self::upgrade_2_5_2();
+			}
+
+			if ( version_compare( $version, '2.6.0', '<' ) ) {
+				self::upgrade_2_6_0();
+			}
+
+			if ( version_compare( $version, '2.6.2', '<' ) ) {
+				self::upgrade_2_6_2();
 			}
 
 			update_site_option( 'wphb_version', WPHB_VERSION );
@@ -128,56 +145,6 @@ class Installer {
 		}
 
 		update_option( 'wphb_version', WPHB_VERSION );
-	}
-
-	/**
-	 * Upgrade to 2.0.0.
-	 *
-	 * @since 2.0.0
-	 */
-	private static function upgrade_2_0() {
-		// Remove old report data.
-		Utils::get_module( 'performance' )->clear_cache();
-
-		// Add additional report options.
-		$defaults = Settings::get_default_settings();
-		$options  = Settings::get_setting( 'reports', 'performance' );
-
-		$new_options = wp_parse_args( $options, $defaults['performance']['reports'] );
-		Settings::update_setting( 'reports', $new_options, 'performance' );
-
-		delete_site_option( 'wphb-pro' );
-	}
-
-	/**
-	 * Upgrade to 2.2.0.
-	 *
-	 * @since 2.2.0
-	 */
-	private static function upgrade_2_2_0() {
-		// Remove deprecated setting.
-		$options = Settings::get_settings( 'page_cache' );
-		if ( isset( $options['preload_interval'] ) ) {
-			unset( $options['preload_interval'] );
-			Settings::update_settings( $options, 'page_cache' );
-		}
-	}
-
-	/**
-	 * Upgrade to 2.2.1.
-	 *
-	 * We want to stop the preloader in case it's stuck or on a loop.
-	 *
-	 * @since 2.2.1
-	 */
-	private static function upgrade_2_2_1() {
-		if ( ! class_exists( '\\Hummingbird\\Core\\Modules\\Caching\\Preload' ) ) {
-			/* @noinspection PhpIncludeInspection */
-			require_once WPHB_DIR_PATH . 'core/modules/caching/class-preload.php';
-		}
-
-		$preload = new \Hummingbird\Core\Modules\Caching\Preload();
-		$preload->cancel();
 	}
 
 	/**
@@ -210,6 +177,150 @@ class Installer {
 		}
 
 		wp_unschedule_hook( 'wphb_performance_fetch_report' );
+	}
+
+	/**
+	 * Upgrade to 2.5.2
+	 *
+	 * Change default value for "File change detection".
+	 *
+	 * @since 2.5.2
+	 */
+	private static function upgrade_2_5_2() {
+		Settings::update_setting( 'detection', 'auto', 'page_cache' );
+	}
+
+	/**
+	 * This is a fixed up mechanism for only updating the required stuff.
+	 *
+	 * Common for both subsites and single sites.
+	 *
+	 * @since 2.6.0
+	 */
+	private static function upgrade_2_6_0_multi() {
+		add_option( 'wphb-minification-show-config_modal', true );
+
+		// Add AO upgrade modal.
+		if ( Settings::get_setting( 'minify_blog', 'minify' ) ) {
+			add_option( 'wphb_do_minification_upgrade', true );
+			self::upgrade_minification_structure();
+		}
+	}
+
+	/**
+	 * Upgrade to 2.6.0
+	 *
+	 * @since 2.6.0
+	 */
+	private static function upgrade_2_6_0() {
+		// Show upgrade summary, Currently only for v2.6.0.
+		add_site_option( 'wphb_show_upgrade_summary', true );
+		add_option( 'wphb-minification-show-config_modal', true );
+
+		// Add AO upgrade modal.
+		if ( Settings::get_setting( 'enabled', 'minify' ) ) {
+			add_option( 'wphb_do_minification_upgrade', true );
+			self::upgrade_minification_structure();
+		}
+
+		// Change default value for "File change detection".
+		Settings::update_setting( 'detection', 'auto', 'page_cache' );
+
+		if ( ! Settings::get_setting( 'enabled', 'page_cache' ) ) {
+			return;
+		}
+
+		// Update Page Cache exclusion rule for split sitemap.
+		$settings = Utils::get_module( 'page_cache' )->get_settings();
+		if ( is_array( $settings['exclude']['url_strings'] ) && ! in_array( 'sitemap[0-9]*\.xml', $settings['exclude']['url_strings'], true ) ) {
+			// Remove old value.
+			$key = array_search( 'sitemap.xml', $settings['exclude']['url_strings'], true );
+			if ( false !== $key && isset( $settings['exclude']['url_strings'][ $key ] ) ) {
+				unset( $settings['exclude']['url_strings'][ $key ] );
+			}
+
+			// Add new one.
+			$settings['exclude']['url_strings'][] = 'sitemap[0-9]*\.xml';
+			Utils::get_module( 'page_cache' )->save_settings( $settings );
+		}
+	}
+
+	/**
+	 * Upgrade the pre 2.5 settings to new 2.6 format.
+	 *
+	 * @since 2.6.0
+	 */
+	private static function upgrade_minification_structure() {
+		$options = Settings::get_settings( 'minify' );
+
+		$collections = Modules\Minify\Sources_Collector::get_collection();
+
+		foreach ( array( 'scripts', 'styles' ) as $type ) {
+			$keys = array_keys( $collections[ $type ] );
+
+			if ( ! isset( $options['minify'] ) || ! isset( $options['minify'][ $type ] ) ) {
+				continue;
+			}
+
+			$options['dont_minify'][ $type ]  = array_diff( $keys, $options['minify'][ $type ] );
+			$options['dont_combine'][ $type ] = array_diff( $keys, $options['combine'][ $type ] );
+		}
+
+		unset( $options['minify'] );
+		unset( $options['combine'] );
+
+		Settings::update_settings( $options, 'minify' );
+	}
+
+	/**
+	 * Upgrade sub sites to 2.6.2
+	 *
+	 * @since 2.6.2
+	 */
+	private static function upgrade_2_6_2_multi() {
+		// Remove AO upgrade modal for sub sites that do not have AO enabled.
+		if ( ! Settings::get_setting( 'minify_blog', 'minify' ) ) {
+			delete_option( 'wphb_do_minification_upgrade' );
+		}
+	}
+
+	/**
+	 * Upgrade to 2.6.2
+	 *
+	 * @since 2.6.2
+	 */
+	private static function upgrade_2_6_2() {
+		Logger::cleanup();
+
+		// Remove unused database entries.
+		delete_option( 'wphb-new-user-tour' );
+
+		// Enhance page cache sitemaps support.
+		if ( Settings::get_setting( 'enabled', 'page_cache' ) ) {
+			$settings = Utils::get_module( 'page_cache' )->get_settings();
+			if ( isset( $settings['exclude']['url_strings'] ) && is_array( $settings['exclude']['url_strings'] ) ) {
+				// Remove old value.
+				$key = array_search( 'sitemap[0-9]*\.xml', $settings['exclude']['url_strings'], true );
+				if ( false !== $key && isset( $settings['exclude']['url_strings'][ $key ] ) ) {
+					unset( $settings['exclude']['url_strings'][ $key ] );
+				}
+
+				// We double search, one of the previous updates, added an extra value.
+				$key = array_search( 'sitemap[0-9]*.xml', $settings['exclude']['url_strings'], true );
+				if ( false !== $key && isset( $settings['exclude']['url_strings'][ $key ] ) ) {
+					unset( $settings['exclude']['url_strings'][ $key ] );
+				}
+
+				$key = array_search( 'sitemap[0-9]*.xml', $settings['exclude']['url_strings'], true );
+				if ( false !== $key && isset( $settings['exclude']['url_strings'][ $key ] ) ) {
+					unset( $settings['exclude']['url_strings'][ $key ] );
+				}
+
+				// Add new one.
+				$settings['exclude']['url_strings'][] = 'sitemap[^\/.]*\.(?:xml|xsl)';
+				Utils::get_module( 'page_cache' )->save_settings( $settings );
+			}
+		}
 	}
 
 }

@@ -242,8 +242,7 @@ abstract class Request {
 	 */
 	public function delete( $path, $data = array() ) {
 		try {
-			$result = $this->request( $path, $data, 'delete' );
-			return $result;
+			return $this->request( $path, $data, 'delete' );
 		} catch ( Exception $e ) {
 			return new WP_Error( $e->getCode(), $e->getMessage() );
 		}

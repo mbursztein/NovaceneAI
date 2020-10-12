@@ -36,14 +36,15 @@ if ( $settings['remove_settings'] ) {
 	delete_transient( 'wphb-minification-errors' );
 	delete_option( 'wphb-minify-server-errors' );
 	delete_option( 'wphb-minification-files-scanned' );
+	delete_option( 'wphb-minification-show-config_modal' );
 
 	delete_option( 'wphb_settings' );
 	delete_site_option( 'wphb_settings' );
 
+	delete_option( 'wphb-quick-setup' );
 	delete_site_option( 'wphb_version' );
 	delete_site_option( 'wphb_run_onboarding' );
 
-	delete_site_option( 'wphb-new-user-tour' );
 	delete_site_option( 'wphb-free-install-date' );
 
 	delete_site_option( 'wphb-gzip-api-checked' );

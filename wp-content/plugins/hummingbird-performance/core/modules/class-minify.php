@@ -147,9 +147,7 @@ class Minify extends Module {
 		// Process the queue through WP Cron.
 		add_action( 'wphb_minify_process_queue', array( $this, 'process_queue' ) );
 
-		if ( ( is_multisite() && is_network_admin() ) || ! is_multisite() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_critical_css' ), 5 );
-		}
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_critical_css' ), 5 );
 
 		$avoid_minify = filter_input( INPUT_GET, 'avoid-minify', FILTER_VALIDATE_BOOLEAN );
 		if ( $avoid_minify || 'wp-login.php' === $pagenow ) {
@@ -278,10 +276,12 @@ class Minify extends Module {
 			} else {
 				// Not registered for some reason - return to WP.
 				$return_to_wp = array_merge( $return_to_wp, array( $handle ) );
+				unset( $handles[ $key ] );
+				continue;
 			}
 
 			// If we aren't in footer, remove handles that need to go to footer.
-			if ( ! self::is_in_footer() && isset( $wp_dependencies->groups[ $handle ] ) && $wp_dependencies->groups[ $handle ] ) {
+			if ( self::is_in_header() && ! self::is_in_footer() && isset( $wp_dependencies->groups[ $handle ] ) && $wp_dependencies->groups[ $handle ] ) {
 				$this->to_footer[ $type ][] = $handle;
 				unset( $handles[ $key ] );
 			}
@@ -711,6 +711,16 @@ class Minify extends Module {
 	}
 
 	/**
+	 * Return if we are processing the header
+	 *
+	 * @return bool
+	 * @since 2.6.0
+	 */
+	public static function is_in_header() {
+		return doing_action( 'wp_head' ) || doing_action( 'wp_print_header_scripts' );
+	}
+
+	/**
 	 * Return if we are processing the footer
 	 *
 	 * @return bool
@@ -723,7 +733,7 @@ class Minify extends Module {
 	 * Trigger the action to process the queue
 	 */
 	public function trigger_process_queue_cron() {
-		// Trigger que the queue hrough WP CRON so we don't waste load time.
+		// Trigger que the queue through WP CRON so we don't waste load time.
 		$this->sources_collector->save_collection();
 
 		$queue = $this->get_queue_to_process();
@@ -902,13 +912,13 @@ class Minify extends Module {
 
 			// Reset the minification settings.
 			if ( $reset_minify ) {
-				$options['minify'] = $default_options['minify']['minify'];
+				$options['dont_minify'] = $default_options['minify']['dont_minify'];
 			}
-			$options['block']    = $default_options['minify']['block'];
-			$options['combine']  = $default_options['minify']['combine'];
-			$options['position'] = $default_options['minify']['position'];
-			$options['defer']    = $default_options['minify']['defer'];
-			$options['inline']   = $default_options['minify']['inline'];
+			$options['block']        = $default_options['minify']['block'];
+			$options['dont_combine'] = $default_options['minify']['dont_combine'];
+			$options['position']     = $default_options['minify']['position'];
+			$options['defer']        = $default_options['minify']['defer'];
+			$options['inline']       = $default_options['minify']['inline'];
 			$this->update_options( $options );
 		}
 
@@ -945,6 +955,35 @@ class Minify extends Module {
 		if ( wp_next_scheduled( 'wphb_minify_clear_files' ) ) {
 			wp_clear_scheduled_hook( 'wphb_minify_clear_files' );
 		}
+	}
+
+	/**
+	 * Reset to default settings for minification module.
+	 *
+	 * @since 2.6.0
+	 */
+	public function reset_minification_settings() {
+		$default        = Settings::get_default_settings();
+		$minify_default = $default[ $this->get_slug() ];
+
+		// Settings that need to be reset.
+		$ao_settings = array(
+			'use_cdn',
+			'nocdn',
+			'file_path',
+			'log',
+		);
+
+		$ao_settings_default = array_intersect_key( $minify_default, array_flip( $ao_settings ) );
+
+		// Get current settings for minify.
+		$minify_settings = $this->get_options();
+		$minify_settings = array_merge( $minify_settings, $ao_settings_default );
+
+		// Reset Critical css.
+		self::save_css( '' );
+
+		$this->update_options( $minify_settings );
 	}
 
 	/**
@@ -1005,12 +1044,12 @@ class Minify extends Module {
 	 */
 	public function filter_resource_minify( $value, $handle, $type ) {
 		$options = $this->get_options();
-		$minify  = $options['minify'][ $type ];
-		if ( ! is_array( $minify ) || ! in_array( $handle, $minify, true ) ) {
-			return $value;
+		$minify  = $options['dont_minify'][ $type ];
+		if ( is_array( $minify ) && in_array( $handle, $minify, true ) ) {
+			return false;
 		}
 
-		return true;
+		return $value;
 	}
 
 	/**
@@ -1042,12 +1081,12 @@ class Minify extends Module {
 	 */
 	public function filter_resource_combine( $value, $handle, $type ) {
 		$options = $this->get_options();
-		$combine = $options['combine'][ $type ];
-		if ( ! in_array( $handle, $combine, true ) ) {
-			return $value;
+		$combine = $options['dont_combine'][ $type ];
+		if ( in_array( $handle, $combine, true ) ) {
+			return false;
 		}
 
-		return true;
+		return $value;
 	}
 
 	/**
@@ -1189,68 +1228,6 @@ class Minify extends Module {
 	}
 
 	/**
-	 * Backup current settings.
-	 */
-	public function backup_settings() {
-		$options                                   = $this->get_options();
-		$options['backed_up_settings']['block']    = $options['block'];
-		$options['backed_up_settings']['minify']   = $options['minify'];
-		$options['backed_up_settings']['combine']  = $options['combine'];
-		$options['backed_up_settings']['position'] = $options['position'];
-		$options['backed_up_settings']['defer']    = $options['defer'];
-		$options['backed_up_settings']['inline']   = $options['inline'];
-		$this->update_options( $options );
-	}
-
-	/**
-	 * Merge backed up settings that were saved before the scan.
-	 */
-	public function merge_backed_up_settings() {
-		$options = $this->get_options();
-		if ( ! isset( $options['backed_up_settings'] ) ) {
-			return;
-		}
-		$current_handles    = Minify\Sources_Collector::get_handles();
-		$backed_up_settings = $options['backed_up_settings'];
-		$file_settings      = self::get_file_settings_types();
-
-		foreach ( $file_settings as $file_setting ) {
-			if ( 'position' !== $file_setting ) {
-				$options[ $file_setting ]['scripts'] = array_intersect( $backed_up_settings[ $file_setting ]['scripts'], $current_handles );
-				$options[ $file_setting ]['styles']  = array_intersect( $backed_up_settings[ $file_setting ]['styles'], $current_handles );
-			} else {
-				$options[ $file_setting ]['scripts'] = array_intersect_key( $backed_up_settings[ $file_setting ]['scripts'], array_flip( $current_handles ) );
-				$options[ $file_setting ]['styles']  = array_intersect_key( $backed_up_settings[ $file_setting ]['styles'], array_flip( $current_handles ) );
-			}
-		}
-
-		// Remove backed up settings so this doesn't run again until a new file check.
-		unset( $options['backed_up_settings'] );
-
-		$this->update_options( $options );
-	}
-
-	/**
-	 * Array of Asset Optimization file settings types.
-	 *
-	 * @access private
-	 *
-	 * @return array
-	 */
-	private static function get_file_settings_types() {
-		$settings = array(
-			'block',
-			'minify',
-			'combine',
-			'position',
-			'defer',
-			'inline',
-		);
-
-		return $settings;
-	}
-
-	/**
 	 * Init minification scan.
 	 */
 	public function init_scan() {
@@ -1325,19 +1302,21 @@ class Minify extends Module {
 	 * @since 1.8
 	 */
 	public function enqueue_critical_css() {
-		$src = WPHB_DIR_PATH . 'admin/assets/css/critical.css';
+		$assets_dir = Filesystem::critical_assets_dir();
+		$file       = $assets_dir['path'] . 'critical.css';
 
-		// If file does not exist or is empty.
-		if ( ! file_exists( $src ) ) {
+		if ( ! file_exists( $file ) ) {
 			return;
 		}
 
-		$content = file_get_contents( $src );
+		$content = file_get_contents( $file );
 		if ( empty( $content ) ) {
 			return;
 		}
 
-		wp_register_style( 'wphb-critical-css', WPHB_DIR_URL . 'admin/assets/css/critical.css', array(), WPHB_VERSION );
+		$url = $assets_dir['url'] . 'critical.css';
+
+		wp_register_style( 'wphb-critical-css', $url, array(), filemtime( $file ) );
 		wp_enqueue_style( 'wphb-critical-css' );
 	}
 
@@ -1349,17 +1328,14 @@ class Minify extends Module {
 	 * @return string
 	 */
 	public static function get_css() {
-		$src = WPHB_DIR_PATH . 'admin/assets/css/critical.css';
+		$assets_dir = Filesystem::critical_assets_dir();
+		$file       = $assets_dir['path'] . 'critical.css';
 
-		if ( ! file_exists( $src ) ) {
-			return '';
+		if ( file_exists( $file ) ) {
+			return file_get_contents( $file );
 		}
 
-		if ( ! $content = file_get_contents( $src ) ) {
-			return '';
-		}
-
-		return $content;
+		return '';
 	}
 
 	/**
@@ -1379,24 +1355,30 @@ class Minify extends Module {
 			);
 		}
 
-		$wphb_fs = Filesystem::instance();
+		$fs = Filesystem::instance();
 
-		if ( is_wp_error( $wphb_fs->status ) ) {
+		if ( is_wp_error( $fs->status ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'Error saving file', 'wphb' ),
 			);
 		}
 
-		$file = WPHB_DIR_PATH . 'admin/assets/css/critical.css';
-
-		$status = $wphb_fs->write( $file, $content );
-
-		if ( is_wp_error( $status ) ) {
-			return array(
-				'success' => false,
-				'message' => $status->get_error_message(),
-			);
+		$assets_dir = Filesystem::critical_assets_dir();
+		$file       = $assets_dir['path'] . 'critical.css';
+		$content    = trim( $content );
+		if ( ! empty( $content ) ) {
+			$status = $fs->write( $file, $content );
+			if ( is_wp_error( $status ) ) {
+				return array(
+					'success' => false,
+					'message' => $status->get_error_message(),
+				);
+			}
+		} else {
+			if ( file_exists( $file ) ) {
+				unlink( $file );
+			}
 		}
 
 		return array(

@@ -1,7 +1,7 @@
 /* global wphbGlobal */
 /* global ajaxurl */
 
-( function() {
+( function () {
 	'use strict';
 
 	const WPHBLazyComment = {
@@ -230,7 +230,7 @@
 					WPHBLazyComment.commentNonce
 			);
 
-			cxhr.onload = function() {
+			cxhr.onload = function () {
 				/** Append the comment template **/
 				if ( 200 === cxhr.status ) {
 					const response = JSON.parse( cxhr.responseText );
@@ -309,7 +309,7 @@
 
 		stringToHTML( str ) {
 			str = '<div>' + str + '</div>';
-			const support = ( function() {
+			const support = ( function () {
 				if ( ! window.DOMParser ) return false;
 				const parser = new DOMParser();
 				try {
@@ -359,7 +359,7 @@
 		},
 	};
 
-	document.addEventListener( 'DOMContentLoaded', function() {
+	document.addEventListener( 'DOMContentLoaded', function () {
 		WPHBLazyComment.init();
 	} );
 } )();
