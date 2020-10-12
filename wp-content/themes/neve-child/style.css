@@ -12,7 +12,7 @@
  Text Domain:  nevechild
 */
 
-
+@import url('https://fonts.googleapis.com/css2?family=Tinos:wght@700&display=swap');
 
 /* Styles for: /paper-to-insight/ */
 #wp-block-themeisle-blocks-advanced-column-4200ed21 {
@@ -425,4 +425,9 @@ input {
 .archive h2 {
 	font-size: 1.2em;
 	font-weight: bold;
+}
+
+h1, .single h1.entry-title {
+	font-family: 'Tinos', serif;
+	line-height: 1em;
 }
