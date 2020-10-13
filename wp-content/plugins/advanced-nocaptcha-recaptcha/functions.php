@@ -149,8 +149,8 @@ function anr_include_require_files() {
 		require_once $fep_file;
 	}
 }
-add_action( 'wp_footer', 'anr_wp_footer', 999 );
-add_action( 'login_footer', 'anr_wp_footer', 999 );
+add_action( 'wp_footer', 'anr_wp_footer', 99999 );
+add_action( 'login_footer', 'anr_wp_footer', 99999 );
 
 function anr_wp_footer() {
 	anr_captcha_class::init()->footer_script();
@@ -212,4 +212,9 @@ function anr_same_settings_for_all_sites(){
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 	}
 	return is_plugin_active_for_network( plugin_basename( ANR_PLUGIN_FILE ) );
+}
+
+function anr_settings_page_url( $tab = false ){
+	$url = anr_same_settings_for_all_sites() ? network_admin_url( 'settings.php?page=anr-admin-settings' ) : admin_url( 'options-general.php?page=anr-admin-settings' );
+	return add_query_arg( 'tab', $tab, $url );
 }
