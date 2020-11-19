@@ -176,6 +176,10 @@ class Post_Grid_2{
                 'type' => 'boolean',
                 'default' => false,
             ],
+            'openInTab' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
 
 
             //--------------------------
@@ -1224,6 +1228,11 @@ class Post_Grid_2{
             //--------------------------
             // Image Setting/Style
             //--------------------------
+            'imgCrop' => [
+                'type' => 'string',
+                'default' => 'ultp_layout_landscape',
+                'depends' => [(object)['key' => 'showImage','condition' => '==','value' => 'true']]
+            ],
             'imgAnimation' => [
                 'type' => 'string',
                 'default' => 'zoomOut',
@@ -2069,6 +2078,42 @@ class Post_Grid_2{
                     ],
                 ],
             ],
+            'hideExtraLarge' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideDesktop' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideTablet' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideMobile' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
             'advanceCss' => [
                 'type' => 'string',
                 'default' => '',
@@ -2115,7 +2160,7 @@ class Post_Grid_2{
     
         if ($recent_posts->have_posts()) {
             
-            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].' '.(isset($attr["className"])?$attr["className"]:'').'">';
+            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].''.(isset($attr["align"])? ' align' .$attr["align"]:'').''.(isset($attr["className"])?' '.$attr["className"]:'').'">';
                 $wraper_before .= '<div class="ultp-block-wrapper">';
 
                     // Loading
@@ -2155,11 +2200,11 @@ class Post_Grid_2{
 
                             include ULTP_PATH.'blocks/template/category.php';
                             
-                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item'.($attr['titleAnimation'] ? ' ultp-animation-'.$attr['titleAnimation'] : '').'">';
+                            $post_loop .= '<div class="ultp-block-item post-id-'.$post_id.($attr['titleAnimation'] ? ' ultp-animation-'.$attr['titleAnimation'] : '').'">';
                                 $post_loop .= '<div class="ultp-block-content-wrap ultp-block-content-overlay">';
                                     if( has_post_thumbnail() && $attr['showImage'] ){
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                            $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, 'full', '', $title).'</a>';
+                                            $post_loop .= '<a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             if( ($attr['catPosition'] != 'aboveTitle') && $attr['catShow'] ) {
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
                                             }
@@ -2201,7 +2246,7 @@ class Post_Grid_2{
 
                                             // Read More
                                             if ($attr['readMore']) {
-                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
                                             }
 
                                             // Meta

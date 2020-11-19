@@ -463,10 +463,12 @@ class Simple_Author_Box_Admin_Page {
 
 		$show_upsell = apply_filters( 'sabox_show_upsell', true );
 
+    /*
 		add_submenu_page( 'simple-author-box-options', __( 'News', 'saboxplugin' ), __( 'News', 'saboxplugin' ), 'manage_options', 'sab-news', array(
 			$this,
 			'render_news_page',
-		) );
+    ) );
+    */
 
 		if ( $show_upsell ) {
 			add_submenu_page( 'simple-author-box-options', __( 'Upgrade to PRO', 'saboxplugin' ), __( 'Upgrade', 'saboxplugin' ), 'manage_options', 'sab-upgrade', array(
@@ -565,7 +567,7 @@ class Simple_Author_Box_Admin_Page {
 
 				<?php
 
-				$show_changelog = apply_filters( 'sabox_show_changelog', true );
+				$show_changelog = apply_filters( 'sabox_show_changelog', false );
 
 				if ( $show_changelog ) {
 					echo '&nbsp; &middot; &nbsp;';

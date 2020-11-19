@@ -4,7 +4,7 @@
 * Plugin Name: 				Simple Author Box
 * Plugin URI: https://wpauthorbox.com/
 * Description: 				Adds a responsive author box with social icons on your posts.
-* Version: 					2.3.18
+* Version: 					2.3.20
 * Author: WebFactory Ltd
 * Author URI: https://www.webfactoryltd.com/
 * Requires: 				4.6 or higher
@@ -12,22 +12,11 @@
 * License URI:       		http://www.gnu.org/licenses/gpl-3.0.html
 * Requires PHP: 			5.6
 *
-* Copyright 2014-2017		Tiguan				office@tiguandesign.com		
+* Copyright 2014-2017		Tiguan				office@tiguandesign.com
 * Copyright 2017-2019 		MachoThemes 		office@machothemes.com
 * Copyright 2019			GreenTreeLabs		diego@greentreelabs.net
+* Copyright 2020			WebFactory Ltd		support@webfactoryltd.com
 *
-* Original Plugin URI: 		https://tiguan.com/simple-author-box/
-* Original Author URI: 		https://tiguan.com
-* Original Author: 			https://profiles.wordpress.org/tiguan/
-*
-* NOTE:
-* Tiguan transferred ownership rights on: 09/22/2017 06:38:44 PM when ownership was handed over to MachoThemes
-* The MachoThemes ownership period started on: 09/22/2017 06:38:45 PM
-* SVN commit proof of ownership transferral: https://plugins.trac.wordpress.org/changeset/1734457/simple-author-box
-*
-* 2019 - 26th of September
-* MachoThemes has transferred ownership to GreenTreeLabs on 26/09/2019 - 11:28 AM
-* 
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License, version 3, as
 * published by the Free Software Foundation.
@@ -48,17 +37,16 @@ function sab_the_author( $a, $b, $c )
     die;
 }
 
-
 if ( function_exists( 'sab_fs' ) ) {
     sab_fs()->set_basename( false, __FILE__ );
 } else {
-    
+
     if ( !function_exists( 'sab_fs' ) ) {
         // Create a helper function for easy SDK access.
         function sab_fs()
         {
             global  $sab_fs ;
-            
+
             if ( !isset( $sab_fs ) ) {
                 // Activate multisite network integration.
                 if ( !defined( 'WP_FS__PRODUCT_4707_MULTISITE' ) ) {
@@ -79,16 +67,18 @@ if ( function_exists( 'sab_fs' ) ) {
                     'days'               => 7,
                     'is_require_payment' => true,
                 ),
+                    'anonymous_mode' => true,
                     'menu'           => array(
                     'slug' => 'simple-author-box-options',
+                    'contact' => false,
                 ),
                     'is_live'        => true,
                 ) );
             }
-            
+
             return $sab_fs;
         }
-        
+
         // Init Freemius.
         sab_fs();
         // Signal that SDK was initiated.
@@ -96,7 +86,7 @@ if ( function_exists( 'sab_fs' ) ) {
         define( 'SIMPLE_AUTHOR_BOX_PATH', plugin_dir_path( __FILE__ ) );
         define( 'SIMPLE_AUTHOR_BOX_ASSETS', plugins_url( '/assets/', __FILE__ ) );
         define( 'SIMPLE_AUTHOR_BOX_SLUG', plugin_basename( __FILE__ ) );
-        define( 'SIMPLE_AUTHOR_BOX_VERSION', '2.3.18' );
+        define( 'SIMPLE_AUTHOR_BOX_VERSION', '2.3.20' );
         define( 'SIMPLE_AUTHOR_SCRIPT_DEBUG', false );
         require_once SIMPLE_AUTHOR_BOX_PATH . 'inc/class-simple-author-box.php';
         Simple_Author_Box::get_instance();
@@ -110,7 +100,7 @@ if ( function_exists( 'sab_fs' ) ) {
                 'slug' => 'simple-author-box',
             ) );
         }
-        
+
         sab_check_for_review();
     }
 

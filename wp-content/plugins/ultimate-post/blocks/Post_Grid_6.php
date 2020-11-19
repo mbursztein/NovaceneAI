@@ -176,6 +176,10 @@ class Post_Grid_6{
                 'type' => 'boolean',
                 'default' => false,
             ],
+            'openInTab' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
 
 
 
@@ -2061,6 +2065,42 @@ class Post_Grid_6{
                     ],
                 ],
             ],
+            'hideExtraLarge' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideDesktop' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideTablet' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideMobile' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
             'advanceCss' => [
                 'type' => 'string',
                 'default' => '',
@@ -2106,7 +2146,7 @@ class Post_Grid_6{
         $pageNum = ultimate_post()->get_page_number($attr, $recent_posts->found_posts);
         
         if ($recent_posts->have_posts()) {
-            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].' '.(isset($attr["className"])?$attr["className"]:'').'">';
+            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].''.(isset($attr["align"])? ' align' .$attr["align"]:'').''.(isset($attr["className"])?' '.$attr["className"]:'').'">';
                 $wraper_before .= '<div class="ultp-block-wrapper">';
 
                     // Loading
@@ -2146,12 +2186,12 @@ class Post_Grid_6{
 
                             include ULTP_PATH.'blocks/template/category.php';
                             
-                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item ultp-block-item-'.$idx.($attr['titleAnimation'] ? ' ultp-animation-'.$attr['titleAnimation'] : '').'">';
+                            $post_loop .= '<div class="ultp-block-item post-id-'.$post_id.' ultp-block-item-'.$idx.($attr['titleAnimation'] ? ' ultp-animation-'.$attr['titleAnimation'] : '').'">';
                                 $post_loop .= '<div class="ultp-block-content-wrap ultp-block-content-overlay">';
 
                                     if( has_post_thumbnail() && $attr['showImage'] ){
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                            $post_loop .= '<a href="'.$titlelink.'"><img loading="lazy" alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, 'full' ).'" /></a>';
+                                            $post_loop .= '<a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'><img loading="lazy" alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, 'full' ).'" /></a>';
                                             if( ($attr['catPosition'] != 'aboveTitle') && ($idx == 0 || $attr['showSmallCat']) && $attr['catShow'] ) {
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
                                             }
@@ -2192,7 +2232,7 @@ class Post_Grid_6{
 
                                             // Read More
                                             if ($attr['readMore'] && ($idx == 0 || $attr['showSmallBtn'])) {
-                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
                                             }
 
                                             // Meta

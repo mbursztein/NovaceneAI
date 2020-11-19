@@ -174,24 +174,7 @@ class Styles {
 	// Set CSS in File
 	public function add_block_css_file(){
         $post_id = get_the_ID();
-		if( $post_id ){
-			$upload_dir_url = wp_get_upload_dir();
-			$upload_css_dir_url = trailingslashit( $upload_dir_url['basedir'] );
-			$css_dir_path = $upload_css_dir_url . "ultimate-post/ultp-css-{$post_id}.css";
-			if ( file_exists( $css_dir_path ) ) {
-				$css_dir_url = trailingslashit( $upload_dir_url['baseurl'] );
-				if (is_ssl()) {
-					$css_dir_url = str_replace('http://', 'https://', $css_dir_url);
-				}
-				$css_url = $css_dir_url . "ultimate-post/ultp-css-{$post_id}.css";
-				wp_enqueue_style( "ultp-post-{$post_id}", $css_url, array(), ULTP_VER, 'all' );
-			} else {
-				$css = get_post_meta($post_id, '_ultp_css', true);
-				if( $css ) {
-					wp_enqueue_style("ultp-post-{$post_id}", $css, false, ULTP_VER);
-				}
-			}
-		}
+		ultimate_post()->set_css_style($post_id);
 	}
 
 
@@ -202,12 +185,25 @@ class Styles {
             $upload_dir_url = wp_get_upload_dir();
             $upload_css_dir_url = trailingslashit( $upload_dir_url['basedir'] );
 			$css_dir_path = $upload_css_dir_url."ultimate-post/ultp-css-{$post_id}.css";
+
+			// Reusable CSS
+			$reusable_css = '';
+			$reusable_id = ultimate_post()->reusable_id($post_id);
+			foreach ( $reusable_id as $id ) {
+				$reusable_dir_path = $upload_css_dir_url."ultimate-post/ultp-css-{$id}.css";
+				if (file_exists( $reusable_dir_path )) {
+					$reusable_css .= file_get_contents($reusable_dir_path);
+				}else{
+					$reusable_css .= get_post_meta($id, '_ultp_css', true);
+				}
+			}
+
 			if (file_exists( $css_dir_path )) {
-				echo '<style type="text/css">'.file_get_contents($css_dir_path).'</style>';
+				echo '<style type="text/css">'.file_get_contents($css_dir_path).$reusable_css.'</style>';
 			} else {
 				$css = get_post_meta($post_id, '_ultp_css', true);
 				if($css) {
-					echo '<style type="text/css">'.$css.'</style>';
+					echo '<style type="text/css">'.$css.$reusable_css.'</style>';
 				}
 			}
 		}

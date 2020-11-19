@@ -1,3 +1,22 @@
+##### [Version 2.8.4](https://github.com/Codeinwp/neve/compare/v2.8.3...v2.8.4) (2020-11-02)
+
+- [Fix] Warning jQuery .load() function is deprecated
+- [Fix] Header builder responsive instructions notifications
+- [Fix] Search icon component going out of the window when right-aligned
+- [Fix] Search icon opening behavior on mobile
+- [Fix] Button styling for WooCommerce blocks
+- [Fix] Move Customizer homepage settings to the Layout panel
+
+##### [Version 2.8.3](https://github.com/Codeinwp/neve/compare/v2.8.2...v2.8.3) (2020-10-19)
+
+- [Fix] Exclusive products section in RTL mode
+- [Fix] Font Family dropdown layout in RTL mode
+- [Fix] Migrate from Zelle theme
+- [Fix] Default values for the spacing and custom content width controls
+- [Fix] Default line-height for buttons
+- [Fix] Search icon color in the mobile header builder
+- New Gutenberg Starter Sites
+
 ##### [Version 2.8.2](https://github.com/Codeinwp/neve/compare/v2.8.1...v2.8.2) (2020-10-01)
 
 - [Feat] New Blog Layout options

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'HFG\\Core\\Builder\\Abstract_Builder' => $baseDir . '/header-footer-grid/Core/Builder/Abstract_Builder.php',
     'HFG\\Core\\Builder\\Footer' => $baseDir . '/header-footer-grid/Core/Builder/Footer.php',
     'HFG\\Core\\Builder\\Header' => $baseDir . '/header-footer-grid/Core/Builder/Header.php',

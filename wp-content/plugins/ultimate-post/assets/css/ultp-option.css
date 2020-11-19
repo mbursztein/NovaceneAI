@@ -270,29 +270,87 @@
     display: flex;
     flex-wrap: wrap;
 }
+.ultp-addons-item-content {
+    padding: 20px;
+}
+.ultp-addons-item-content img { 
+    width: 85px;
+    float: left;
+    margin-right: 15px;
+}
 .ultp-addons-item h4 {
     padding: 0 25px;
     font-size: 18px;
     color: #000;
-    margin-top: 25px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 8px;
 }
 .ultp-addons-item .ultp-addons-desc {
-    padding: 0 25px 25px;
     font-size: 14px;
     color: #5A5A5A;
 }
 .ultp-addons-btn {
     padding: 15px;
-    background: #F2F2F2;
+    background: #ececec;
     text-align: center;
-    border-top: 1px solid #dedede;
+    border-top: 1px solid #d4d4d4;
     width: 100%;
 }
 .ultp-addons-btn a {
     display: inline-block;
-    border: 1px solid #CBCBCB;
-    color: #6A6A6A;
+    border: 1px solid #1740f5;
+    color: #1740f5;
+    padding: 10px 20px;
+}
+.ultp-switch {
+    position: relative;
+    display: inline-block;
+    width: 65px;
+    height: 30px;
+}
+.ultp-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.ultp-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.ultp-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 11px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+input:checked + .ultp-slider {
+    background-color: #1740f5;
+}
+input:focus + .ultp-slider {
+    box-shadow: 0 0 1px #1740f5;
+}
+input:checked + .ultp-slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+.ultp-slider.ultp-round {
+    border-radius: 100px;
+}
+.ultp-slider.ultp-round:before {
+    border-radius: 50%;
 }
 
 /* ---- Features --- */
@@ -600,6 +658,21 @@
 }
 .ultp-sidebar .ultp-btn-pro {
     display: inline-block;
+}
+
+/* Saved Template */
+.ultp-save-templates-pro {
+    color: #46b450 !important;
+    border-color: #46b450 !important;
+}
+.ultp-save-templates-pro:hover {
+    color: #379c40 !important;
+    border-color: #379c40 !important;
+}
+.ultp-save-templates-pro:focus {
+    color: #379c40 !important;
+    border-color: #379c40 !important;
+    box-shadow: none !important;
 }
 
 /* ----Responsive--- */

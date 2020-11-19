@@ -5,6 +5,66 @@ defined('ABSPATH') || exit;
 
 class Functions{
 
+    public function reusable_id($post_id){
+        $reusable_id = array();
+        if($post_id){
+            $post = get_post($post_id);
+            if (has_blocks($post->post_content)) {
+                $blocks = parse_blocks($post->post_content);
+                foreach ($blocks as $key => $value) {
+                    if(isset($value['attrs']['ref'])) {
+                        $reusable_id[] = $value['attrs']['ref'];
+                    }
+                }
+            }
+        }
+        return $reusable_id;
+    }
+
+    public function plugin_compatibility(){
+        if( version_compare( ULTP_VER, '2.0.3', '>=') ){
+            $this->init_set_addon_data();
+        }
+    }
+    
+    public function set_css_style($post_id){
+        if( $post_id ){
+			$upload_dir_url = wp_get_upload_dir();
+			$upload_css_dir_url = trailingslashit( $upload_dir_url['basedir'] );
+            $css_dir_path = $upload_css_dir_url . "ultimate-post/ultp-css-{$post_id}.css";
+            
+            $css_dir_url = trailingslashit( $upload_dir_url['baseurl'] );
+            if (is_ssl()) {
+                $css_dir_url = str_replace('http://', 'https://', $css_dir_url);
+            }
+                
+            // Reusable CSS
+			$reusable_id = ultimate_post()->reusable_id($post_id);
+			foreach ( $reusable_id as $id ) {
+				$reusable_dir_path = $upload_css_dir_url."ultimate-post/ultp-css-{$id}.css";
+				if (file_exists( $reusable_dir_path )) {
+                    $css_url = $css_dir_url . "ultimate-post/ultp-css-{$id}.css";
+				    wp_enqueue_style( "ultp-post-{$id}", $css_url, array(), ULTP_VER, 'all' );
+				}else{
+					$css = get_post_meta($id, '_ultp_css', true);
+                    if( $css ) {
+                        wp_enqueue_style("ultp-post-{$id}", $css, false, ULTP_VER);
+                    }
+				}
+            }
+            
+			if ( file_exists( $css_dir_path ) ) {
+				$css_url = $css_dir_url . "ultimate-post/ultp-css-{$post_id}.css";
+				wp_enqueue_style( "ultp-post-{$post_id}", $css_url, array(), ULTP_VER, 'all' );
+			} else {
+				$css = get_post_meta($post_id, '_ultp_css', true);
+				if( $css ) {
+					wp_enqueue_style("ultp-post-{$post_id}", $css, false, ULTP_VER);
+				}
+			}
+		}
+    }
+
     public function get_setting($key){
         $data = get_option( 'ultp_options' );
         if(!$data){
@@ -22,8 +82,8 @@ class Functions{
     public function get_image_html($url = '', $size = 'full', $class = '', $alt = ''){
         $alt = $alt ? ' alt="'.$alt.'" ' : '';
         if( function_exists('ultimate_post_pro') ){
-            $addon_enable = get_option('ultp_pro_options');
-            if($addon_enable['addons_imageloading']){
+            $addon_enable = get_option('ultp_addons_option');
+            if(isset($addon_enable['addons_imageloading']) && $addon_enable['addons_imageloading'] == 'true'){
                 $class = $class ? ' class="ultp-lazy '.$class.'" ' : ' class="ultp-lazy" ';
                 return '<img loading="lazy" loading="lazy" '.$class.$alt.' '.ultimate_post_pro()->get_size($size).' src="'.ultimate_post_pro()->img_placeholder($size).'" data-src="'.$url.'"/>';    
             }else{
@@ -39,8 +99,8 @@ class Functions{
     public function get_image($attach_id, $size = 'full', $class = '', $alt = ''){
         $alt = $alt ? ' alt="'.$alt.'" ' : '';
         if( function_exists('ultimate_post_pro') ){
-            $addon_enable = get_option('ultp_pro_options');
-            if($addon_enable['addons_imageloading']){
+            $addon_enable = get_option('ultp_addons_option');
+            if(isset($addon_enable['addons_imageloading']) && $addon_enable['addons_imageloading'] == 'true'){
                 $class = $class ? ' class="ultp-lazy '.$class.'" ' : ' class="ultp-lazy" ';
                 return '<img loading="lazy" '.$class.$alt.' '.ultimate_post_pro()->get_size($size).' src="'.ultimate_post_pro()->img_placeholder($size).'" data-src="'.wp_get_attachment_image_url( $attach_id, $size ).'"/>';
             }else{
@@ -65,6 +125,14 @@ class Functions{
         );
         update_option('ultp_options', $option_data);
         return $option_data;
+    }
+
+    public function init_set_addon_data(){
+        $addon_data = get_option('ultp_addons_option');
+        if(!$addon_data || !isset($addon_data['ultp_templates'])){
+            $addon_data['ultp_templates'] = true;
+            update_option('ultp_addons_option', $addon_data);
+        }
     }
 
     // Excerpt

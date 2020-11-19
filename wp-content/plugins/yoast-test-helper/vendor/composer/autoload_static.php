@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c2f179e84fcceebe1f0fa38461a405d
+class ComposerStaticInit5370625fac851c6006657a074c994fdf
 {
     public static $classMap = array (
         'Yoast\\WP\\Test_Helper\\Admin_Bar_Panel' => __DIR__ . '/../..' . '/src/admin-bar-panel.php',
@@ -15,6 +15,7 @@ class ComposerStaticInit8c2f179e84fcceebe1f0fa38461a405d
         'Yoast\\WP\\Test_Helper\\Domain_Dropdown' => __DIR__ . '/../..' . '/src/domain-dropdown.php',
         'Yoast\\WP\\Test_Helper\\Feature_Toggler' => __DIR__ . '/../..' . '/src/feature-toggler.php',
         'Yoast\\WP\\Test_Helper\\Form_Presenter' => __DIR__ . '/../..' . '/src/form-presenter.php',
+        'Yoast\\WP\\Test_Helper\\Indexing_Reason_Integration' => __DIR__ . '/../..' . '/src/indexing-reason-integration.php',
         'Yoast\\WP\\Test_Helper\\Inline_Script' => __DIR__ . '/../..' . '/src/inline-script.php',
         'Yoast\\WP\\Test_Helper\\Integration' => __DIR__ . '/../..' . '/src/integration-interface.php',
         'Yoast\\WP\\Test_Helper\\Notification' => __DIR__ . '/../..' . '/src/notification.php',
@@ -42,7 +43,7 @@ class ComposerStaticInit8c2f179e84fcceebe1f0fa38461a405d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit8c2f179e84fcceebe1f0fa38461a405d::$classMap;
+            $loader->classMap = ComposerStaticInit5370625fac851c6006657a074c994fdf::$classMap;
 
         }, null, ClassLoader::class);
     }

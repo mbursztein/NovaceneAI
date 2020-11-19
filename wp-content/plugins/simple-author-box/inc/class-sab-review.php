@@ -3,7 +3,7 @@
 class SAB_Review {
 
 	private static $instance;
-	private $when = array( 5, 15, 30 );
+	private $when = array( 2, 15, 30, 90, 200 );
 	private $value;
 	private $messages;
 	private $link = 'https://wordpress.org/support/plugin/%s/reviews/#new-post';

@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, gutenberg blocks, post grid, popular post
 Requires at least: 5.0    
 Tested up to: 5.5.1
 Requires PHP: 5.4
-Stable tag: 2.0.2
+Stable tag: 2.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ Gutenberg post blocks is a Gutenberg blocks plugin for latest post blocks, post 
 
 == Description ==
 
-[Gutenberg Post Blocks](https://www.wpxpo.com/gutenberg-post-blocks/) is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds. 
+[Gutenberg Post Blocks](https://www.wpxpo.com/gutenberg-post-blocks/) is a Gutenberg post block plugins for creating beautiful Gutenberg post grid blocks, post listing blocks, post slider blocks and post carousel blocks within a few seconds. It comes with default shortcode support so that you can easily integrate Gutenberg blocks within any existing page builder.
 
 [🔥 Plugin Details](https://www.wpxpo.com/gutenberg-post-blocks/) || [💥 Starter Packs](https://ultp.wpxpo.com/starter-packs/) || [😱 Upgrade Pro](https://www.wpxpo.com/gutenberg-post-blocks/pricing/) || [💿 Video Tutorials](https://www.youtube.com/watch?v=JZxIflYKOuM&list=PLPidnGLSR4qcAwVwIjMo1OVaqXqjUp_s4)
 
@@ -56,7 +56,13 @@ These Gutenberg post blocks come with a lot of key features.
 * Animation Support in Blocks
 * Custom CSS Option in Every Blocks
 * Section Title with a lot of preset design 
+* Gutenberg Post Blocks Compatible Within Shortcode
 
+### 🏆 Shortcode Support
+Now you can convert any blocks into a shortcode. So you can use any blocks inside a page builder like Divi Builder, Beaver Builder, Visual Composer, Elementor, Themify Builder, etc. via shortcode.
+
+### 🏆 Gutenberg Post Blocks and Elementor Integration
+Gutenberg Post Blocks can be used within Elementor plugin. Now Elementor user can easily edit any Gutenberg Blocks within Elementor page.  
 
 ### 🏆 Post Slider Blocks
 Dynamic slider using posts is now easier to make using Gutenberg post blocks. Slider will be run with your control, your desire design. Post Grid blocks come with ultimate control over the modern design. 
@@ -163,6 +169,35 @@ It is a Gutenberg plugin it works great with WordPress version 5.x.x or more. An
 6. Post Slider
 
 == Changelog ==
+
+= 2.1.0 - 27 October 2020 =
+* New: Equal Height Option in Post Grid #1 Added
+* New: Post Link Open in New Tab Option Added
+* New: Gutenberg Post Blocks Compatible With GeneratePress Theme
+* New: Image Select options in Post Grid #2 Added
+* Update: customClass ultp-pro-field
+* Fix: Gutenberg Reusable Blocks Issue fixed
+* Fix: Elementor CSS loading Issue fixed
+* Fix: All known Issue Fixed
+
+= 2.0.3 - 13 October 2020 =
+* New: Introducing Gutenberg Blocks for Elementor Plugin
+* New: Save template Addons Added
+* New: News 3 Starter Packs Added
+* New: Support Align (center,wide,full) for all Blocks
+* New: Hide on Different Responsive Device Added
+* New: Typography Font Family Search Added
+* New: Gutenberg Post Blocks Integration Within Shortcode
+* New: Gutenberg Post Blocks Compatible With Go Theme
+* New: Gutenberg Post Blocks Compatible With Hestia Theme
+* New: Gutenberg Post Blocks Compatible With Kadence Theme
+* New: Block Library Import Popup Preloader Added
+* Update: Heading Blocks Dropdown
+* Fix: Post Module 1 Issue
+* Fix: Post Module 2 Issue
+* Fix: Post Grid 1 Column Responsive Issue
+* Fix: Post ID Duplicate Issue
+* Fix: Dismiss Button Issue
 
 = 2.0.2 - 30 September 2020 =
 * New: Meta Style 2 Added

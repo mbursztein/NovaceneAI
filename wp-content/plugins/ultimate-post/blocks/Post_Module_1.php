@@ -148,6 +148,10 @@ class Post_Module_1{
                     ],
                 ],
             ],
+            'openInTab' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
 
             //--------------------------
             //      Heading Setting/Style
@@ -2339,6 +2343,42 @@ class Post_Module_1{
                     ],
                 ],
             ],
+               'hideExtraLarge' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideDesktop' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideTablet' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideMobile' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
             'advanceCss' => [
                 'type' => 'string',
                 'default' => '',
@@ -2386,7 +2426,7 @@ class Post_Module_1{
     
         if ($recent_posts->have_posts()) {
             
-            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].' '.(isset($attr["className"])?$attr["className"]:'').'">';
+            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].''.(isset($attr["align"])? ' align' .$attr["align"]:'').''.(isset($attr["className"])?' '.$attr["className"]:'').'">';
                 $wraper_before .= '<div class="ultp-block-wrapper">';
 
                     // Loading
@@ -2424,16 +2464,16 @@ class Post_Module_1{
 
                             include ULTP_PATH.'blocks/template/category.php';
 
-                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item">';
+                            $post_loop .= '<div class="ultp-block-item post-id-'.$post_id.'">';
 
                                 $post_loop .= '<div class="ultp-block-content-wrap">';
                                     if( has_post_thumbnail() && $attr['showImage'] ){
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
                                             if ($idx == 0) {
-                                                $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
+                                                $post_loop .= '<a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             } else {
                                                 if($attr['layout'] == 'layout2' || $attr['layout'] == 'layout3' || $attr['layout'] == 'layout5'){
-                                                    $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCropSmall'], '', $title).'</a>';
+                                                    $post_loop .= '<a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.ultimate_post()->get_image($post_thumb_id, $attr['imgCropSmall'], '', $title).'</a>';
                                                 }
                                             }
                                             if( ($attr['catPosition'] != 'aboveTitle') && ($idx == 0 || $attr['showSmallCat']) && $attr['catShow'] ) {
@@ -2468,7 +2508,7 @@ class Post_Module_1{
                                         }
                                         // Read More
                                         if ($attr['readMore'] && ($idx == 0 || $attr['showSmallBtn'])) {
-                                            $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                            $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
                                         }
                                         // Bottom
                                         if( $attr['metaPosition'] =='bottom' ) {

@@ -1,9 +1,10 @@
 === Simple Author Box ===
-Contributors: webfactory, wpreset, googlemapswidget, underconstructionpage
-Tags: author box, responsive author box, author profile fields, author social icons, profile fields, author bio, author description, author profile, post author, rtl author box, amp, accelerated mobile pages
+Contributors: WebFactory
+Tags: author box, responsive author box, author profile fields, author social icons, profile fields, author bio, author description, author profile, post author, guest author, guest posts, author bio, guest author box
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.4
+Tested up to: 5.5
+Stable tag: 2.3.20
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -11,17 +12,18 @@ Add a cool responsive author box with social icons to any post. The best author 
 
 == Description ==
 
-**Simple Author Box** adds a responsive author box at the end of your posts, showing the author name, author gravatar and author description. It also adds over 30 social profile fields on WordPress user profile screen, allowing to display the author social icons in the author box.
+**Simple Author Box** adds a responsive author box at the end of your posts, showing the author name, author gravatar and author description - author bio. It also adds over 30 social profile fields on WordPress user profile screen, allowing to display the author social icons in the author box.
 
 = Main Features =
 
-* Shows author gravatar, name, website, description and social icons
+* Shows author gravatar, name, website, description (author bio) and social icons
 * Fully customizable to match your theme design (style, color, size and text options)
 * Nice looking on desktop, laptop, tablet or mobile phones
 * Automatically insert the author box at the end of your post
 * Option to manually insert the author box on your template file (single.php or author.php)
 * Simple Author Box has RTL support
 * Simple Author Box has AMP support
+* Great for guest posts, and guest authors
 
 = Simple Author Box Pro Features =
 
@@ -46,6 +48,16 @@ Add a cool responsive author box with social icons to any post. The best author 
 
 
 == Changelog ==
+
+= 2.3.20 =
+* 2020-11-13
+* Updated Freemius library
+* Removed promo for WP 301 Redirects plugin
+
+= 2.3.19 =
+* 2020-10-15
+* Removed various unnecessary elements like the news and changelog
+* Added promo for WP 301 Redirects plugin
 
 = 2.3.18 =
 * 2020-04-18
@@ -127,21 +139,21 @@ Add a cool responsive author box with social icons to any post. The best author 
 * Found a solution for "incompatibility with Content Blocks"
 * Found a solution to translate the author description with WPML and Polylang
 
-= 2.1.5 = 
+= 2.1.5 =
 * Remove uninstall feedback.
 
-= 2.1.4 = 
+= 2.1.4 =
 * Added WhatsApp Social Media Link.
 
-= 2.1.3 = 
+= 2.1.3 =
 * Fixed error on footer.
 * Fixed profile image in dashboard ( https://github.com/MachoThemes/simple-author-box/issues/97 )
 * Fixed profile image in comments ( https://github.com/MachoThemes/simple-author-box/issues/96 )
 
-= 2.1.2 = 
+= 2.1.2 =
 * Added alt tag for custom profile image.
 
-= 2.1.1 = 
+= 2.1.1 =
 * Minor fixes & version bump
 
 = 2.1.0 =
@@ -156,10 +168,10 @@ See complete list here : https://github.com/MachoThemes/simple-author-box/milest
 = 2.0.9 =
 * AMP CSS fixes & validator
 
-= 2.0.8 = 
+= 2.0.8 =
 * Fixed a small bug re. custom AMP CSS (forgot to add 'px' units for author description paragraphs, browser was interpreting them as em)
 
-= 2.0.7 = 
+= 2.0.7 =
 * Added AMP compatibility
 * Fixed some CSS isues & cleaned up the code
 

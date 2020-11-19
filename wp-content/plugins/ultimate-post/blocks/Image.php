@@ -519,6 +519,42 @@ class Image{
                     ],
                 ],
             ],
+            'hideExtraLarge' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideDesktop' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideTablet' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideMobile' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
             'advanceCss' => [
                 'type' => 'string',
                 'default' => '',
@@ -555,7 +591,7 @@ class Image{
         $wraper_before = '';
         $block_name = 'image';
         $attr['headingShow'] = true;
-        $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].' '.(isset($attr["className"])?$attr["className"]:'').'">';
+        $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].''.(isset($attr["align"])? ' align' .$attr["align"]:'').''.(isset($attr["className"])?' '.$attr["className"]:'').'">';
             $wraper_before .= '<div class="ultp-block-wrapper">';
                 $wraper_before .= '<figure class="ultp-image-block-wrapper">';
                     $wraper_before .= '<div class="ultp-image-block ultp-image-block-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-image-block-overlay ultp-image-block-'.$attr["imgOverlayType"] : '' ).'">';

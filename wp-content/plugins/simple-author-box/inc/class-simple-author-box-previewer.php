@@ -70,8 +70,8 @@ class Simple_Author_Box_Previewer {
 
 	public function output_old_premium() {
 		if(class_exists("Simple_Author_Box_Pro_EDD")) {
-			echo "<div class='sab-old-premium'>Hi! Simple Author Box was recently acquired by <a href='https://www.greentreelabs.net' target='_blank'>GreenTreeLabs</a>. Your license is still valid and your premium features will continue to work, <strong>you don’t need to upgrade</strong>. We’re currently migrating the old licenses to our new database, you’ll receive instructions shortly. For any question please <a href='?page=simple-author-box-options-contact'>contact us</a>.</div>";
-		}		
+			echo "<div class='sab-old-premium'>Hi! Simple Author Box was recently acquired by <a href='https://www.webfactoryltd.com' target='_blank'>WebFactory Ltd</a>. Your license is still valid and your premium features will continue to work, <strong>you don’t need to upgrade</strong>. We’re currently migrating the old licenses to our new database, you’ll receive instructions shortly. For any question please <a href='mailto:support@webfactoryltd.com'>contact us</a>.</div>";
+		}
 	}
 
 	public function output_author_box() {

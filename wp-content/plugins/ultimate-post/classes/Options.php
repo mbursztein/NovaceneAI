@@ -52,12 +52,12 @@ class Options{
 
         require_once ULTP_PATH . 'classes/options/Overview.php';
         require_once ULTP_PATH . 'classes/options/Features.php';
-        //require_once ULTP_PATH . 'classes/options/Addons.php';
+        require_once ULTP_PATH . 'classes/options/Addons.php';
         require_once ULTP_PATH . 'classes/options/Settings.php';
         require_once ULTP_PATH . 'classes/options/Contact.php';
         new \ULTP\Options_Overview();
         new \ULTP\Options_Features();
-        // new \ULTP\Options_Addons();
+        new \ULTP\Options_Addons();
         new \ULTP\Options_Settings();
         new \ULTP\Options_Contact();
 

@@ -50,6 +50,9 @@
                 }
             }
         }
+
+        const post_ID = (parents.parents('.ultp-shortcode').length != 0) ? parents.parents('.ultp-shortcode').data('postid') : parents.data('postid');
+
 		$.ajax({
 			url: ultp_data.ajax,
             type: 'POST',
@@ -57,7 +60,7 @@
                 action: 'ultp_next_prev', 
                 paged: paged ,
                 blockId: parents.data('blockid'),
-                postId: parents.data('postid'),
+                postId: post_ID,
                 blockName: parents.data('blockname'),
                 wpnonce: ultp_data.security
             },
@@ -102,6 +105,8 @@
             }
         }
 
+        const post_ID = (that.parents('.ultp-shortcode').length != 0) ? that.parents('.ultp-shortcode').data('postid') : that.data('postid');
+
         $.ajax({
             url: ultp_data.ajax,
             type: 'POST',
@@ -109,7 +114,7 @@
                 action: 'ultp_next_prev', 
                 paged: paged ,
                 blockId: that.data('blockid'),
-                postId: that.data('postid'),
+                postId: post_ID,
                 blockName: that.data('blockname'),
                 wpnonce: ultp_data.security
             },
@@ -145,6 +150,8 @@
                 parents.find('a').removeClass('filter-active');
                 that.addClass('filter-active');
 
+            const post_ID = (parents.parents('.ultp-shortcode').length != 0) ? parents.parents('.ultp-shortcode').data('postid') : parents.data('postid');
+
             $.ajax({
                 url: ultp_data.ajax,
                 type: 'POST',
@@ -153,7 +160,7 @@
                     taxtype: parents.data('taxtype'),
                     taxonomy: that.data('taxonomy'),
                     blockId: parents.data('blockid'),
-                    postId: parents.data('postid'),
+                    postId: post_ID,
                     blockName: parents.data('blockname'),
                     wpnonce: ultp_data.security
                 },
@@ -252,6 +259,8 @@
             }
         }
 
+        const post_ID = (parents.parents('.ultp-shortcode').length != 0) ? parents.parents('.ultp-shortcode').data('postid') : parents.data('postid');
+
         if(pageNum){
             $.ajax({
                 url: ultp_data.ajax,
@@ -260,7 +269,7 @@
                     action: 'ultp_pagination', 
                     paged: pageNum,
                     blockId: parents.data('blockid'),
-                    postId: parents.data('postid'),
+                    postId: post_ID,
                     blockName: parents.data('blockname'),
                     wpnonce: ultp_data.security
                 },

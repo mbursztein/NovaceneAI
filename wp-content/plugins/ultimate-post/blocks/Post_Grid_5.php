@@ -1,22 +1,16 @@
 <?php
 namespace ULTP\blocks;
-
 defined('ABSPATH') || exit;
-
 class Post_Grid_5{
-
     public function __construct() {
         add_action('init', array($this, 'register'));
     }
-
     public function get_attributes($default = false){
-
         $attributes = array(
             'blockId' => [
                 'type' => 'string',
                 'default' => '',
             ],
-
             //--------------------------
             //      Layout
             //--------------------------
@@ -24,7 +18,6 @@ class Post_Grid_5{
                 'type' => 'string',
                 'default' => 'layout1',
             ],
-
             //--------------------------
             //      Query Setting
             //--------------------------
@@ -176,7 +169,10 @@ class Post_Grid_5{
                 'type' => 'boolean',
                 'default' => false,
             ],
-
+            'openInTab' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
 
 
             //--------------------------
@@ -2062,13 +2058,48 @@ class Post_Grid_5{
                     ],
                 ],
             ],
+            'hideExtraLarge' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideDesktop' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideTablet' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideMobile' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
             'advanceCss' => [
                 'type' => 'string',
                 'default' => '',
                 'style' => [(object)['selector' => '']],
             ]
-        );
-        
+        );        
         if( $default ){
             $temp = array();
             foreach ($attributes as $key => $value) {
@@ -2081,7 +2112,6 @@ class Post_Grid_5{
             return $attributes;
         }
     }
-
     public function register() {
         register_block_type( 'ultimate-post/post-grid-5',
             array(
@@ -2092,9 +2122,7 @@ class Post_Grid_5{
             )
         );
     }
-
     public function content($attr, $noAjax) {
-
         if(!$noAjax){
             $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
             $attr['paged'] = $paged;
@@ -2104,41 +2132,32 @@ class Post_Grid_5{
         $page_post_id = get_the_ID();
         $wraper_before = $wraper_after = $post_loop = '';
         $recent_posts = new \WP_Query( ultimate_post()->get_query( $attr ) );
-        $pageNum = ultimate_post()->get_page_number($attr, $recent_posts->found_posts);
-        
+        $pageNum = ultimate_post()->get_page_number($attr, $recent_posts->found_posts);        
         if ($recent_posts->have_posts()) {
-            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].' '.(isset($attr["className"])?$attr["className"]:'').'">';
+            $wraper_before .= '<div '.($attr['advanceId']?'id="'.$attr['advanceId'].'" ':'').' class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].''.(isset($attr["align"])? ' align' .$attr["align"]:'').''.(isset($attr["className"])? ' ' .$attr["className"]:'').'">';
                 $wraper_before .= '<div class="ultp-block-wrapper">';
-
                     // Loading
                     $wraper_before .= ultimate_post()->loading();
-
                     if ($attr['headingShow'] || $attr['filterShow'] || $attr['paginationShow']) {
                         $wraper_before .= '<div class="ultp-heading-filter">';
-                            $wraper_before .= '<div class="ultp-heading-filter-in">';
-                                
+                            $wraper_before .= '<div class="ultp-heading-filter-in">';                                
                                 // Heading
                                 include ULTP_PATH.'blocks/template/heading.php';
-                                
                                 if ($attr['filterShow'] || $attr['paginationShow']) {
                                     $wraper_before .= '<div class="ultp-filter-navigation">';
-
                                         // Filter
                                         if($attr['filterShow']) {
                                             include ULTP_PATH.'blocks/template/filter.php';
                                         }
-
                                         // Navigation
                                         if($attr['paginationShow'] && ($attr['paginationType'] == 'navigation') && ($attr['navPosition'] == 'topRight')) {
                                             include ULTP_PATH.'blocks/template/navigation-before.php';
                                         }
                                     $wraper_before .= '</div>';
                                 }
-
                             $wraper_before .= '</div>';
                         $wraper_before .= '</div>';
                     }
-             
                     $wraper_before .= '<div class="ultp-block-items-wrap ultp-block-row ultp-'.$attr['layout'].' ultp-block-content-'.($attr['columnFlip'] ? 'true' : 'false').'">';
                         $idx = $noAjax ? 1 : 0;
                         while ( $recent_posts->have_posts() ): $recent_posts->the_post();
@@ -2147,12 +2166,12 @@ class Post_Grid_5{
 
                             include ULTP_PATH.'blocks/template/category.php';
                             
-                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item'.($attr['titleAnimation'] ? ' ultp-animation-'.$attr['titleAnimation'] : '').'">';
+                            $post_loop .= '<div class="ultp-block-item post-id-'.$post_id.($attr['titleAnimation'] ? ' ultp-animation-'.$attr['titleAnimation'] : '').'">';
                                 $post_loop .= '<div class="ultp-block-content-wrap ultp-block-content-overlay">';
 
                                     if( has_post_thumbnail() && $attr['showImage'] ){
                                         $post_loop .= '<div class="ultp-block-image ultp-block-image-'.$attr['imgAnimation'].($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                            $post_loop .= '<a href="'.$titlelink.'"><img loading="lazy" alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, 'full' ).'" /></a>';
+                                            $post_loop .= '<a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'><img loading="lazy" alt="'.$title.'" src="'.wp_get_attachment_image_url( $post_thumb_id, 'full' ).'" /></a>';
                                             if( ($attr['catPosition'] != 'aboveTitle') && ($idx == 0 || $attr['showSmallCat']) && $attr['catShow'] ) {
                                                 $post_loop .= '<div class="ultp-category-img-grid">'.$category.'</div>';
                                             }
@@ -2193,7 +2212,7 @@ class Post_Grid_5{
 
                                             // Read More
                                             if ($attr['readMore'] && ($idx == 0 || $attr['showSmallBtn'])) {
-                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
                                             }
 
                                             // Meta

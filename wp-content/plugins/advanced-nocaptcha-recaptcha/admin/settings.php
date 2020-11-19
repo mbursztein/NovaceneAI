@@ -36,19 +36,7 @@ class ANR_Settings {
 			add_settings_section( $section_id, $section['section_title'], ! empty( $section['section_callback'] ) ? $section['section_callback'] : null, 'anr_admin_options' );
 		}
 		foreach ( $this->get_fields() as $field_id => $field ) {
-			$args = wp_parse_args(
-				$field, array(
-					'id'         => $field_id,
-					'label'      => '',
-					'cb_label'   => '',
-					'type'       => 'text',
-					'class'      => 'regular-text',
-					'section_id' => '',
-					'desc'       => '',
-					'std'        => '',
-				)
-			);
-			add_settings_field( $args['id'], $args['label'], ! empty( $args['callback'] ) ? $args['callback'] : array( $this, 'callback' ), 'anr_admin_options', $args['section_id'], $args );
+			add_settings_field( $field['id'], $field['label'], ! empty( $field['callback'] ) ? $field['callback'] : array( $this, 'callback' ), 'anr_admin_options', $field['section_id'], $field );
 		}
 	}
 
@@ -290,12 +278,29 @@ class ANR_Settings {
 				'section_id' => 'forms',
 				'type'       => 'html',
 				'std'        => sprintf( '<div class="notice notice-success inline">
-					<p>To support development of "Advanced noCaptcha & invisible Captcha" plugin please purchase PRO version. <a class="button button-secondary" href="%1$s">View Details</a></p>
+					<p>To support development of "Advanced noCaptcha & invisible Captcha" plugin please purchase PRO version. <a class="button button-secondary" href="%1$s">' . __( 'View Details', 'advanced-nocaptcha-recaptcha' ) . '</a></p>
 				</div>', function_exists( 'anr_fs' ) ? anr_fs()->get_upgrade_url() : 'https://www.shamimsplugins.com/products/advanced-nocaptcha-and-invisible-captcha-pro/' ),
 			);
 		endif;
+
+		$fields = apply_filters( 'anr_settings_fields', $fields );
+
+		foreach ( $fields as $field_id => $field ) {
+			$fields[ $field_id ] = wp_parse_args(
+				$field, array(
+					'id'         => $field_id,
+					'label'      => '',
+					'cb_label'   => '',
+					'type'       => 'text',
+					'class'      => 'regular-text',
+					'section_id' => '',
+					'desc'       => '',
+					'std'        => '',
+				)
+			);
+		}
 		
-		return apply_filters( 'anr_settings_fields', $fields );
+		return $fields;
 	}
 
 	function callback( $field ) {
@@ -573,33 +578,23 @@ class ANR_Settings {
 	}
 
 	function anr_admin_sidebar() {
-			$return = '<div class="postbox">
-					<h3 class="hndle" style="text-align: center;">
-						<span>' . __( 'Plugin Author', 'advanced-nocaptcha-recaptcha' ) . '</span>
-					</h3>
-
-					<div class="inside">
-						<div style="text-align: center; margin: auto">
-						<strong>Shamim Hasan</strong><br />
-						Know php, MySql, css, javascript, html. Expert in WordPress. <br /><br />
-								
-						You can hire for plugin customization, build custom plugin or any kind of WordPress job via <br> <a
-								href="https://www.shamimsplugins.com/contact-us/"><strong>Contact Form</strong></a>
-					</div>
-				</div>
-			</div>';
+			$return = '';
 			if ( ! class_exists( 'ANR_Pro' ) ) :
+			$return .= '<style>ul.anr-pro-features-ul li.dashicons-yes-alt:before {color:green;}</style>';
 			$return .= sprintf( '<div class="postbox">
-					<h3 class="hndle" style="text-align: center;">
-						<span>' . __( 'Support Development', 'advanced-nocaptcha-recaptcha' ) . '</span>
-					</h3>
-
-					<div class="inside">
-						<div style="text-align: center; margin: auto">
-						<a style="text-decoration:none;" href="%1$s">To support development of "Advanced noCaptcha & invisible Captcha" plugin please purchase
-						<div style="font-size:24px;color:red;margin:10px;">PRO</div>
-						version</a>
-						<p><a class="button button-secondary" href="%1$s">View Details</a></p>
+				<h3 class="hndle" style="text-align: center;">
+					<span>' . __( 'PRO Features', 'advanced-nocaptcha-recaptcha' ) . '</span>
+				</h3>
+				<div class="inside">
+					<div>
+						<ul class="anr-pro-features-ul">
+							<li class="dashicons-before dashicons-yes-alt"> ' . __( 'WooCommerce forms', 'advanced-nocaptcha-recaptcha' ) . '</li>
+							<li class="dashicons-before dashicons-yes-alt"> ' . __( 'Contact Form 7 forms', 'advanced-nocaptcha-recaptcha' ) . '</li>
+							<li class="dashicons-before dashicons-yes-alt"> ' . __( 'bbPress New topic form', 'advanced-nocaptcha-recaptcha' ) . '</li>
+							<li class="dashicons-before dashicons-yes-alt"> ' . __( 'bbPress reply to topic form', 'advanced-nocaptcha-recaptcha' ) . '</li>
+							<li class="dashicons-before dashicons-yes-alt"> ' . __( 'BuddyPress register form', 'advanced-nocaptcha-recaptcha' ) . '</li>
+						</ul>
+						<p style="text-align: center; margin: auto"><a class="button button-secondary" href="%1$s">' . __( 'View Details', 'advanced-nocaptcha-recaptcha' ) . '</a></p>
 					</div>
 				</div>
 			</div>', function_exists( 'anr_fs' ) ? anr_fs()->get_upgrade_url() : 'https://www.shamimsplugins.com/products/advanced-nocaptcha-and-invisible-captcha-pro/' );

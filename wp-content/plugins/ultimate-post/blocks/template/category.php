@@ -24,9 +24,9 @@ if ($attr['catShow']) {
                         }
                     }
                     if($attr['onlyCatColor']){
-                        $category .= '<a href="'.get_term_link($val->term_id).'" '.$color.'>'.$val->name.'</a>';
+                        $category .= '<a href="'.get_term_link($val->term_id).'" '.$color.' '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.$val->name.'</a>';
                     } else {
-                        $category .= '<a class="ultp-customCatOnlyColor-'.$attr['customCatColor'].'" href="'.get_term_link($val->term_id).'" '.$color.'>'.$val->name.'</a>';
+                        $category .= '<a class="ultp-customCatOnlyColor-'.$attr['customCatColor'].'" href="'.get_term_link($val->term_id).'" '.$color.' '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.$val->name.'</a>';
                     }
                 }
             }

@@ -8,8 +8,9 @@ class Initialization{
     private $all_blocks;
 
     public function __construct(){
-        $this->requires();
-        $this->blocks();
+        $this->requires(); // Include Necessary Files
+        $this->blocks(); // Include Blocks
+        $this->include_addons(); // Include Addons
 
         add_action('wp_head',                       array($this, 'popular_posts_tracker_callback'));
         add_filter('block_categories',              array($this, 'register_category_callback'), 10, 2); // Block Category Register
@@ -18,6 +19,8 @@ class Initialization{
         add_action('enqueue_block_editor_assets',   array($this, 'register_scripts_back_callback')); // Only editor
         add_action('admin_enqueue_scripts',         array($this, 'register_scripts_option_panel_callback')); // Option Panel
         add_action('wp_enqueue_scripts',            array($this, 'register_scripts_front_callback')); // Both frontend
+        register_activation_hook(ULTP_PATH.'ultimate-post.php', array($this, 'install_hook'));
+        add_action( 'activated_plugin',             array($this, 'activation_redirect'));
 
         add_action('wp_ajax_ultp_next_prev',        array($this, 'ultp_next_prev_callback')); // Next Previous AJAX Call
         add_action('wp_ajax_nopriv_ultp_next_prev', array($this, 'ultp_next_prev_callback')); // Next Previous AJAX Call Logout User
@@ -25,8 +28,7 @@ class Initialization{
         add_action('wp_ajax_nopriv_ultp_filter',    array($this, 'ultp_filter_callback')); // Next Previous AJAX Call Logout User
         add_action('wp_ajax_ultp_pagination',       array($this, 'ultp_pagination_callback')); // Page Number AJAX Call
         add_action('wp_ajax_nopriv_ultp_pagination',array($this, 'ultp_pagination_callback')); // Page Number AJAX Call Logout User
-        register_activation_hook(ULTP_PATH.'ultimate-post.php', array($this, 'install_hook'));
-        add_action( 'activated_plugin',             array($this, 'activation_redirect'));
+        add_action('wp_ajax_ultp_addon',           array($this, 'ultp_addon_callback')); // Next Previous AJAX Call
     }
 
     public function register_scripts_option_panel_callback(){
@@ -35,7 +37,9 @@ class Initialization{
         wp_enqueue_script('ultp-option-script', ULTP_URL.'assets/js/ultp-option.js', array('jquery'), ULTP_VER, true);
         wp_enqueue_style('ultp-option-style', ULTP_URL.'assets/css/ultp-option.css', array(), ULTP_VER);
         wp_localize_script('ultp-option-script', 'ultp_option', array(
-            'width' => ultimate_post()->get_setting('editor_container')
+            'width' => ultimate_post()->get_setting('editor_container'),
+            'security' => wp_create_nonce('ultp-nonce'),
+            'ajax' => admin_url('admin-ajax.php')
         ));
     }
 
@@ -97,118 +101,12 @@ class Initialization{
         if (!get_option('ultp_options')) {
             ultimate_post()->init_set_data();
         }
+        ultimate_post()->init_set_addon_data();
     }
 
     public function activation_redirect($plugin) {
         if( $plugin == 'ultimate-post/ultimate-post.php' ) {
             exit(wp_redirect(admin_url('admin.php?page=ultp-settings')));
-        }
-    }
-
-    public function ultp_pagination_callback() {
-        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local) {
-            return ;
-        }
-
-        $paged      = sanitize_text_field($_POST['paged']);
-        $blockId    = sanitize_text_field($_POST['blockId']);
-        $postId     = sanitize_text_field($_POST['postId']);
-        $blockRaw   = sanitize_text_field($_POST['blockName']);
-        $blockName  = str_replace('_','/', $blockRaw);
-
-        if($paged) {
-            $post = get_post($postId); 
-            if (has_blocks($post->post_content)) {
-                $blocks = parse_blocks($post->post_content);
-                $this->block_return($blocks, $paged, $blockId, $blockRaw, $blockName);
-            }
-        }
-    }
-
-    public function block_return($blocks, $paged, $blockId, $blockRaw, $blockName) {
-        foreach ($blocks as $key => $value) {
-            if($blockName == $value['blockName']) {
-                if($value['attrs']['blockId'] == $blockId) {
-                    $attr = $this->all_blocks[$blockRaw]->get_attributes(true);
-                    $attr['paged'] = $paged;
-                    $attr = array_merge($attr, $value['attrs']);
-                    echo $this->all_blocks[$blockRaw]->content($attr, true);
-                    die();
-                }
-            }
-            if(!empty($value['innerBlocks'])){
-                $this->block_return($value['innerBlocks'], $paged, $blockId, $blockRaw, $blockName);
-            }
-        }
-    }
-
-
-    public function ultp_filter_callback() {
-        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local){
-            return ;
-        }
-     
-        $taxtype    = sanitize_text_field($_POST['taxtype']);
-        $blockId    = sanitize_text_field($_POST['blockId']);
-        $postId     = sanitize_text_field($_POST['postId']);
-        $taxonomy   = sanitize_text_field($_POST['taxonomy']);
-        $blockRaw   = sanitize_text_field($_POST['blockName']);
-        $blockName  = str_replace('_','/', $blockRaw);
-
-        if( $taxtype ) {
-            $post = get_post($postId); 
-            if (has_blocks($post->post_content)) {
-                $blocks = parse_blocks($post->post_content);
-                $this->filter_block_return($blocks, $blockId, $blockRaw, $blockName, $taxtype, $taxonomy);
-            }
-        }
-    }
-
-    public function filter_block_return($blocks, $blockId, $blockRaw, $blockName, $taxtype, $taxonomy) {
-        foreach ($blocks as $key => $value) {
-            if($blockName == $value['blockName']) {
-                if($value['attrs']['blockId'] == $blockId) {
-                    $attr = $this->all_blocks[$blockRaw]->get_attributes(true);
-                    if($taxonomy) {
-                        if($taxtype == 'category'){
-                            $value['attrs']['queryCat'] = json_encode(array($taxonomy));
-                        }elseif($taxtype == 'post_tag'){
-                            $value['attrs']['queryTag'] = json_encode(array($taxonomy));
-                        }
-                        $value['attrs']['queryTax'] = $taxtype;
-                    }
-                    if(isset($value['attrs']['queryNumber'])){
-                        $value['attrs']['queryNumber'] = $value['attrs']['queryNumber'];
-                    }
-                    $attr = array_merge($attr, $value['attrs']);
-                    echo $this->all_blocks[$blockRaw]->content($attr, true);
-                    die();
-                }
-            }
-            if(!empty($value['innerBlocks'])){
-                $this->filter_block_return($value['innerBlocks'], $blockId, $blockRaw, $blockName, $taxtype, $taxonomy);
-            }
-        }
-    }
-
-
-    public function ultp_next_prev_callback() {
-        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local){
-            return ;
-        }
-
-        $paged      = sanitize_text_field($_POST['paged']);
-        $blockId    = sanitize_text_field($_POST['blockId']);
-        $postId     = sanitize_text_field($_POST['postId']);
-        $blockRaw   = sanitize_text_field($_POST['blockName']);
-        $blockName  = str_replace('_','/', $blockRaw);
-
-        if( $paged && $blockId && $postId && $blockName ) {
-            $post = get_post($postId); 
-            if (has_blocks($post->post_content)) {
-                $blocks = parse_blocks($post->post_content);
-                $this->block_return($blocks, $paged, $blockId, $blockRaw, $blockName);
-            }
         }
     }
 
@@ -250,6 +148,7 @@ class Initialization{
 
     // Require Categories
     public function requires() {
+        ultimate_post()->plugin_compatibility();
         require_once ULTP_PATH.'classes/Notice.php';
         require_once ULTP_PATH.'classes/Styles.php';
         require_once ULTP_PATH.'classes/Options.php';
@@ -273,6 +172,7 @@ class Initialization{
         );
     }
 
+    // Post View Post Meta Set
     public function popular_posts_tracker_callback($post_id) {
         if (!is_single()){ return; }
         global $post;
@@ -281,10 +181,147 @@ class Initialization{
         update_post_meta($post_id, '__post_views_count', $count ? (int)$count + 1 : 1 );
     }
 
+    // Set Image Size
     public function add_image_size() {
         add_image_size('ultp_layout_landscape_large', 1200, 800, true);
         add_image_size('ultp_layout_landscape', 870, 570, true);
         add_image_size('ultp_layout_portrait', 600, 900, true);
         add_image_size('ultp_layout_square', 600, 600, true);
     }
+
+    // Include Addons directory
+	public function include_addons() {
+		$addons_dir = array_filter(glob(ULTP_PATH.'addons/*'), 'is_dir');
+		if (count($addons_dir) > 0) {
+			foreach( $addons_dir as $key => $value ) {
+				$addon_dir_name = str_replace(dirname($value).'/', '', $value);
+				$file_name = ULTP_PATH . 'addons/'.$addon_dir_name.'/init.php';
+				if ( file_exists($file_name) ) {
+					include_once $file_name;
+				}
+			}
+		}
+    }
+
+
+    public function ultp_addon_callback() {
+        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local){
+            return ;
+        }
+        $addon_name = sanitize_text_field($_POST['addon']);
+        $addon_value = sanitize_text_field($_POST['value']);
+        if ($addon_name) {
+            $addon_data = get_option('ultp_addons_option', array());
+            $addon_data[$addon_name] = $addon_value;
+            update_option('ultp_addons_option', $addon_data);
+        }
+    }
+
+    public function ultp_next_prev_callback() {
+        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local){
+            return ;
+        }
+
+        $paged      = sanitize_text_field($_POST['paged']);
+        $blockId    = sanitize_text_field($_POST['blockId']);
+        $postId     = sanitize_text_field($_POST['postId']);
+        $blockRaw   = sanitize_text_field($_POST['blockName']);
+        $blockName  = str_replace('_','/', $blockRaw);
+
+        if( $paged && $blockId && $postId && $blockName ) {
+            $post = get_post($postId); 
+            if (has_blocks($post->post_content)) {
+                $blocks = parse_blocks($post->post_content);
+                $this->block_return($blocks, $paged, $blockId, $blockRaw, $blockName);
+            }
+        }
+    }
+
+    public function filter_block_return($blocks, $blockId, $blockRaw, $blockName, $taxtype, $taxonomy) {
+        foreach ($blocks as $key => $value) {
+            if($blockName == $value['blockName']) {
+                if($value['attrs']['blockId'] == $blockId) {
+                    $attr = $this->all_blocks[$blockRaw]->get_attributes(true);
+                    if($taxonomy) {
+                        if($taxtype == 'category'){
+                            $value['attrs']['queryCat'] = json_encode(array($taxonomy));
+                        }elseif($taxtype == 'post_tag'){
+                            $value['attrs']['queryTag'] = json_encode(array($taxonomy));
+                        }
+                        $value['attrs']['queryTax'] = $taxtype;
+                    }
+                    if(isset($value['attrs']['queryNumber'])){
+                        $value['attrs']['queryNumber'] = $value['attrs']['queryNumber'];
+                    }
+                    $attr = array_merge($attr, $value['attrs']);
+                    echo $this->all_blocks[$blockRaw]->content($attr, true);
+                    die();
+                }
+            }
+            if(!empty($value['innerBlocks'])){
+                $this->filter_block_return($value['innerBlocks'], $blockId, $blockRaw, $blockName, $taxtype, $taxonomy);
+            }
+        }
+    }
+
+
+    public function ultp_filter_callback() {
+        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local){
+            return ;
+        }
+     
+        $taxtype    = sanitize_text_field($_POST['taxtype']);
+        $blockId    = sanitize_text_field($_POST['blockId']);
+        $postId     = sanitize_text_field($_POST['postId']);
+        $taxonomy   = sanitize_text_field($_POST['taxonomy']);
+        $blockRaw   = sanitize_text_field($_POST['blockName']);
+        $blockName  = str_replace('_','/', $blockRaw);
+
+        if( $taxtype ) {
+            $post = get_post($postId); 
+            if (has_blocks($post->post_content)) {
+                $blocks = parse_blocks($post->post_content);
+                $this->filter_block_return($blocks, $blockId, $blockRaw, $blockName, $taxtype, $taxonomy);
+            }
+        }
+    }
+
+    public function ultp_pagination_callback() {
+        if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-nonce') && $local) {
+            return ;
+        }
+
+        $paged      = sanitize_text_field($_POST['paged']);
+        $blockId    = sanitize_text_field($_POST['blockId']);
+        $postId     = sanitize_text_field($_POST['postId']);
+        $blockRaw   = sanitize_text_field($_POST['blockName']);
+        $blockName  = str_replace('_','/', $blockRaw);
+
+        if($paged) {
+            $post = get_post($postId); 
+            if (has_blocks($post->post_content)) {
+                $blocks = parse_blocks($post->post_content);
+                $this->block_return($blocks, $paged, $blockId, $blockRaw, $blockName);
+            }
+        }
+    }
+
+
+    public function block_return($blocks, $paged, $blockId, $blockRaw, $blockName) {
+        foreach ($blocks as $key => $value) {
+            if($blockName == $value['blockName']) {
+                if($value['attrs']['blockId'] == $blockId) {
+                    $attr = $this->all_blocks[$blockRaw]->get_attributes(true);
+                    $attr['paged'] = $paged;
+                    $attr = array_merge($attr, $value['attrs']);
+                    echo $this->all_blocks[$blockRaw]->content($attr, true);
+                    die();
+                }
+            }
+            if(!empty($value['innerBlocks'])){
+                $this->block_return($value['innerBlocks'], $paged, $blockId, $blockRaw, $blockName);
+            }
+        }
+    }
+
 }

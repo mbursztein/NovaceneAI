@@ -1,33 +1,29 @@
 <?php
 namespace ULTP;
-
 defined('ABSPATH') || exit;
-
 class Notice {
     public function __construct(){
 		add_action('admin_notices', array($this, 'ultp_installation_notice_callback'));
 		add_action('wp_ajax_ultp_get_pro_notice', array($this, 'set_dismiss_notice_callback'));
 	}
-	
 	// Dismiss Notice Callback
 	public function set_dismiss_notice_callback() {
 		if (!wp_verify_nonce($_REQUEST['wpnonce'], 'ultp-free-nonce')) {
 			return ;
         }
-        set_transient( 'ultp_get_pro_notice_v2', 'off', 2592000 ); // 30 days notice
+        set_transient( 'ultp_get_pro_notice_v4', 'off', 2592000 ); // 30 days notice
 	}
 	public function ultp_installation_notice_callback() {
-		if (get_transient('ultp_get_pro_notice_v2') != 'off' && (!defined('ULTP_PRO_VER'))) {
+		if (get_transient('ultp_get_pro_notice_v4') != 'off' && (!defined('ULTP_PRO_VER'))) {
 			$this->ultp_notice_css();
 			$this->ultp_notice_js();
 			?>
-			<div class="ultp-pro-notice">
-                <div class="ultp-pro-notice-content">
-                    <a class="wc-dismiss-notice" data-security=<?php echo wp_create_nonce('ultp-free-nonce'); ?>  data-ajax=<?php echo admin_url('admin-ajax.php'); ?> href="#"><span class="dashicons dashicons-no-alt"></span> <?php _e('Dismiss', 'ultimate-post'); ?></a>
-                    <a target="_blank" href="https://www.wpxpo.com/gutenberg-post-blocks/?utm_campaign=go_premium">
-                        <img loading="lazy" src="<?php echo ULTP_URL.'assets/img/banner.jpg'; ?>" alt="logo" />
-                    </a>
-                </div>
+            <div class="wc-install ultp-pro-notice">
+				<div class="wc-install-body">
+					<a class="wc-dismiss-notice" data-security=<?php echo wp_create_nonce('ultp-free-nonce'); ?>  data-ajax=<?php echo admin_url('admin-ajax.php'); ?> href="#"><span class="dashicons dashicons-dismiss"></span></a>
+					<div><?php _e('Want to help make <b>Gutenberg Post Blocks</b> even more awesome? You can get a <b style="color:#e5561e;">50% Discount coupon</b> for all premium features.', 'ultimate-post'); ?></div>
+					<a class="button button-primary button-hero ultp-btn-notice-pro" target="_blank" href="https://www.wpxpo.com/gutenberg-post-blocks/?utm_campaign=go_premium"><span class="dashicons dashicons-image-rotate"></span><?php _e('Get Now', 'ultimate-post'); ?></a>
+				</div>
 			</div>
 			<?php
 		}
@@ -36,39 +32,20 @@ class Notice {
 		?>
 		<style type="text/css">
             .wc-install {
-                display: -ms-flexbox;
                 display: flex;
                 align-items: center;
                 background: #fff;
                 margin-top: 40px;
                 width: calc(100% - 50px);
                 border: 1px solid #ccd0d4;
-                padding: 15px;
+                padding: 12px 15px;
                 border-radius: 4px;
+                border-left: 4px solid #e5561e;
             }   
-            .ultp-pro-notice {
-                margin-top: 40px;
-                width: calc(100% - 50px); 
-            }
-            .ultp-pro-notice img { 
-                max-width: 100%;
-            }
-            .ultp-pro-notice-content {
-                position: relative;
-                padding-top: 30px;
-                display: inline-block;
-            }
-            .ultp-pro-notice-content .wc-dismiss-notice {
-                padding-top: 0px;
-                position: absolute;
-                right: 0;
-                top: 6px;
-            }
             .wc-install img {
                 margin-right: 10px; 
-				max-width: 100%;
             }
-            .wc-install-body img{
+            .wc-install-body {
                 -ms-flex: 1;
                 flex: 1;
             }
@@ -95,27 +72,72 @@ class Notice {
 				margin-top: 12px;
 				margin-right: 5px;
 			}
-            .wc-install-body img {
-                max-width: 100%;
+            .ultp-pro-notice {
+                border-radius: 0;
             }
+            .ultp-pro-notice img {
+                margin-right: 20px;
+            }
+            .ultp-pro-notice .wc-install-body h3 {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+            .ultp-pro-notice .wc-install-body > div {
+                max-width: 800px;
+                margin-bottom: 10px;
+            }
+            .ultp-pro-notice .button-hero {
+                padding: 8px 14px !important;
+                min-height: inherit !important;
+                line-height: 1 !important;
+                /* background: #46b450; */
+                box-shadow: none;
+                border: none;
+                transition: 400ms;
+            }
+            .ultp-pro-notice .ultp-btn-notice-pro {
+                background: #e5561e;
+                color: #fff;
+            }
+            .ultp-pro-notice .ultp-btn-notice-pro:hover,
+            .ultp-pro-notice .ultp-btn-notice-pro:focus {
+                background: #ce4b18;
+            }
+            .ultp-pro-notice .button-hero:hover,
+            .ultp-pro-notice .button-hero:focus {
+                /* background: #349a3d; */
+                border: none;
+                box-shadow: none;
+            }
+			@keyframes dashicons-spin {
+				0% {
+					transform: rotate( 0deg );
+				}
+				100% {
+					transform: rotate( 360deg );
+				}
+			}
 			.wc-dismiss-notice {
 				position: relative;
 				text-decoration: none;
 				float: right;
-				right: 26px;
-			}
+                right: 0;
+                color: #72777c;
+                transition: 400ms;
+            }
+            .wc-dismiss-notice:hover {
+                color: #c00;
+            }
 			.wc-dismiss-notice .dashicons{
 				display: inline-block;
     			text-decoration: none;
-				animation: none;
+                animation: none;
+                font-size: 16px;
 			}
 		</style>
 		<?php
-	}
-
-
-	public function ultp_notice_js() {
-		?>
+    }
+	public function ultp_notice_js() { ?>
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
 				'use strict';
@@ -142,5 +164,4 @@ class Notice {
 		</script>
 		<?php
 	}
-
 }

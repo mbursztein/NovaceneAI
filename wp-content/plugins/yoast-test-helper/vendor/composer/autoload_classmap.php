@@ -14,6 +14,7 @@ return array(
     'Yoast\\WP\\Test_Helper\\Domain_Dropdown' => $baseDir . '/src/domain-dropdown.php',
     'Yoast\\WP\\Test_Helper\\Feature_Toggler' => $baseDir . '/src/feature-toggler.php',
     'Yoast\\WP\\Test_Helper\\Form_Presenter' => $baseDir . '/src/form-presenter.php',
+    'Yoast\\WP\\Test_Helper\\Indexing_Reason_Integration' => $baseDir . '/src/indexing-reason-integration.php',
     'Yoast\\WP\\Test_Helper\\Inline_Script' => $baseDir . '/src/inline-script.php',
     'Yoast\\WP\\Test_Helper\\Integration' => $baseDir . '/src/integration-interface.php',
     'Yoast\\WP\\Test_Helper\\Notification' => $baseDir . '/src/notification.php',

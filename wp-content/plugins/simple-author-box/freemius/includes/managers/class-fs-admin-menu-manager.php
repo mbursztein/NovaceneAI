@@ -554,7 +554,7 @@
 			$menu_slug = $this->get_raw_slug();
 
 			$hook_name = get_plugin_page_hookname( $menu_slug, '' );
-			foreach ( @$menu as $pos => $m ) {
+			foreach ( $menu as $pos => $m ) {
 				if ( $menu_slug === $m[2] ) {
 					$position   = $pos;
 					$found_menu = $m;
@@ -703,7 +703,12 @@
                 $menu['parent_slug'] :
                 'admin.php';
 
-			return admin_url( $parent_slug . '?page=' . $menu['menu'][2] );
+            return admin_url(
+                $parent_slug .
+                ( false === strpos( $parent_slug, '?' ) ? '?' : '&' ) .
+                'page=' .
+                $menu['menu'][2]
+            );
 		}
 
 		/**

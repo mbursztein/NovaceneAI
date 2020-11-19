@@ -153,6 +153,10 @@ class Post_Slider_1{
                 'type' => 'boolean',
                 'default' => true,
             ],
+            'openInTab' => [
+                'type' => 'boolean',
+                'default' => false,
+            ],
             
 
             //--------------------------
@@ -2074,6 +2078,42 @@ class Post_Slider_1{
                     ],
                 ],
             ],
+            'hideExtraLarge' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideDesktop' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideTablet' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
+            'hideMobile' => [
+                'type' => 'boolean',
+                'default' => false,
+                'style' => [
+                    (object)[
+                        'selector' => '{{ULTP}} {display:none;}'
+                    ],
+                ],
+            ],
             'advanceCss' => [
                 'type' => 'string',
                 'default' => '',
@@ -2119,7 +2159,7 @@ class Post_Slider_1{
         $pageNum = ultimate_post()->get_page_number($attr, $recent_posts->found_posts);
     
         if ( $recent_posts->have_posts() ) {
-            $wraper_before .= '<div id="'.$attr["blockId"].'" class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].' '.(isset($attr["className"])?$attr["className"]:'').'">';
+            $wraper_before .= '<div id="'.$attr["blockId"].'" class="wp-block-ultimate-post-'.$block_name.' ultp-block-'.$attr["blockId"].''.(isset($attr["align"])? ' align' .$attr["align"]:'').''.(isset($attr["className"])?' '.$attr["className"]:'').'">';
                 $wraper_before .= '<div class="ultp-block-wrapper">';
                     if ($attr['headingShow']) {
                         $wraper_before .= '<div class="ultp-heading-filter">';
@@ -2134,13 +2174,13 @@ class Post_Slider_1{
                             
                             include ULTP_PATH.'blocks/template/data.php';
 
-                            $post_loop .= '<div id="post-id-'.$post_id.'" class="ultp-block-item">';
+                            $post_loop .= '<div class="ultp-block-item post-id-'.$post_id.'">';
                                 $post_loop .= '<div class="ultp-block-slider-wrap">';
 
                                     $post_loop .= '<div class="ultp-block-image-inner">';
                                         if(has_post_thumbnail()) {
                                             $post_loop .= '<div class="ultp-block-image '.($attr["imgOverlay"] ? ' ultp-block-image-overlay ultp-block-image-'.$attr["imgOverlayType"].' ultp-block-image-'.$attr["imgOverlayType"].$idx : '' ).'">';
-                                                $post_loop .= '<a href="'.$titlelink.'">'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
+                                                $post_loop .= '<a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.ultimate_post()->get_image($post_thumb_id, $attr['imgCrop'], '', $title).'</a>';
                                             $post_loop .= '</div>'; //.ultp-block-image    
                                         }
                                     $post_loop .= '</div>'; //.ultp-block-image-inner                  
@@ -2172,7 +2212,7 @@ class Post_Slider_1{
                                             }
 
                                             if ($attr['readMore']) {
-                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'">'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
+                                                $post_loop .= '<div class="ultp-block-readmore"><a href="'.$titlelink.'" '.($attr['openInTab'] ? 'target="_blank"' : '').'>'.($attr['readMoreText'] ? $attr['readMoreText'] : __( "Read More", "ultimate-post" )).ultimate_post()->svg_icon($attr['readMoreIcon']).'</a></div>';
                                             }
 
                                             if( $attr['metaPosition'] =='bottom' ) {
